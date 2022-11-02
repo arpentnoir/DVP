@@ -1,0 +1,17 @@
+steps:
+  - task: NodeTool@0
+    displayName: Set Node Version
+    inputs:
+      versionSpec: 16.x
+
+  - task: Cache@2
+    displayName: Cache node_modules
+    inputs:
+      key: 'yarn | "$(Agent.OS)" | $(Build.SourcesDirectory)/yarn.lock'
+      path: $(Build.SourcesDirectory)/node_modules
+      cacheHitVar: NODE_MODULES_CACHE_RESTORED
+
+  - bash: |
+      yarn install --ignore-engines --frozen-lockfile
+    condition: ne(variables.NODE_MODULES_CACHE_RESTORED, 'true')
+    displayName: Install dependencies only if there is no cache available

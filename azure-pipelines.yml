@@ -1,0 +1,65 @@
+
+trigger:
+  - main
+pr:
+  - main
+
+parameters:
+  - name: ENV
+    displayName: Deployment environment
+    default: dev
+    values:
+      - dev
+      - test
+      - preprod
+
+variables:
+  CI: 'true'
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  isPR: $[eq(variables['Build.Reason'], 'PullRequest')]
+  ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+    NX_BRANCH: $(System.PullRequest.PullRequestNumber)
+    TARGET_BRANCH: $[replace(variables['System.PullRequest.TargetBranch'],'refs/heads/','origin/')]
+    BASE_SHA: $(git merge-base $(TARGET_BRANCH) HEAD)
+  ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+    NX_BRANCH: $(Build.SourceBranchName)
+    BASE_SHA: $(git rev-parse HEAD~1)
+  HEAD_SHA: $(git rev-parse HEAD)
+
+stages:
+  - stage: build_test
+    pool:
+      vmImage: ubuntu-latest
+    variables:
+      disable.coverage.autogenerate: true
+    jobs:
+      - job: test_build
+        steps:
+          - template: .azure-pipelines/steps/install-node-modules.yml
+
+          - script: npx nx workspace-lint
+            displayName: "Run nx workspace linting"
+
+          - script: npx nx format:check --base=$(BASE_SHA) --head=$(HEAD_SHA)
+            displayName: "Run nx format check"
+
+          - script: npx nx affected -base=$(BASE_SHA) --head=$(HEAD_SHA) --target=lint --parallel=3
+            displayName: "Run linting"
+
+          - script: npx nx affected -base=$(BASE_SHA) --head=$(HEAD_SHA) --target=test --parallel=3 --ci --code-coverage
+            displayName: "Run tests"
+
+          - script: npx nx affected -base=$(BASE_SHA) --head=$(HEAD_SHA) --target=build --parallel=3
+            displayName: "Run build"
+
+          - task: PublishPipelineArtifact@1
+            condition: and(succeeded(), eq(variables.isMain, 'true'))
+            inputs:
+              targetPath: $(System.DefaultWorkingDirectory)/apps/client/build
+              artifactName: "client-build"
+
+          - task: PublishPipelineArtifact@1
+            condition: and(succeeded(), eq(variables.isMain, 'true'))
+            inputs:
+              targetPath: $(System.DefaultWorkingDirectory)/apps/api/build
+              artifactName: "api-build"
