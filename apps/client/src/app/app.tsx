@@ -1,8 +1,16 @@
+import { CssBaseline, ThemeProvider } from '@mui/material';
 import React, { useEffect, useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { Message } from '@dvp/api-interfaces';
+import { NavBar } from '../components';
+import { theme } from '../theme';
+
+const Home = ({ message }: { message: Message }) => (
+  <div tabIndex={0}>{message.message}</div>
+);
 
 export const App = () => {
-  const [m, setMessage] = useState<Message>({ message: '' });
+  const [message, setMessage] = useState<Message>({ message: '' });
 
   useEffect(() => {
     fetch('/api')
@@ -11,17 +19,17 @@ export const App = () => {
   }, []);
 
   return (
-    <>
-      <div style={{ textAlign: 'center' }}>
-        <h1>Welcome to client!</h1>
-        <img
-          width="450"
-          src="https://raw.githubusercontent.com/nrwl/nx/master/images/nx-logo.png"
-          alt="Nx - Smart, Fast and Extensible Build System"
-        />
-      </div>
-      <div>{m.message}</div>
-    </>
+    <React.Fragment>
+      <CssBaseline />
+      <ThemeProvider theme={theme}>
+        <Router>
+          <NavBar />
+          <Routes>
+            <Route path="/" element={<Home message={message} />} />
+          </Routes>
+        </Router>
+      </ThemeProvider>
+    </React.Fragment>
   );
 };
 
