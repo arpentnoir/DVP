@@ -35,21 +35,25 @@ stages:
     jobs:
       - job: test_build
         steps:
+          - checkout: self
+            fetchDepth: 2
+            displayName: Checkout
+
           - template: .azure-pipelines/steps/install-node-modules.yml
 
           - script: npx nx workspace-lint
             displayName: "Run nx workspace linting"
 
-          - script: npx nx format:check --base=$(BASE_SHA) --head=$(HEAD_SHA)
-            displayName: "Run nx format check"
+          # - script: npx nx format:check --base=$(BASE_SHA) --head=$(HEAD_SHA)
+          #   displayName: "Run nx format check"
 
-          - script: npx nx affected -base=$(BASE_SHA) --head=$(HEAD_SHA) --target=lint --parallel=3
+          - script: npx nx affected --base=$(BASE_SHA) --head=$(HEAD_SHA) --target=lint --parallel=3
             displayName: "Run linting"
 
-          - script: npx nx affected -base=$(BASE_SHA) --head=$(HEAD_SHA) --target=test --parallel=3 --ci --code-coverage
+          - script: npx nx affected --base=$(BASE_SHA) --head=$(HEAD_SHA) --target=test --parallel=3 --ci --code-coverage
             displayName: "Run tests"
 
-          - script: npx nx affected -base=$(BASE_SHA) --head=$(HEAD_SHA) --target=build --parallel=3
+          - script: npx nx affected --base=$(BASE_SHA) --head=$(HEAD_SHA) --target=build --parallel=3
             displayName: "Run build"
 
           - task: PublishPipelineArtifact@1
