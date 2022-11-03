@@ -20,10 +20,10 @@ variables:
   ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
     NX_BRANCH: $(System.PullRequest.PullRequestNumber)
     TARGET_BRANCH: $[replace(variables['System.PullRequest.TargetBranch'],'refs/heads/','origin/')]
-    BASE_SHA: $(git merge-base $(TARGET_BRANCH) HEAD)
+    BASE_SHA: main
   ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
     NX_BRANCH: $(Build.SourceBranchName)
-    BASE_SHA: $(git rev-parse HEAD~1)
+    BASE_SHA: main~1
   HEAD_SHA: $(git rev-parse HEAD)
 
 stages:
@@ -44,26 +44,23 @@ stages:
           - script: npx nx workspace-lint
             displayName: "Run nx workspace linting"
 
-          # - script: npx nx format:check --base=$(BASE_SHA) --head=$(HEAD_SHA)
-          #   displayName: "Run nx format check"
-
-          - script: npx nx affected --base=$(BASE_SHA) --head=$(HEAD_SHA) --target=lint --parallel=3
+          - script: npx nx run-many --target=lint --parallel=3
             displayName: "Run linting"
 
-          - script: npx nx affected --base=$(BASE_SHA) --head=$(HEAD_SHA) --target=test --parallel=3 --ci --code-coverage
+          - script: npx nx run-many --target=test --parallel=3 --ci --code-coverage
             displayName: "Run tests"
 
-          - script: npx nx affected --base=$(BASE_SHA) --head=$(HEAD_SHA) --target=build --parallel=3
+          - script: npx nx run-many --target=build --parallel=3
             displayName: "Run build"
 
           - task: PublishPipelineArtifact@1
             condition: and(succeeded(), eq(variables.isMain, 'true'))
             inputs:
-              targetPath: $(System.DefaultWorkingDirectory)/apps/client/build
+              targetPath: $(System.DefaultWorkingDirectory)/dist/apps/client
               artifactName: "client-build"
 
           - task: PublishPipelineArtifact@1
             condition: and(succeeded(), eq(variables.isMain, 'true'))
             inputs:
-              targetPath: $(System.DefaultWorkingDirectory)/apps/api/build
+              targetPath: $(System.DefaultWorkingDirectory)/dist/apps/api
               artifactName: "api-build"
