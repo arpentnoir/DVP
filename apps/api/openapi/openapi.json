@@ -1,0 +1,95 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "version": "0.1",
+    "title": "DVP",
+    "description": "API for the Digital Verification Platform"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3333",
+      "description": "Local environment"
+    },
+    {
+      "url": "https://dev.api.dvp.ha.showthething.com",
+      "description": "Development environment"
+    }
+  ],
+  "paths": {
+    "/storage/documents/{documentId}": {
+      "get": {
+        "summary": "Get encrypted document by Id",
+        "parameters": [
+          {
+            "name": "documentId",
+            "in": "path",
+            "required": true,
+            "description": "The encrypted documents object Id",
+            "example": "b1e0a450-1dad-495d-9cae-ab80f3b00591",
+            "schema": {
+              "$ref": "#/components/schemas/Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the document",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EncryptedDocumentObject"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "openapi.errors.json#/components/responses/badRequestErrorResponse"
+          },
+          "404": {
+            "$ref": "openapi.errors.json#/components/responses/resourceNotFoundErrorResponse"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Id": {
+        "type": "string",
+        "format": "uuid"
+      },
+      "EncryptedDocumentObject": {
+        "type": "object",
+        "required": ["document"],
+        "properties": {
+          "document": {
+            "type": "object",
+            "required": ["cipherText", "iv", "tag", "type"],
+            "properties": {
+              "cipherText": {
+                "type": "string",
+                "example": "HSKcfell3ocggQDfvg4CRHNptlfleWW3DEcdBbouFoS5Sp0STZmU2ddmchLcinsxYBkN+VFrFNhC3ws1vB6HEWq/mmz+7Vl0HRiBnC8NP4iZFEdbDelCuyfEoRLVenFXcQu2LnBB63aqicvNhzOs1p/dJQnmkr5zxR3vW0MgH+Xi8/NY+lOUu0+TTDs8S4AkhO3BsX1TnS8eWpjImDUxNDTA7tDiyx0m2Ns+EbqJY1q/wi5Wq1vqezpOLaBiAn4TJ4zYARU1BeiCbBGSaCKPtLZPhFYd9EeCTghqdgVqyL8ZuVONYELgvUATvtqJiOqTxkAVm2H9EoKzmP9hzwCW4r3JOl/glaST+IdXfq/aSxqUVbobLH4q7Ho7gNTM5wnvjmhpfo+K6ycsfTyHLvBGQqnITlH0+RnXsSTimxdmEPShG0ER8ul+5d8e68oozZntB6bkM3TxoZJ8idh2",
+                "description": "Encrypted verifiable credential"
+              },
+              "iv": {
+                "type": "string",
+                "example": "LKwFbAzol64l0OyN",
+                "description": "Initialisation vector"
+              },
+              "tag": {
+                "type": "string",
+                "example": "EOH28x8yC2pJDFCX/wVhqg==",
+                "description": "Message authentication code (MAC)"
+              },
+              "type": {
+                "type": "string",
+                "example": "OPEN-ATTESTATION-TYPE-1",
+                "description": "Encryption algorithm identifier (OA)"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
