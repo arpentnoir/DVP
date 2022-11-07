@@ -15,7 +15,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@dvp/api-interfaces": ["libs/api-interfaces/src/index.ts"]
+      "@dvp/api-interfaces": ["libs/api-interfaces/src/index.ts"],
+      "@dvp/vc-ui": ["libs/vc-ui/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
