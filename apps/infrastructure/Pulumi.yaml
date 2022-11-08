@@ -1,0 +1,5 @@
+name: client
+runtime: nodejs
+description: Program to manage the infrastructure for client
+options:
+  refresh: always

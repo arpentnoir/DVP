@@ -1,5 +1,0 @@
-name: DVP
-runtime: nodejs
-description: Pulumi project for DVP project
-options:
-  refresh: always

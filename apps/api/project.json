@@ -5,16 +5,24 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/webpack:webpack",
+      "executor": "@nrwl/esbuild:esbuild",
       "outputs": ["{options.outputPath}"],
       "options": {
-        "target": "node",
-        "compiler": "tsc",
+        "minify": true,
+        "target": "esnext",
+        "platform": "node",
+        "format": ["esm"],
         "outputPath": "dist/apps/api",
         "main": "apps/api/src/index.ts",
         "tsConfig": "apps/api/tsconfig.app.json",
         "assets": ["apps/api/src/assets"],
-        "outputFileName": "index.js"
+        "outputFileName": "index.js",
+        "esbuildOptions": {
+          "banner": {
+            "js": "import { createRequire } from 'module';const require = createRequire(import.meta.url);"
+          }
+        }
+
       },
       "configurations": {
         "production": {

@@ -1,0 +1,37 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "infrastructure",
+  "projectType": "application",
+  "sourceRoot": "apps/infrastructure/src",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/infrastructure/**/*.ts"]
+      }
+    },
+    "up": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "make pulumi-up",
+        "cwd": "apps/infrastructure"
+      }
+    },
+    "preview": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "make pulumi-preview",
+        "cwd": "apps/infrastructure"
+      }
+    },
+    "destroy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "make pulumi-destroy",
+        "cwd": "apps/infrastructure"
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["client", "api"]
+}

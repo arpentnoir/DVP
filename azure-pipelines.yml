@@ -64,3 +64,54 @@ stages:
             inputs:
               targetPath: $(System.DefaultWorkingDirectory)/dist/apps/api
               artifactName: "api-build"
+  - stage: deploy
+    dependsOn: build_test
+    condition: and(succeeded(), eq(variables.isMain, 'true'))
+    pool:
+      vmImage: ubuntu-latest
+    jobs:
+      - job: deploy
+        steps:
+          - task: AzureKeyVault@2
+            inputs:
+              connectedServiceName: "gs-ha-dvp-serviceconnection"
+              keyVaultName: "gs-ha-dvp"
+              secretsFilter: "*"
+              runAsPreJob: true
+
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              source: "current" # Options: current, specific
+              path: $(System.DefaultWorkingDirectory)/artifacts
+
+          - template: .azure-pipelines/steps/install-node-modules.yml
+
+          - bash: |
+              # exit if a command returns a non-zero exit code and also print the commands and their args as they are executed
+              set -e -x
+
+              # Download and install required tools pulumi
+              rm -rf $HOME/.pulumi
+              rm -rf /usr/local/bin/pulumi*
+              curl -fsSL https://get.pulumi.com | sh -s -- --version 3.46.0
+              /bin/cp -rf $HOME/.pulumi/bin/* /usr/local/bin
+
+              cd apps/infrastructure/policypack && yarn install
+
+            displayName: Install pulumi
+
+          - bash: |
+              npx nx run infrastructure:preview --verbose
+            displayName: Run `pulumi preview`
+            env:
+              ENV: ${{ parameters.ENV }}
+              AWS_ACCESS_KEY_ID: $(AWS-ACCESS-KEY-ID)
+              AWS_SECRET_ACCESS_KEY: $(aws-secret-access-key)
+
+          - bash: |
+              npx nx run infrastructure:up --verbose
+            displayName: Run `pulumi up`
+            env:
+              ENV: ${{ parameters.ENV }}
+              AWS_ACCESS_KEY_ID: $(AWS-ACCESS-KEY-ID)
+              AWS_SECRET_ACCESS_KEY: $(aws-secret-access-key)

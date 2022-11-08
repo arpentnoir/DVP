@@ -6,13 +6,6 @@
 
 Navigate to the [Pulumi install guide](https://www.pulumi.com/docs/get-started/aws/begin/#install-pulumi) and follow the instructions based on your operating system.
 
-#### Install the Dependencies
-
-Navigate to the projects root directory and run the following command:
-
-```
-yarn install
-```
 
 #### Environment Variables
 
