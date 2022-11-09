@@ -20,3 +20,13 @@ export interface Document {
   '@context': string[];
   issuer: Issuer;
 }
+
+//TODO: fill out this type
+export interface VerifiableCredential{
+  "@context": Array<{ [key: string]: any } | string>;
+  issuer: string | Record<string, unknown>;
+  credentialSubject: Record<string, unknown>;
+  proof?: Record<string, unknown>;
+  credentialStatus?: Record<string, unknown>;
+  [key: string]: any;
+}
