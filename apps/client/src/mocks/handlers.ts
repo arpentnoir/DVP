@@ -25,6 +25,10 @@ export const handlers: RequestHandler[] = [
   }),
 
   // VC API
+  rest.get('http://localhost:4200/api', (req, res, ctx) => {
+    return res(ctx.status(200), ctx.json({ message: 'soopadooopa' }));
+  }),
+
   rest.post('http://localhost:4200/api/verify', async (req, res, ctx) => {
     const result = await req.json();
 

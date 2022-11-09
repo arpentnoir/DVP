@@ -10,3 +10,5 @@ export const ROUTES = {
 
 export const FAIL_VC_FETCH_DECRYPT_ERR_MSG =
   'Unable to fetch and/or decrypt Verifiable Credential';
+
+export const API_ENDPOINTS = { VERIFY: '/verify' };

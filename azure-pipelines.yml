@@ -1,4 +1,3 @@
-
 trigger:
   - main
 pr:
@@ -42,28 +41,30 @@ stages:
           - template: .azure-pipelines/steps/install-node-modules.yml
 
           - script: npx nx workspace-lint
-            displayName: "Run nx workspace linting"
+            displayName: 'Run nx workspace linting'
 
           - script: npx nx run-many --target=lint --parallel=3
-            displayName: "Run linting"
+            displayName: 'Run linting'
 
           - script: npx nx run-many --target=test --parallel=3 --ci --code-coverage
-            displayName: "Run tests"
+            displayName: 'Run tests'
 
           - script: npx nx run-many --target=build --parallel=3
-            displayName: "Run build"
+            displayName: 'Run build'
+            env:
+              NX_API_URL: https://api.${{ parameters.ENV }}.$(TARGET_DOMAIN)
 
           - task: PublishPipelineArtifact@1
             condition: and(succeeded(), eq(variables.isMain, 'true'))
             inputs:
               targetPath: $(System.DefaultWorkingDirectory)/dist/apps/client
-              artifactName: "client-build"
+              artifactName: 'client-build'
 
           - task: PublishPipelineArtifact@1
             condition: and(succeeded(), eq(variables.isMain, 'true'))
             inputs:
               targetPath: $(System.DefaultWorkingDirectory)/dist/apps/api
-              artifactName: "api-build"
+              artifactName: 'api-build'
   - stage: deploy
     dependsOn: build_test
     condition: and(succeeded(), eq(variables.isMain, 'true'))
@@ -74,14 +75,14 @@ stages:
         steps:
           - task: AzureKeyVault@2
             inputs:
-              connectedServiceName: "gs-ha-dvp-serviceconnection"
-              keyVaultName: "gs-ha-dvp"
-              secretsFilter: "*"
+              connectedServiceName: 'gs-ha-dvp-serviceconnection'
+              keyVaultName: 'gs-ha-dvp'
+              secretsFilter: '*'
               runAsPreJob: true
 
           - task: DownloadPipelineArtifact@2
             inputs:
-              source: "current" # Options: current, specific
+              source: 'current' # Options: current, specific
               path: $(System.DefaultWorkingDirectory)/artifacts
 
           - template: .azure-pipelines/steps/install-node-modules.yml

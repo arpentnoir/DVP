@@ -1,5 +1,6 @@
 import { Message } from '@dvp/api-interfaces';
 import { Container } from '@mui/material';
+import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { Verify } from './Verify';
@@ -13,8 +14,9 @@ export const Main = () => {
   const [message, setMessage] = useState<Message>({ message: '' });
 
   useEffect(() => {
-    fetch('/api')
-      .then((r) => r.json())
+    axios
+      .get('/api')
+      .then((r) => r.data)
       .then(setMessage);
   }, []);
 

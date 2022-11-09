@@ -1,7 +1,9 @@
+import axios from 'axios';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
-
 import App from './app/app';
+
+axios.defaults.baseURL = process.env['NX_API_URL'];
 
 // Start the mocking conditionally.
 if (process.env['NODE_ENV'] === 'development') {
