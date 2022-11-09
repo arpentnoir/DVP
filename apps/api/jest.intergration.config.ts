@@ -1,6 +1,6 @@
 /* eslint-disable */
 export default {
-  displayName: 'api unit tests',
+  displayName: 'api intergration tests',
   preset: '../../jest.preset.js',
   globals: {
     'ts-jest': {
@@ -11,8 +11,6 @@ export default {
   transform: {
     '^.+\\.[tj]s$': 'ts-jest',
   },
-  setupFilesAfterEnv: ['./jest.setup.ts'],
   moduleFileExtensions: ['ts', 'js', 'html'],
-  coverageDirectory: '../../coverage/apps/api',
-  testMatch: ['**/**/*.spec.{ts, js}'],
+  testMatch: ['**/**/*.test.{ts, js}'],
 };

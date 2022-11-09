@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as aws from "@pulumi/aws";
 import * as awsx from "@pulumi/awsx";
 import * as pulumi from "@pulumi/pulumi";
@@ -43,12 +44,14 @@ const databaseUrl = pulumi
   ])
   .apply(([password, username, endpoint, port]: Array<any>) => {
     const urlParams = new URLSearchParams(config.databaseOptions).toString();
-    return `mongodb://${username}:${encodeURIComponent(password)}@${endpoint}:${port}/?${urlParams}`;
+    return `mongodb://${username}:${encodeURIComponent(
+      password
+    )}@${endpoint}:${port}/?${urlParams}`;
   });
 
 const enviromentVariables = {
   variables: {
-    BUCKET_NAME: documentStoreBucket.bucket,
+    DOCUMENT_STORAGE_BUCKET_NAME: documentStoreBucket.bucket,
     S3_REGION: documentStoreBucket.region,
     DATABASE_URL: databaseUrl,
     CONFIGFILE_DATABASE_COLLECTION_NAME: config.databaseCollectionName,
@@ -59,20 +62,29 @@ const enviromentVariables = {
 
 ////////////////////////////////////////////////////////////////////////////////
 // Lambda role policy attachments
-new aws.iam.RolePolicyAttachment(`${stack}-api-handler-lambda-execute-attachment`, {
-  role: lambdaRole.name,
-  policyArn: aws.iam.ManagedPolicy.AWSLambdaExecute,
-});
+new aws.iam.RolePolicyAttachment(
+  `${stack}-api-handler-lambda-execute-attachment`,
+  {
+    role: lambdaRole.name,
+    policyArn: aws.iam.ManagedPolicy.AWSLambdaExecute,
+  }
+);
 
-new aws.iam.RolePolicyAttachment(`${stack}-api--handler-lambda-xray-attachment`, {
-  role: lambdaRole.name,
-  policyArn: aws.iam.ManagedPolicy.AWSXrayWriteOnlyAccess,
-});
+new aws.iam.RolePolicyAttachment(
+  `${stack}-api--handler-lambda-xray-attachment`,
+  {
+    role: lambdaRole.name,
+    policyArn: aws.iam.ManagedPolicy.AWSXrayWriteOnlyAccess,
+  }
+);
 
-new aws.iam.RolePolicyAttachment(`${stack}-api-handler-lambda-vpc-execution-attachment`, {
-  role: lambdaRole.name,
-  policyArn: aws.iam.ManagedPolicy.AWSLambdaVPCAccessExecutionRole,
-});
+new aws.iam.RolePolicyAttachment(
+  `${stack}-api-handler-lambda-vpc-execution-attachment`,
+  {
+    role: lambdaRole.name,
+    policyArn: aws.iam.ManagedPolicy.AWSLambdaVPCAccessExecutionRole,
+  }
+);
 
 const kmsLambdaPolicy = new aws.iam.Policy(`${stack}-kms-Lambda-Policy`, {
   policy: {
@@ -122,7 +134,7 @@ const apiGateway = new awsx.apigateway.API(`${stack}-api`, {
       path: "/{proxy+}",
       method: "ANY",
       eventHandler: lambdaApiHandler,
-    }
+    },
   ],
   stageName: `${stack}-api`,
   stageArgs: {
@@ -157,7 +169,9 @@ new aws.apigateway.MethodSettings("all", {
 ////////////////////////////////////////////////////////////////////////////////
 // Custom domain name for api
 
-const provider = new aws.Provider(`${stack}-provider-us-east-1`, { region: "us-east-1" });
+const provider = new aws.Provider(`${stack}-provider-us-east-1`, {
+  region: "us-east-1",
+});
 
 // Get ssl certificate
 const sslCertificate = pulumi.output(
@@ -171,13 +185,18 @@ const sslCertificate = pulumi.output(
 );
 
 // Get hosted zone
-const hostedZoneId = aws.route53.getZone({ name: config.targetDomain }, {}).then((zone) => zone.zoneId);
+const hostedZoneId = aws.route53
+  .getZone({ name: config.targetDomain }, {})
+  .then((zone) => zone.zoneId);
 
 // Register custom domain name with ApiGateway
-const apiDomainName = new aws.apigateway.DomainName(`${stack}-api-domain-name`, {
-  certificateArn: sslCertificate.arn,
-  domainName: config.dvpApiDomain,
-});
+const apiDomainName = new aws.apigateway.DomainName(
+  `${stack}-api-domain-name`,
+  {
+    certificateArn: sslCertificate.arn,
+    domainName: config.dvpApiDomain,
+  }
+);
 
 // Create dns record
 new aws.route53.Record(`${stack}-api-dns`, {
