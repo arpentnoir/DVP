@@ -15,7 +15,7 @@ export const Main = () => {
 
   useEffect(() => {
     axios
-      .get('/api')
+      .get('/')
       .then((r) => r.data)
       .then(setMessage);
   }, []);

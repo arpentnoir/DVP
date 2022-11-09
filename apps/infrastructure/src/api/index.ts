@@ -1,18 +1,18 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import * as aws from "@pulumi/aws";
-import * as awsx from "@pulumi/awsx";
-import * as pulumi from "@pulumi/pulumi";
-import { kms } from "../common";
+import * as aws from '@pulumi/aws';
+import * as awsx from '@pulumi/awsx';
+import * as pulumi from '@pulumi/pulumi';
+import { kms } from '../common';
 
-import * as documentDB from "../common/documentDb";
-import * as vpc from "../common/vpc";
-import { config } from "./config";
-import { bucketPolicy } from "./policies/s3Policies";
-import { lambdaRole } from "./roles/lambdaRole";
+import * as documentDB from '../common/documentDb';
+import * as vpc from '../common/vpc';
+import { config } from './config';
+import { bucketPolicy } from './policies/s3Policies';
+import { lambdaRole } from './roles/lambdaRole';
 
 const stack = pulumi.getStack();
 
-const apiDir = "../../artifacts/api-build"; // directory for content files
+const apiDir = '../../artifacts/api-build'; // directory for content files
 
 ////////////////////////////////////////////////////////////////////////////////
 // Log group for api
@@ -25,7 +25,7 @@ const documentStoreBucket = new aws.s3.Bucket(`${stack}-document-store`, {
 });
 
 // Set the access policy for the bucket
-new aws.s3.BucketPolicy("documentStoreBucketPolicy", {
+new aws.s3.BucketPolicy('documentStoreBucketPolicy', {
   bucket: documentStoreBucket.bucket,
   policy: pulumi
     .all([documentStoreBucket.bucket, lambdaRole.arn])
@@ -88,11 +88,11 @@ new aws.iam.RolePolicyAttachment(
 
 const kmsLambdaPolicy = new aws.iam.Policy(`${stack}-kms-Lambda-Policy`, {
   policy: {
-    Version: "2012-10-17",
+    Version: '2012-10-17',
     Statement: [
       {
-        Effect: "Allow",
-        Action: ["kms:Encrypt", "kms:Decrypt"],
+        Effect: 'Allow',
+        Action: ['kms:Encrypt', 'kms:Decrypt'],
         Resource: kms.kmsCmkAlias.targetKeyArn,
       },
     ],
@@ -106,13 +106,14 @@ new aws.iam.RolePolicyAttachment(`${stack}-api-kms-policy-attachment`, {
 ////////////////////////////////////////////////////////////////////////////////
 // Lambda functions for apis
 const lambdaApiHandler = new aws.lambda.Function(`${stack}-api-handler`, {
+  memorySize: 1028,
   role: lambdaRole.arn,
   code: new pulumi.asset.FileArchive(apiDir),
-  handler: "index.handler",
-  runtime: "nodejs16.x",
+  handler: 'index.handler',
+  runtime: 'nodejs16.x',
   environment: { ...enviromentVariables },
   tracingConfig: {
-    mode: "Active",
+    mode: 'Active',
   },
   vpcConfig: {
     subnetIds: vpc.dvpVpcPrivateSubnetIds,
@@ -126,13 +127,13 @@ const lambdaApiHandler = new aws.lambda.Function(`${stack}-api-handler`, {
 const apiGateway = new awsx.apigateway.API(`${stack}-api`, {
   restApiArgs: {
     endpointConfiguration: {
-      types: "EDGE",
+      types: 'EDGE',
     },
   },
   routes: [
     {
-      path: "/{proxy+}",
-      method: "ANY",
+      path: '/{proxy+}',
+      method: 'ANY',
       eventHandler: lambdaApiHandler,
     },
   ],
@@ -142,27 +143,27 @@ const apiGateway = new awsx.apigateway.API(`${stack}-api`, {
     accessLogSettings: {
       destinationArn: apiLogGroup.arn,
       format: JSON.stringify({
-        requestId: "$context.requestId",
-        ip: "$context.identity.sourceIp",
-        caller: "$context.identity.caller",
-        user: "$context.identity.user",
-        requestTime: "$context.requestTime",
-        httpMethod: "$context.httpMethod",
-        resourcePath: "$context.resourcePath",
-        status: "$context.status",
-        protocol: "$context.protocol",
+        requestId: '$context.requestId',
+        ip: '$context.identity.sourceIp',
+        caller: '$context.identity.caller',
+        user: '$context.identity.user',
+        requestTime: '$context.requestTime',
+        httpMethod: '$context.httpMethod',
+        resourcePath: '$context.resourcePath',
+        status: '$context.status',
+        protocol: '$context.protocol',
       }),
     },
   },
 });
 
-new aws.apigateway.MethodSettings("all", {
+new aws.apigateway.MethodSettings('all', {
   restApi: apiGateway.restAPI.id,
   stageName: apiGateway.stage.stageName,
-  methodPath: "*/*",
+  methodPath: '*/*',
   settings: {
     metricsEnabled: true,
-    loggingLevel: "INFO",
+    loggingLevel: 'INFO',
   },
 });
 
@@ -170,7 +171,7 @@ new aws.apigateway.MethodSettings("all", {
 // Custom domain name for api
 
 const provider = new aws.Provider(`${stack}-provider-us-east-1`, {
-  region: "us-east-1",
+  region: 'us-east-1',
 });
 
 // Get ssl certificate
@@ -178,7 +179,7 @@ const sslCertificate = pulumi.output(
   aws.acm.getCertificate(
     {
       domain: config.dvpApiDomain,
-      statuses: ["ISSUED"],
+      statuses: ['ISSUED'],
     },
     { provider: provider }
   )
@@ -201,7 +202,7 @@ const apiDomainName = new aws.apigateway.DomainName(
 // Create dns record
 new aws.route53.Record(`${stack}-api-dns`, {
   zoneId: hostedZoneId,
-  type: "A",
+  type: 'A',
   name: config.dvpApiDomain,
   aliases: [
     {

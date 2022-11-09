@@ -3,7 +3,7 @@ import axios from 'axios';
 
 // Establish API mocking before all tests.
 beforeAll(() => {
-  axios.defaults.baseURL = 'http://localhost:4200';
+  axios.defaults.baseURL = 'http://localhost:4200/api';
   server.listen();
 });
 // Reset any request handlers that we may add during the tests,

@@ -52,7 +52,7 @@ stages:
           - script: npx nx run-many --target=build --parallel=3
             displayName: 'Run build'
             env:
-              NX_API_URL: https://api.${{ parameters.ENV }}.$(TARGET_DOMAIN)
+              NX_API_URL: https://api.${{ parameters.ENV }}.$(TARGET_DOMAIN)/api
 
           - task: PublishPipelineArtifact@1
             condition: and(succeeded(), eq(variables.isMain, 'true'))

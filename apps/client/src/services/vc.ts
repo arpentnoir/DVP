@@ -9,5 +9,8 @@ export const verify = async (document: Document) => {
   const res = await axios.post(API_ENDPOINTS.VERIFY, {
     verifiableCredential: document,
   });
-  return { document, results: { ...res.data, issuer: _getIssuer(document) } };
+  return {
+    document,
+    results: { ...res.data, issuer: _getIssuer(document) },
+  };
 };

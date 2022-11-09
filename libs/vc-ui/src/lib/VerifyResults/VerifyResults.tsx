@@ -65,6 +65,7 @@ export const Valid = ({ issuer, checks }: IValid) => {
           lineHeight="24px"
           marginBottom="8px"
           marginTop="8px"
+          style={{ wordWrap: 'break-word' }}
         >
           Issued by: {issuer}
         </Typography>
