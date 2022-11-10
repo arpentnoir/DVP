@@ -7,11 +7,11 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3333",
+      "url": "http://localhost:3333/api",
       "description": "Local environment"
     },
     {
-      "url": "https://dev.api.dvp.ha.showthething.com",
+      "url": "https://api.dev.dvp.ha.showthething.com/api",
       "description": "Development environment"
     }
   ],
@@ -25,7 +25,7 @@
             "in": "path",
             "required": true,
             "description": "The encrypted documents object Id",
-            "example": "b1e0a450-1dad-495d-9cae-ab80f3b00591",
+            "example": "77879ba6-9aaf-4895-9e1c-794e4a3653fe",
             "schema": {
               "$ref": "#/components/schemas/Id"
             }
@@ -56,7 +56,8 @@
     "schemas": {
       "Id": {
         "type": "string",
-        "format": "uuid"
+        "format": "uuid",
+        "example": "77879ba6-9aaf-4895-9e1c-794e4a3653fe"
       },
       "EncryptedDocumentObject": {
         "type": "object",

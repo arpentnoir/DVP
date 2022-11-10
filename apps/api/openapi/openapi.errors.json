@@ -219,13 +219,41 @@
       }
     },
     "examples": {
+      "errorResponseExample": {
+        "description": "An example of an ERROR (`500`) error.\n\nThis can be returned when the **API** encounters an internal error.",
+        "value": {
+          "errors": [
+            {
+              "id": "34910168-ff90-410f-a684-8eb89b876ab6",
+              "code": "DVPAPI-001",
+              "detail": "System Unavailable.  Try again later."
+            }
+          ]
+        }
+      },
+      "notFoundErrorExample": {
+        "description": "An example of a NOT FOUND (`404`) error.\n\nThis can be returned when a **GET** / **PUT** / **DELETE** request is made for a resource\nthat does not exist.",
+        "value": {
+          "errors": [
+            {
+              "id": "7773a6c1-ad84-4e88-a299-4c257a66a601",
+              "code": "DVPAPI-002",
+              "detail": "Cannot find resource `/storage/documents/6933bbcb-422f-4135-be13-74677a80dbde`",
+              "source": {
+                "location": "ID",
+                "parameter": "6933bbcb-422f-4135-be13-74677a80dbde"
+              }
+            }
+          ]
+        }
+      },
       "badRequestErrorExample": {
         "description": "An example of a NOT UNDERSTOOD / BAD REQUEST (`400`) error.\n\nThis can be returned when a **API** call is made with malformed syntax.",
         "value": {
           "errors": [
             {
               "id": "22af5d37-531c-4515-8f91-963249d3744a",
-              "code": "DVPAPI-001",
+              "code": "DVPAPI-003",
               "detail": "Missing field in schema POSTed to resource `/storage/documents/6d343ddd-ef1a-4ec3-8bcd-b833295c239a`",
               "source": {
                 "location": "REQUEST",
@@ -241,24 +269,12 @@
           "errors": [
             {
               "id": "6d343ddd-ef1a-4ec3-8bcd-b833295c239a",
-              "code": "DVPAPI-003",
+              "code": "DVPAPI-004",
               "detail": "Missing \"Authorization\" Header.",
               "source": {
                 "pointer": "Authorization",
                 "location": "QUERY"
               }
-            }
-          ]
-        }
-      },
-      "errorResponseExample": {
-        "description": "An example of an ERROR (`500`) error.\n\nThis can be returned when the **API** encounters an internal error.",
-        "value": {
-          "errors": [
-            {
-              "id": "34910168-ff90-410f-a684-8eb89b876ab6",
-              "code": "DVPAPI-001",
-              "detail": "System Unavailable.  Try again later."
             }
           ]
         }
@@ -269,24 +285,8 @@
           "errors": [
             {
               "id": "1cdd29dd-a475-4aa7-8c9b-3c9843807ab7",
-              "code": "DVPAPI-003",
+              "code": "DVPAPI-005",
               "detail": "Unable to perform POST to /credentials/issue for ABN 17-376-225-834"
-            }
-          ]
-        }
-      },
-      "notFoundErrorExample": {
-        "description": "An example of a NOT FOUND (`404`) error.\n\nThis can be returned when a **GET** / **PUT** / **DELETE** request is made for a resource\nthat does not exist.",
-        "value": {
-          "errors": [
-            {
-              "id": "7773a6c1-ad84-4e88-a299-4c257a66a601",
-              "code": "DVPAPI-004",
-              "detail": "Cannot find resource `/storage/documents/6933bbcb-422f-4135-be13-74677a80dbde`",
-              "source": {
-                "location": "ID",
-                "parameter": "6933bbcb-422f-4135-be13-74677a80dbde"
-              }
             }
           ]
         }
@@ -297,7 +297,7 @@
           "errors": [
             {
               "id": "46b1472a-4b19-47bb-91ad-701d38183e94",
-              "code": "DVPAPI-001",
+              "code": "DVPAPI-006",
               "detail": "Cannot DELETE resource `/storage/documents`"
             }
           ]
