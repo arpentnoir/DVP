@@ -106,7 +106,7 @@ new aws.iam.RolePolicyAttachment(`${stack}-api-kms-policy-attachment`, {
 ////////////////////////////////////////////////////////////////////////////////
 // Lambda functions for apis
 const lambdaApiHandler = new aws.lambda.Function(`${stack}-api-handler`, {
-  memorySize: 1028,
+  memorySize: 512,
   role: lambdaRole.arn,
   code: new pulumi.asset.FileArchive(apiDir),
   handler: 'index.handler',

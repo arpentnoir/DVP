@@ -6,11 +6,23 @@ export const _getIssuer = (document: Document) => document?.issuer?.id ?? '';
 
 // TODO: Refactor and write tests once verify endpoint response format is confirmed
 export const verify = async (document: Document) => {
-  const res = await axios.post(API_ENDPOINTS.VERIFY, {
-    verifiableCredential: document,
-  });
-  return {
-    document,
-    results: { ...res.data, issuer: _getIssuer(document) },
-  };
+  try {
+    const res = await axios.post(API_ENDPOINTS.VERIFY, {
+      verifiableCredential: document,
+    });
+
+    return {
+      document,
+      results: { ...res.data, issuer: _getIssuer(document) },
+    };
+  } catch (err: any) {
+    // If verification fails a 400 is returned, but we still want to return result
+    if (err.response.data) {
+      return {
+        document,
+        results: { ...err.response.data, issuer: _getIssuer(document) },
+      };
+    }
+    throw err;
+  }
 };

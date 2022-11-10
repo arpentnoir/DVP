@@ -34,7 +34,7 @@ export const handlers: RequestHandler[] = [
 
     // Fail
     if (result.verifiableCredential.test) {
-      return res(ctx.status(200), ctx.delay(1500), ctx.json(invalidVC));
+      return res(ctx.status(400), ctx.delay(1500), ctx.json(invalidVC));
     }
 
     // Success
