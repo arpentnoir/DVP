@@ -1,8 +1,7 @@
-import type { Request, Response, NextFunction } from 'express';
 import { EncryptedDocument } from '@dvp/api-interfaces';
-import { getDocument } from './storage.service';
-import { storageClient } from './storage.service';
-import { CustomError, ServerError } from '../../utils';
+import { NotFoundError, SystemError } from '@dvp/server-common';
+import type { NextFunction, Request, Response } from 'express';
+import { storageClient, StorageService } from './storage.service';
 
 export const getDocumentById = async (
   req: Request,
@@ -12,32 +11,16 @@ export const getDocumentById = async (
   const { documentId } = req.params;
 
   try {
-    const document = await getDocument(storageClient, documentId);
+    const storageService = new StorageService(req.invocationContext);
+    const document = await storageService.getDocument(
+      storageClient,
+      documentId
+    );
     if (!document) {
-      return next(
-        new CustomError(
-          {
-            code: 'DVPAPI-002',
-            detail: `Cannot find resource \`${req.originalUrl}\``,
-            source: {
-              location: 'ID',
-              parameter: `${documentId}`,
-            },
-          },
-          404
-        )
-      );
+      return next(new NotFoundError(`${req.originalUrl}/${documentId}`));
     }
     return res.send(document);
   } catch (err) {
-    return next(
-      new ServerError(
-        {
-          code: 'DVPAPI-001',
-          detail: 'System Unavailable.  Try again later.',
-        },
-        err.message
-      )
-    );
+    return next(new SystemError(err));
   }
 };

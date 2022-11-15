@@ -1,19 +1,18 @@
-import { VerifyService } from './verify.service';
 import type { Request, Response } from 'express';
+import { VerifyService } from './verify.service';
 
 export const handleVerify = async (req: Request, res: Response) => {
   const { verifiableCredential, options } = req.body;
 
-  const verifyService = new VerifyService();
+  const verifyService = new VerifyService(req.invocationContext);
   const verificationResult = await verifyService.verify(
     verifiableCredential,
     options
   );
 
   if (verificationResult.errors.length > 0) {
-    console.log(verificationResult.errors);
+    req.logger.debug('[verify.handleVerify] Verification Errors, %o', verificationResult.errors)
     res.status(400);
   }
-  console.log(JSON.stringify(verificationResult));
   return res.json(verificationResult);
 };

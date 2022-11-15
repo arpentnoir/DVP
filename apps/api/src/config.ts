@@ -1,5 +1,5 @@
-import { S3Config, ApiConfigFile } from '@dvp/api-interfaces';
-import { getEnv } from './utils';
+import { ApiConfigFile, S3Config } from '@dvp/api-interfaces';
+import { getEnv } from '@dvp/server-common';
 
 getEnv(['DOCUMENT_STORAGE_BUCKET_NAME', 'S3_REGION']) as S3Config;
 

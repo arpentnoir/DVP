@@ -1,6 +1,11 @@
-import { ErrorRequestHandler } from 'express';
+import { Logger, RequestInvocationContext } from '@dvp/server-common';
+import { RequestHandler } from 'express';
 
-export const logger: ErrorRequestHandler = (err, req, res, next) => {
-  //  TODO: Implement logger
-  next(err);
+export const loggerMiddleware: RequestHandler = async (req, res, next) => {
+  const invocationContext = new RequestInvocationContext(req);
+  const logger = Logger.from(invocationContext);
+
+  req.logger = logger;
+
+  next();
 };

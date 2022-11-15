@@ -1,14 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import { NotFoundError, SystemError } from '@dvp/server-common';
+import { getDocumentById } from './storage.controller';
+import { StorageService } from './storage.service';
+
 jest.mock('uuid', () => ({
   v4: () => '3a33cd7e-13e3-423f-a96e-36793a448b4c',
 }));
 jest.mock('./storage.service');
 
-import { getDocumentById } from './storage.controller';
-import { getDocument } from './storage.service';
-import { ServerError } from '../../utils';
-
-const mockedGetDocument = getDocument as jest.Mock;
 const ResponseMock = { send: jest.fn() } as any;
 const mockNext = jest.fn() as any;
 
@@ -18,7 +16,9 @@ describe('Storage Controller', () => {
   });
 
   it('should return a document if it exists', async () => {
-    mockedGetDocument.mockResolvedValueOnce({ document: 'testDocument' });
+    (StorageService.prototype.getDocument as jest.Mock).mockResolvedValueOnce({
+      document: 'testDocument',
+    });
     await getDocumentById(
       {
         params: { documentId: '3a33cd7e-13e3-423f-a96e-36793a448b4c' },
@@ -32,31 +32,28 @@ describe('Storage Controller', () => {
   });
 
   it("should send error to error handler if document doesn't exist", async () => {
-    mockedGetDocument.mockResolvedValueOnce(null);
+    (StorageService.prototype.getDocument as jest.Mock).mockResolvedValueOnce(
+      null
+    );
+    const documentId = '2a33cd7e-13e3-423f-a96e-36793a448b4b';
     await getDocumentById(
       {
-        params: { documentId: '2a33cd7e-13e3-423f-a96e-36793a448b4b' },
+        params: { documentId },
         originalUrl: '/storage/',
       } as any,
       ResponseMock,
       mockNext
     );
 
-    expect(mockNext).toBeCalledWith({
-      errorObject: {
-        code: 'DVPAPI-002',
-        detail: 'Cannot find resource `/storage/`',
-        source: {
-          location: 'ID',
-          parameter: '2a33cd7e-13e3-423f-a96e-36793a448b4b',
-        },
-      },
-      statusCode: 404,
-    });
+    expect(mockNext).toBeCalledWith(
+      new NotFoundError(`/storage//${documentId}`)
+    );
   });
 
   it('should send serverError to error handler if somthing unexpected happens', async () => {
-    mockedGetDocument.mockRejectedValueOnce(new Error('testErrorMessage'));
+    (StorageService.prototype.getDocument as jest.Mock).mockRejectedValueOnce(
+      new Error('testErrorMessage')
+    );
     await getDocumentById(
       {
         params: { documentId: '4a33cd7e-13e3-423f-a96e-36793a448b4a' },
@@ -65,6 +62,6 @@ describe('Storage Controller', () => {
       ResponseMock,
       mockNext
     );
-    expect(mockNext.mock.lastCall[0]).toBeInstanceOf(ServerError);
+    expect(mockNext.mock.lastCall[0]).toBeInstanceOf(SystemError);
   });
 });

@@ -1,9 +1,18 @@
 import {
-  VerificationResult, VerifierFunction, VerifyOptions
+  VerificationResult,
+  VerifierFunction,
+  VerifyOptions,
 } from '@dvp/api-interfaces';
 import {
-  isValid, openAttestationDidIdentityProof, openAttestationDidSignedDocumentStatus, openAttestationDnsDidIdentityProof, openAttestationDnsTxtIdentityProof, openAttestationHash, utils, verificationBuilder,
-  VerificationFragmentType
+  isValid,
+  openAttestationDidIdentityProof,
+  openAttestationDidSignedDocumentStatus,
+  openAttestationDnsDidIdentityProof,
+  openAttestationDnsTxtIdentityProof,
+  openAttestationHash,
+  utils,
+  verificationBuilder,
+  VerificationFragmentType,
 } from '@govtechsg/oa-verify';
 
 //TODO: production strategy

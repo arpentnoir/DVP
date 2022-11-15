@@ -1,4 +1,4 @@
-import { StorageClient, S3Config } from '@dvp/api-interfaces';
+import { S3Config, StorageClient } from '@dvp/api-interfaces';
 import { S3 } from 'aws-sdk';
 
 export class S3Adapter implements StorageClient {
@@ -18,7 +18,7 @@ export class S3Adapter implements StorageClient {
         return JSON.parse(encryptedDocument.Body.toString());
       }
       return null;
-    } catch (err) {
+    } catch (err: any) {
       if (err.message === 'The specified key does not exist.') {
         return null;
       }

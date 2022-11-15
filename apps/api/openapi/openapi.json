@@ -43,10 +43,10 @@
             }
           },
           "400": {
-            "$ref": "openapi.errors.json#/components/responses/badRequestErrorResponse"
+            "$ref": "#/components/responses/BadRequestErrorResponse"
           },
           "404": {
-            "$ref": "openapi.errors.json#/components/responses/resourceNotFoundErrorResponse"
+            "$ref": "#/components/responses/ResourceNotFoundErrorResponse"
           }
         }
       }
@@ -61,11 +61,18 @@
       },
       "EncryptedDocumentObject": {
         "type": "object",
-        "required": ["document"],
+        "required": [
+          "document"
+        ],
         "properties": {
           "document": {
             "type": "object",
-            "required": ["cipherText", "iv", "tag", "type"],
+            "required": [
+              "cipherText",
+              "iv",
+              "tag",
+              "type"
+            ],
             "properties": {
               "cipherText": {
                 "type": "string",
@@ -89,6 +96,312 @@
               }
             }
           }
+        }
+      },
+      "ErrorSource": {
+        "description": "An object containing references to the source of an error.",
+        "type": "object",
+        "properties": {
+          "pointer": {
+            "description": "A JSON Pointer which describes which property in the request object to which an error\nmessage relates.\n\nFor more details on JSON pointers see [RFC6901](https://tools.ietf.org/html/rfc6901).",
+            "type": "string"
+          },
+          "location": {
+            "description": "Describes the location of the data to which the error message is related.\n\n- **\"REQUEST\"** - Indicates the message relates to a _property_ within the request\n  object. The `pointer` property should be populated in this case.\n- **\"QUERY\"** - Indicates the message relates to a _query_ parameter. The `parameter`\n  property should be populated in this case.\n- **\"ID\"** - Indicates the message relates to the identifier of the REST resource. The\n  `parameter` property _may optionally_ be populated in this case.",
+            "type": "string",
+            "enum": [
+              "REQUEST",
+              "QUERY",
+              "ID"
+            ]
+          },
+          "parameter": {
+            "description": "A string indicating which URI query parameter caused the error.",
+            "type": "string"
+          }
+        }
+      },
+      "Error": {
+        "description": "An object containing the details of a particular error.",
+        "type": "object",
+        "properties": {
+          "id": {
+            "description": "A unique identifier for the error occurrence, to provide traceability in application logs.",
+            "type": "string"
+          },
+          "code": {
+            "description": "A provider-specific or enterprise defined error code. Codes must be in uppercase.",
+            "type": "string",
+            "example": "DVP0003"
+          },
+          "detail": {
+            "description": "A provider-specific or enterprise defined error message.",
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/components/schemas/ErrorSource"
+          },
+          "helpUrl": {
+            "description": "A URL which leads to further details about the error (e.g. A help page).",
+            "type": "string"
+          },
+          "helpText": {
+            "description": "Help text which can provide further assistance on the error.",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "detail"
+        ],
+        "example": {
+          "id": "123-4",
+          "code": "DVP0003",
+          "message": "The 'Decryption Key' is not valid.",
+          "source": {
+            "pointer": "decryptionKey",
+            "helpLocation": "REQUEST"
+          }
+        }
+      },
+      "ErrorsArray": {
+        "description": "A schema for the `errors` array.",
+        "type": "object",
+        "properties": {
+          "errors": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Error"
+            }
+          }
+        }
+      },
+      "ErrorsResponseSchema": {
+        "description": "The response returned when one or more errors have been encountered.",
+        "type": "object",
+        "required": [
+          "errors"
+        ],
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ErrorsArray"
+          }
+        ]
+      }
+    },
+    "responses": {
+      "GenericErrorResponse": {
+        "description": "One or more error(s) were encountered processing the request.\n\nThis response contains a collection of errors encountered while processing the request.",
+        "headers": {},
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorsResponseSchema"
+            },
+            "examples": {
+              "systemTimeout": {
+                "$ref": "#/components/examples/ErrorResponseExample"
+              }
+            }
+          }
+        }
+      },
+      "BadRequestErrorResponse": {
+        "description": "The request could not be understood by the server due to malformed syntax.\n\nThe client **SHOULD NOT** repeat the request without modifications.",
+        "headers": {},
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorsResponseSchema"
+            },
+            "examples": {
+              "badRequestError": {
+                "$ref": "#/components/examples/BadRequestErrorExample"
+              }
+            }
+          }
+        }
+      },
+      "AuthorizationErrorResponse": {
+        "description": "Client Error - Unauthorized.\n\nMissing or invalid `Authorization` header.",
+        "headers": {},
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorsResponseSchema"
+            },
+            "examples": {
+              "authorizationError": {
+                "$ref": "#/components/examples/AuthorizationErrorExample"
+              }
+            }
+          }
+        }
+      },
+      "ForbiddenErrorResponse": {
+        "description": "Client Error - Forbidden.\n\nOperation not allowed.",
+        "headers": {},
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorsResponseSchema"
+            },
+            "examples": {
+              "forbiddenError": {
+                "$ref": "#/components/examples/ForbiddenErrorExample"
+              }
+            }
+          }
+        }
+      },
+      "ResourceNotFoundErrorResponse": {
+        "description": "The requested resource could not be found but may be available in the future. \n\nSubsequent requests by the client are permissible.",
+        "headers": {},
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorsResponseSchema"
+            },
+            "examples": {
+              "notFoundError": {
+                "$ref": "#/components/examples/NotFoundErrorExample"
+              }
+            }
+          }
+        }
+      },
+      "MethodNotAllowedErrorResponse": {
+        "description": "Client Error - Method Not Allowed.\n\nA request method (**GET**, **POST**, **DELETE**, etc) is not supported for the requested\nresource.",
+        "headers": {},
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorsResponseSchema"
+            },
+            "examples": {
+              "methodNotAllowed": {
+                "$ref": "#/components/examples/MethodNotAllowedErrorExample"
+              }
+            }
+          }
+        }
+      },
+      "RequestTimeoutErrorResponse": {
+        "description": "Client Error - Request Timeout.\n\nThe server timed out waiting for the client request.",
+        "headers": {}
+      },
+      "UnsupportedMediaTypeErrorResponse": {
+        "description": "Client Error - Unsupported Media Type.\n\nThe request entity has a media type which the server or resource does not support.",
+        "headers": {}
+      },
+      "TooManyRequestsErrorResponse": {
+        "description": "Client Error - To Many Requests.\n\nThe client has sent too many requests in a given amount of time.",
+        "headers": {}
+      },
+      "InternalServerErrorResponse": {
+        "description": "Server Error - Internal Server Error. \n\nA generic error message, given when an unexpected condition was encountered while the server\nwas processing the request.",
+        "headers": {},
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorsResponseSchema"
+            },
+            "examples": {
+              "systemTimeout": {
+                "$ref": "#/components/examples/ErrorResponseExample"
+              }
+            }
+          }
+        }
+      },
+      "NotImplementedErrorResponse": {
+        "description": "Server Error - Not Implemented. \n\nThe server either does not recognize the request method, or it lacks the ability to fulfill\nthe request. \n\nUsually this implies future availability (e.g. A new feature of a web-service API).",
+        "headers": {}
+      }
+    },
+    "examples": {
+      "ErrorResponseExample": {
+        "description": "An example of an ERROR (`500`) error.\n\nThis can be returned when the **API** encounters an internal error.",
+        "value": {
+          "errors": [
+            {
+              "id": "34910168-ff90-410f-a684-8eb89b876ab6",
+              "code": "DVPAPI-001",
+              "detail": "System Unavailable.  Try again later."
+            }
+          ]
+        }
+      },
+      "NotFoundErrorExample": {
+        "description": "An example of a NOT FOUND (`404`) error.\n\nThis can be returned when a **GET** / **PUT** / **DELETE** request is made for a resource\nthat does not exist.",
+        "value": {
+          "errors": [
+            {
+              "id": "7773a6c1-ad84-4e88-a299-4c257a66a601",
+              "code": "DVPAPI-002",
+              "detail": "Cannot find resource `/storage/documents/6933bbcb-422f-4135-be13-74677a80dbde`",
+              "source": {
+                "location": "ID",
+                "parameter": "6933bbcb-422f-4135-be13-74677a80dbde"
+              }
+            }
+          ]
+        }
+      },
+      "BadRequestErrorExample": {
+        "description": "An example of a NOT UNDERSTOOD / BAD REQUEST (`400`) error.\n\nThis can be returned when a **API** call is made with malformed syntax.",
+        "value": {
+          "errors": [
+            {
+              "id": "22af5d37-531c-4515-8f91-963249d3744a",
+              "code": "DVPAPI-003",
+              "detail": "Missing field in schema POSTed to resource `/storage/documents/6d343ddd-ef1a-4ec3-8bcd-b833295c239a`",
+              "source": {
+                "location": "REQUEST",
+                "parameter": "/decryptionKey"
+              }
+            }
+          ]
+        }
+      },
+      "AuthorizationErrorExample": {
+        "description": "An example of an AUTHORIZATION (`401`) error.\n\nThis can be returned when an **API** call does not contain an `Authorization`\nheader.",
+        "value": {
+          "errors": [
+            {
+              "id": "6d343ddd-ef1a-4ec3-8bcd-b833295c239a",
+              "code": "DVPAPI-004",
+              "detail": "Missing \"Authorization\" Header.",
+              "source": {
+                "pointer": "Authorization",
+                "location": "QUERY"
+              }
+            }
+          ]
+        }
+      },
+      "ForbiddenErrorExample": {
+        "description": "An example of a FORBIDDEN (`403`) error.\n\nThis can be returned when an **API** submission is not permitted for a client with\na given `Authorization` header.",
+        "value": {
+          "errors": [
+            {
+              "id": "1cdd29dd-a475-4aa7-8c9b-3c9843807ab7",
+              "code": "DVPAPI-005",
+              "detail": "Unable to perform POST to /credentials/issue for ABN 17-376-225-834"
+            }
+          ]
+        }
+      },
+      "MethodNotAllowedErrorExample": {
+        "description": "An example of a METHOD NOT ALLOWED (`405`) error.\n\nThis can be returned when **GET** / **POST** / ** PUT** / **DELETE** request for is made for\na resource that does not support **GET** / **POST** / ** PUT** / **DELETE**.",
+        "value": {
+          "errors": [
+            {
+              "id": "46b1472a-4b19-47bb-91ad-701d38183e94",
+              "code": "DVPAPI-006",
+              "detail": "Cannot DELETE resource `/storage/documents`"
+            }
+          ]
         }
       }
     }

@@ -1,3 +1,4 @@
+import { VerifiableCredential } from '@dvp/api-interfaces';
 import {
   FrameActions,
   FrameConnector,
@@ -8,10 +9,10 @@ import { useCallback, useRef, useState } from 'react';
 import { DEFAULT_RENDERER } from '../constants';
 
 export interface IRendererViewer {
-  document: any;
+  document: VerifiableCredential;
 }
 
-export const _getRendererURl = (document: any) => {
+export const _getRendererURl = (document: VerifiableCredential) => {
   return document?.openAttestationMetadata?.template?.url
     ? document.openAttestationMetadata.template.url
     : DEFAULT_RENDERER;

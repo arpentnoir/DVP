@@ -1,20 +1,38 @@
 import {
-  VerifiableCredential, VerificationResult, VerifierFunction, VerifyOptions
+  VerifiableCredential,
+  VerificationResult,
+  VerifierFunction,
+  VerifyOptions,
 } from '@dvp/api-interfaces';
+import {
+  Logger,
+  RequestInvocationContext,
+  ValidationError,
+} from '@dvp/server-common';
 import { verify as oAVerify } from './openAttestation';
 
 export class VerifyService {
+  logger: Logger;
+  invocationContext: RequestInvocationContext;
+
+  constructor(invocationContext: RequestInvocationContext) {
+    this.invocationContext = invocationContext;
+    this.logger = Logger.from(invocationContext);
+  }
+
   //Choose which backend to use based on the given VC.
-  getVerifier(
-    verifiableCredential: VerifiableCredential,
-    _options: VerifyOptions
-  ) {
+  getVerifier(verifiableCredential: VerifiableCredential) {
     if (verifiableCredential.type.includes('OpenAttestationCredential')) {
-      console.log('Found an OpenAttestationCredential');
       return oAVerify;
     } else {
-      console.log('Unknown credential type found');
-      throw Error('Non OpenAttestation credentials are not handled currently');
+      this.logger.debug(
+        '[VerifyService.getVerifier] Unknown credential type found, %s',
+        verifiableCredential.type
+      );
+      const types = Array.isArray(verifiableCredential.type)
+        ? verifiableCredential.type.join(',')
+        : verifiableCredential.type;
+      throw new ValidationError('type', types);
     }
   }
 
@@ -28,8 +46,12 @@ export class VerifyService {
   ): Promise<VerificationResult> {
     let verifier: VerifierFunction;
     try {
-      verifier = this.getVerifier(verifiableCredential, options);
+      verifier = this.getVerifier(verifiableCredential);
     } catch (err) {
+      this.logger.debug(
+        '[VerifyService.verify] Unsupported credential type, %o',
+        err
+      );
       return {
         errors: [`Unsupported credential type`],
         warnings: [],
@@ -38,7 +60,11 @@ export class VerifyService {
     }
     try {
       return await verifier(verifiableCredential, options);
-    } catch (err: unknown) {
+    } catch (err: any) {
+      this.logger.debug(
+        '[VerifyService.verify] Unknown exception during verification, %o',
+        err
+      );
       return {
         errors: ['Unknown exception in verify'],
         warnings: [],

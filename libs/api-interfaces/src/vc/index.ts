@@ -1,3 +1,5 @@
+import { OpenAttestationDocument } from '@govtechsg/open-attestation/dist/types/3.0/types';
+
 export interface Message {
   message: string;
 }
@@ -12,21 +14,5 @@ export interface Issuer {
   type: string;
 }
 
-// Temporarily declaring Document
-// Add or remove as needed
-export interface Document {
-  version: string;
-  credentialSubject: CredentialSubject;
-  '@context': string[];
-  issuer: Issuer;
-}
-
-//TODO: fill out this type
-export interface VerifiableCredential{
-  "@context": Array<{ [key: string]: any } | string>;
-  issuer: string | Record<string, unknown>;
-  credentialSubject: Record<string, unknown>;
-  proof?: Record<string, unknown>;
-  credentialStatus?: Record<string, unknown>;
-  [key: string]: any;
-}
+//TODO: extend as needed
+export type VerifiableCredential = OpenAttestationDocument;

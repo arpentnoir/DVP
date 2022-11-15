@@ -1,24 +1,16 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
+import { ApplicationError, SystemError } from '@dvp/server-common';
 import type { ErrorRequestHandler } from 'express';
-import { v4 as uuid } from 'uuid';
-import { CustomError } from '../utils';
 
 // TODO: Refactor error handler
 export const errorHandler: ErrorRequestHandler = (err, req, res, next) => {
-  if (err instanceof CustomError) {
-    return res.status(err.statusCode).send({
-      errors: [{ id: uuid(), ...err.errorObject }],
-    });
+  if (req.logger) {
+    // this won't be set during tests
+    req.logger.debug('[errorHandler] %o', err);
   }
-  return res.status(500).send({
-    errors: err.errorObject
-      ? [{ id: uuid(), ...err.errorObject }]
-      : [
-          {
-            id: uuid(),
-            code: 'DVPAPI-001',
-            detail: 'System Unavailable.  Try again later.',
-          },
-        ],
-  });
+  if (err instanceof ApplicationError) {
+    const error = err.toApiError();
+    return res.status(err.httpStatusCode).send(error);
+  }
+  return res.status(500).send(new SystemError(err).toApiError());
 };
