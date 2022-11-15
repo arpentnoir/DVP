@@ -7,7 +7,8 @@
     "build": "nx run-many --target=build --all",
     "test": "nx run-many --target=test --all --ci --code-coverage",
     "lint": "nx run-many --target=lint --all",
-    "storybook": "nx storybook vc-ui"
+    "storybook": "nx storybook vc-ui",
+    "postinstall": "husky install"
   },
   "private": true,
   "dependencies": {
@@ -94,6 +95,7 @@
     "eslint-plugin-jsx-a11y": "6.6.1",
     "eslint-plugin-react": "7.31.8",
     "eslint-plugin-react-hooks": "4.6.0",
+    "husky": "^8.0.2",
     "jest": "28.1.1",
     "jest-environment-jsdom": "28.1.1",
     "mime-types": "^2.1.35",
