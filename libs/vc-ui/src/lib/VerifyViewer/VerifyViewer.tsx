@@ -1,11 +1,16 @@
 import { Paper } from '@mui/material';
 import { VerifyResults, RendererViewer, IStatusCheck } from '../';
 
+export interface Issuer {
+  id?: string;
+  name?: string;
+}
+
 export interface VerifyResult {
   checks: IStatusCheck[];
   warnings: string[];
   errors: string[];
-  issuer?: string;
+  issuer?: Issuer;
 }
 
 export interface IVerifyViewer {

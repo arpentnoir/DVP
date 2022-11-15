@@ -1,10 +1,10 @@
 import React from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { VerifyResult } from '../VerifyViewer';
+import { Issuer, VerifyResult } from '../VerifyViewer';
 
 export interface IVerificationResults {
-  issuer: string;
+  issuer: Issuer;
   result: IStatusCheck[];
 }
 
@@ -33,7 +33,7 @@ export const StatusCheck = ({ text, valid }: IStatusCheck) => {
 };
 
 export interface IValid {
-  issuer?: string;
+  issuer?: Issuer;
   checks: IStatusCheck[];
 }
 
@@ -57,19 +57,35 @@ export const Valid = ({ issuer, checks }: IValid) => {
           Valid
         </Typography>
       </Box>
-      {issuer && (
-        <Typography
-          tabIndex={0}
-          fontWeight={500}
-          fontSize="24px"
-          lineHeight="24px"
-          marginBottom="8px"
-          marginTop="8px"
-          style={{ wordWrap: 'break-word' }}
-        >
-          Issued by: {issuer}
-        </Typography>
+      {issuer?.name && (
+        <Box paddingTop={2} paddingBottom={2}>
+          <Typography
+            tabIndex={0}
+            fontWeight={500}
+            fontSize="24px"
+            lineHeight="24px"
+            marginBottom="8px"
+            marginTop="8px"
+            style={{ wordWrap: 'break-word' }}
+          >
+            Issued by: {issuer.name}
+          </Typography>
+          {issuer?.id && (
+            <Typography
+              tabIndex={0}
+              fontWeight={500}
+              fontSize="18px"
+              lineHeight="18px"
+              marginBottom="8px"
+              marginTop="8px"
+              style={{ wordWrap: 'break-word' }}
+            >
+              ({issuer.id})
+            </Typography>
+          )}
+        </Box>
       )}
+
       <Stack spacing="4px">
         {checks.map((check) => (
           <Box
@@ -113,16 +129,18 @@ export const Invalid = () => {
           Invalid
         </Typography>
       </Box>
-      <Typography
-        fontWeight={500}
-        fontSize="24px"
-        lineHeight="24px"
-        marginBottom="8px"
-        marginTop="8px"
-      >
-        The document hasn't been verified yet, or some verification aspects are
-        invalid or document has been tampered with
-      </Typography>
+      <Box paddingTop={2} paddingBottom={2}>
+        <Typography
+          fontWeight={500}
+          fontSize="24px"
+          lineHeight="24px"
+          marginBottom="8px"
+          marginTop="8px"
+        >
+          The document hasn't been verified yet, or some verification aspects
+          are invalid or document has been tampered with
+        </Typography>
+      </Box>
     </React.Fragment>
   );
 };

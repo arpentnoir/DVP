@@ -2,7 +2,10 @@ import axios from 'axios';
 import { Document } from '@dvp/api-interfaces';
 import { API_ENDPOINTS } from '../constants';
 
-export const _getIssuer = (document: Document) => document?.issuer?.id ?? '';
+export const _getIssuer = (document: Document) => ({
+  id: document?.issuer?.id ?? '',
+  name: document?.issuer?.name ?? '',
+});
 
 // TODO: Refactor and write tests once verify endpoint response format is confirmed
 export const verify = async (document: Document) => {
