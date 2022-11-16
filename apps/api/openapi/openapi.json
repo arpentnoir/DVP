@@ -47,6 +47,86 @@
           },
           "404": {
             "$ref": "#/components/responses/ResourceNotFoundErrorResponse"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "$ref": "#/components/responses/InternalServerErrorResponse"
+          }
+        }
+      }
+    },
+    "/issue": {
+      "post": {
+        "summary": "Issues a credential and returns it in the response body.",
+        "tags": ["Credentials"],
+        "operationId": "issueCredential",
+        "description": "Issues a credential and returns it in the response body.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/IssueCredentialRequest"
+              }
+            }
+          },
+          "description": "Parameters for issuing the credential."
+        },
+        "responses": {
+          "201": {
+            "description": "Credential successfully issued!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/IssueCredentialResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad User Input",
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "$ref": "#/components/responses/InternalServerErrorResponse"
+          }
+        }
+      }
+    },
+    "/verify": {
+      "post": {
+        "summary": "Verifies a verifiableCredential and returns a verificationResult in the response body.",
+        "tags": ["Credentials"],
+        "operationId": "verifyCredential",
+        "description": "Verifies a verifiableCredential and returns a verificationResult in the response body.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyCredentialRequest"
+              }
+            }
+          },
+          "description": "Parameters for verifying a verifiableCredential."
+        },
+        "responses": {
+          "200": {
+            "description": "Verifiable Credential successfully verified!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VerifyCredentialResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad User Input",
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "$ref": "#/components/responses/InternalServerErrorResponse"
           }
         }
       }
@@ -61,18 +141,11 @@
       },
       "EncryptedDocumentObject": {
         "type": "object",
-        "required": [
-          "document"
-        ],
+        "required": ["document"],
         "properties": {
           "document": {
             "type": "object",
-            "required": [
-              "cipherText",
-              "iv",
-              "tag",
-              "type"
-            ],
+            "required": ["cipherText", "iv", "tag", "type"],
             "properties": {
               "cipherText": {
                 "type": "string",
@@ -109,11 +182,7 @@
           "location": {
             "description": "Describes the location of the data to which the error message is related.\n\n- **\"REQUEST\"** - Indicates the message relates to a _property_ within the request\n  object. The `pointer` property should be populated in this case.\n- **\"QUERY\"** - Indicates the message relates to a _query_ parameter. The `parameter`\n  property should be populated in this case.\n- **\"ID\"** - Indicates the message relates to the identifier of the REST resource. The\n  `parameter` property _may optionally_ be populated in this case.",
             "type": "string",
-            "enum": [
-              "REQUEST",
-              "QUERY",
-              "ID"
-            ]
+            "enum": ["REQUEST", "QUERY", "ID"]
           },
           "parameter": {
             "description": "A string indicating which URI query parameter caused the error.",
@@ -150,10 +219,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "code",
-          "detail"
-        ],
+        "required": ["code", "detail"],
         "example": {
           "id": "123-4",
           "code": "DVP0003",
@@ -179,14 +245,239 @@
       "ErrorsResponseSchema": {
         "description": "The response returned when one or more errors have been encountered.",
         "type": "object",
-        "required": [
-          "errors"
-        ],
+        "required": ["errors"],
         "allOf": [
           {
             "$ref": "#/components/schemas/ErrorsArray"
           }
         ]
+      },
+      "Credential": {
+        "type": "object",
+        "description": "A JSON-LD Verifiable Credential without a proof.",
+        "properties": {
+          "@context": {
+            "type": "array",
+            "description": "The JSON-LD context of the credential.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "id": {
+            "type": "string",
+            "description": "The ID of the credential."
+          },
+          "type": {
+            "type": "array",
+            "description": "The JSON-LD type of the credential.",
+            "items": {
+              "type": "string"
+            }
+          },
+          "issuer": {
+            "$ref": "#/components/schemas/Issuer"
+          },
+          "issuanceDate": {
+            "type": "string",
+            "description": "The issuanceDate"
+          },
+          "expirationDate": {
+            "type": "string",
+            "description": "The expirationDate"
+          },
+          "credentialSubject": {
+            "type": "object",
+            "description": "The subject"
+          }
+        },
+        "example": {
+          "@context": [
+            "https://www.w3.org/2018/credentials/v1",
+            "https://www.w3.org/2018/credentials/examples/v1"
+          ],
+          "id": "http://example.gov/credentials/3732",
+          "type": ["VerifiableCredential", "UniversityDegreeCredential"],
+          "issuer": "did:example:123",
+          "issuanceDate": "2020-03-16T22:37:26.544Z",
+          "credentialSubject": {
+            "id": "did:example:123",
+            "degree": {
+              "type": "BachelorDegree",
+              "name": "Bachelor of Science and Arts"
+            }
+          }
+        }
+      },
+      "Issuer": {
+        "type": "object",
+        "description": "A JSON-LD Verifiable Credential Issuer.",
+        "oneOf": [
+          {
+            "type": "string"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string"
+              }
+            }
+          }
+        ],
+        "example": {
+          "id": "did:key:z6MkjRagNiMu91DduvCvgEsqLZDVzrJzFrwahc4tXLt9DoHd"
+        }
+      },
+      "LinkedDataProof": {
+        "type": "object",
+        "description": "A JSON-LD Linked Data proof.",
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Linked Data Signature Suite used to produce proof."
+          },
+          "created": {
+            "type": "string",
+            "description": "Date the proof was created."
+          },
+          "challenge": {
+            "type": "string",
+            "description": "A value chosen by the verifier to mitigate authentication proof replay attacks."
+          },
+          "domain": {
+            "type": "string",
+            "description": "The domain of the proof to restrict its use to a particular target."
+          },
+          "nonce": {
+            "type": "string",
+            "description": "A value chosen by the creator of a proof to randomize proof values for privacy purposes."
+          },
+          "verificationMethod": {
+            "type": "string",
+            "description": "Verification Method used to verify proof."
+          },
+          "proofPurpose": {
+            "type": "string",
+            "description": "The purpose of the proof to be used with verificationMethod."
+          },
+          "jws": {
+            "type": "string",
+            "description": "Detached JSON Web Signature."
+          },
+          "proofValue": {
+            "type": "string",
+            "description": "Value of the Linked Data proof."
+          }
+        },
+        "example": {
+          "type": "Ed25519Signature2018",
+          "created": "2020-04-02T18:28:08Z",
+          "verificationMethod": "did:example:123#z6MksHh7qHWvybLg5QTPPdG2DgEjjduBDArV9EF9mRiRzMBN",
+          "proofPurpose": "assertionMethod",
+          "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..YtqjEYnFENT7fNW-COD0HAACxeuQxPKAmp4nIl8jYAu__6IH2FpSxv81w-l5PvE1og50tS9tH8WyXMlXyo45CA"
+        }
+      },
+      "IssueCredentialRequest": {
+        "type": "object",
+        "properties": {
+          "credential": {
+            "$ref": "#/components/schemas/Credential"
+          }
+        }
+      },
+      "IssueCredentialResponse": {
+        "type": "object",
+        "properties": {
+          "verifiableCredential": {
+            "$ref": "#/components/schemas/VerifiableCredential"
+          }
+        }
+      },
+      "VerifyCredentialRequest": {
+        "type": "object",
+        "properties": {
+          "verifiableCredential": {
+            "$ref": "#/components/schemas/VerifiableCredential"
+          }
+        }
+      },
+
+      "VerificationResult": {
+        "type": "object",
+        "additionalProperties": false,
+        "description": "Object summarizing a verification",
+        "properties": {
+          "checks": {
+            "type": "array",
+            "description": "The checks performed",
+            "items": {
+              "type": "string"
+            }
+          },
+          "warnings": {
+            "type": "array",
+            "description": "Warnings",
+            "items": {
+              "type": "string"
+            }
+          },
+          "errors": {
+            "type": "array",
+            "description": "Errors",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "example": {
+          "checks": ["proof"],
+          "warnings": [],
+          "errors": []
+        }
+      },
+      "VerifyCredentialResponse": {
+        "$ref": "#/components/schemas/VerificationResult"
+      },
+      "VerifiableCredential": {
+        "type": "object",
+        "description": "A JSON-LD Verifiable Credential with a proof.",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Credential"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "proof": {
+                "$ref": "#/components/schemas/LinkedDataProof"
+              }
+            }
+          }
+        ],
+        "example": {
+          "@context": [
+            "https://www.w3.org/2018/credentials/v1",
+            "https://www.w3.org/2018/credentials/examples/v1"
+          ],
+          "id": "http://example.gov/credentials/3732",
+          "type": ["VerifiableCredential", "UniversityDegreeCredential"],
+          "issuer": "did:example:123",
+          "issuanceDate": "2020-03-16T22:37:26.544Z",
+          "credentialSubject": {
+            "id": "did:example:123",
+            "degree": {
+              "type": "BachelorDegree",
+              "name": "Bachelor of Science and Arts"
+            }
+          },
+          "proof": {
+            "type": "Ed25519Signature2018",
+            "created": "2020-04-02T18:28:08Z",
+            "verificationMethod": "did:example:123#z6MksHh7qHWvybLg5QTPPdG2DgEjjduBDArV9EF9mRiRzMBN",
+            "proofPurpose": "assertionMethod",
+            "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..YtqjEYnFENT7fNW-COD0HAACxeuQxPKAmp4nIl8jYAu__6IH2FpSxv81w-l5PvE1og50tS9tH8WyXMlXyo45CA"
+          }
+        }
       }
     },
     "responses": {
