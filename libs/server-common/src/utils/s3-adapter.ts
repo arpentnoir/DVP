@@ -22,7 +22,7 @@ export class S3Adapter implements StorageClient {
   }
 
   async isDocumentExists(documentId: string) {
-    const params = { Bucket: this.bucket, Key: `{documents}/${documentId}` };
+    const params = { Bucket: this.bucket, Key: `documents/${documentId}` };
     try {
       await this.s3Client.send(new HeadObjectCommand(params));
       return true;
@@ -37,7 +37,7 @@ export class S3Adapter implements StorageClient {
   }
 
   async getDocument(documentId: string) {
-    const params = { Bucket: this.bucket, Key: `{documents}/${documentId}` };
+    const params = { Bucket: this.bucket, Key: `documents/${documentId}` };
     try {
       const encryptedDocument = await this.s3Client.send(
         new GetObjectCommand(params)
