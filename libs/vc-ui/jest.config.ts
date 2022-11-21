@@ -2,6 +2,7 @@
 export default {
   displayName: 'vc-ui',
   preset: '../../jest.preset.js',
+  setupFiles: ['./jest.setup.ts'],
   transform: {
     '^.+\\.[tj]sx?$': 'babel-jest',
   },

@@ -4,6 +4,15 @@ export interface Message {
   message: string;
 }
 
+export interface CredentialSubject {
+  [string: string]: any;
+  links?: {
+    self?: {
+      href: string;
+    };
+  };
+}
+
 export interface Issuer {
   id: string;
   name: string;
@@ -11,4 +20,6 @@ export interface Issuer {
 }
 
 //TODO: extend as needed
-export type VerifiableCredential = OpenAttestationDocument;
+export interface VerifiableCredential extends OpenAttestationDocument {
+  credentialSubject: CredentialSubject;
+}

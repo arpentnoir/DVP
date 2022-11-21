@@ -22,7 +22,7 @@ export const Viewer = () => {
   }, []);
 
   return state ? (
-    <Box paddingTop={6}>
+    <Box paddingTop={6} position={'relative'}>
       <VerifyViewer
         document={state.document}
         results={{ ...state.results, checks }}
