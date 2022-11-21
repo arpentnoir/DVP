@@ -1,7 +1,20 @@
-const mockS3Promise = jest.fn();
-const mockS3GetObject = jest.fn(() => ({
-  promise: mockS3Promise,
-}));
+import {
+  GetObjectCommand,
+  HeadObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
+import { mockClient } from 'aws-sdk-client-mock';
+
+const s3Mock = mockClient(S3Client);
+
+export default function toReadableStream(value: string) {
+  return new ReadableStream({
+    start(controller) {
+      controller.enqueue(value);
+      controller.close();
+    },
+  });
+}
 
 const mockAwsProviderConfig = {
   bucketName: 'test',
@@ -9,12 +22,6 @@ const mockAwsProviderConfig = {
     region: 'test',
   },
 };
-
-jest.mock('aws-sdk', () => ({
-  S3: jest.fn(() => ({
-    getObject: mockS3GetObject,
-  })),
-}));
 
 import { S3Adapter } from './s3-adapter';
 
@@ -29,9 +36,13 @@ const testEncryptedDocument = {
 describe('S3Adapter', () => {
   const s3StorageClient = new S3Adapter(mockAwsProviderConfig);
 
-  test('it should return a document if it exists', async () => {
-    mockS3Promise.mockResolvedValueOnce({
-      Body: JSON.stringify(testEncryptedDocument),
+  it('should return a document if it exists', async () => {
+    s3Mock.on(GetObjectCommand).resolves({
+      Body: {
+        transformToString: async () =>
+          Promise.resolve(JSON.stringify(testEncryptedDocument)),
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      } as any,
     });
 
     const encryptedDocument = await s3StorageClient.getDocument(testDocumentId);
@@ -39,23 +50,41 @@ describe('S3Adapter', () => {
     expect(encryptedDocument).toStrictEqual(testEncryptedDocument);
   });
 
-  test('it should return null if body is empty', async () => {
-    mockS3Promise.mockResolvedValueOnce('documentMissingBody');
-
+  it('should return null if body is empty', async () => {
+    s3Mock.on(GetObjectCommand).resolves({});
     expect(await s3StorageClient.getDocument(testDocumentId)).toBe(null);
   });
 
-  test('it should return null if document does not exists', async () => {
-    mockS3Promise.mockRejectedValueOnce(
-      new Error('The specified key does not exist.')
-    );
-
+  it('should return null if document does not exists', async () => {
+    s3Mock
+      .on(GetObjectCommand)
+      .rejectsOnce(new Error('The specified key does not exist.'));
     expect(await s3StorageClient.getDocument(testDocumentId)).toBe(null);
   });
 
-  test('it should return an error if unexpected error is thrown', async () => {
-    mockS3Promise.mockRejectedValue(new Error());
-
+  it('should return an error if unexpected error is thrown', async () => {
+    s3Mock.on(GetObjectCommand).rejects('test');
     await expect(s3StorageClient.getDocument(testDocumentId)).rejects.toThrow();
+  });
+
+  describe('isDocumentExists', () => {
+    it("should return false if document doesn't exists", async () => {
+      s3Mock.on(HeadObjectCommand).rejectsOnce(new Error('not found'));
+
+      const isDocumentExists = await s3StorageClient.isDocumentExists(
+        testDocumentId
+      );
+
+      expect(isDocumentExists).toBe(false);
+    });
+    it('should return true if document exists', async () => {
+      s3Mock.on(HeadObjectCommand).resolves({});
+
+      const isDocumentExists = await s3StorageClient.isDocumentExists(
+        testDocumentId
+      );
+
+      expect(isDocumentExists).toBe(true);
+    });
   });
 });

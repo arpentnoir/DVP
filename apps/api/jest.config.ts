@@ -14,5 +14,10 @@ export default {
   setupFilesAfterEnv: ['./jest.setup.ts'],
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/apps/api',
-  testMatch: ['**/**/*.spec.{ts, js}'],
+  testMatch: ['**/**/*.spec.{ts, js}', '**/**/*.test.{ts, js}'],
+  coverageThreshold: {
+    global: {
+      lines: 90,
+    },
+  },
 };

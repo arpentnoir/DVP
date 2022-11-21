@@ -1,7 +1,13 @@
 import cors from 'cors';
 import express from 'express';
 import apiSpec from '../openapi/openapi.json';
-import { contextMiddleware, errorHandler, loggerMiddleware, OpenAPIV3Document, openApiValidatorMiddleware } from './middlewares';
+import {
+  contextMiddleware,
+  errorHandler,
+  loggerMiddleware,
+  OpenAPIV3Document,
+  openApiValidatorMiddleware,
+} from './middlewares';
 import { router } from './routes';
 
 const app = express();
@@ -12,7 +18,6 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/healthcheck', (req, res) => {
   res.send('OK');
 });
-
 
 app.use(openApiValidatorMiddleware(apiSpec as OpenAPIV3Document));
 app.use(loggerMiddleware);

@@ -23,9 +23,11 @@ export const RendererViewer = ({ document }: IRendererViewer) => {
 
   const [height, setHeight] = useState(250);
   const SCROLLBAR_WIDTH = 20; // giving scrollbar a default width as there are no perfect ways to get it
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const toFrame = useRef<any>();
 
   const onConnected = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (frame: any) => {
       toFrame.current = frame;
       if (toFrame.current) {

@@ -1,9 +1,6 @@
+import { VerificationResult } from '@dvp/api-interfaces';
 import {
-  VerificationResult,
-  VerifierFunction,
-  VerifyOptions,
-} from '@dvp/api-interfaces';
-import {
+  DocumentsToVerify,
   isValid,
   openAttestationDidIdentityProof,
   openAttestationDidSignedDocumentStatus,
@@ -32,15 +29,9 @@ const builtVerifier = verificationBuilder(oaVerifiersToRun, {
   provider: ethProvider,
 });
 
-export const verify: VerifierFunction = async (
-  verifiableCredential: any,
-  options: VerifyOptions = {}
+export const verify = async (
+  verifiableCredential: DocumentsToVerify
 ): Promise<VerificationResult> => {
-  if (Object.keys(options).length > 0) {
-    throw new Error(
-      `Options  not yet supported in OA verify. \n (received: ${options})`
-    );
-  }
   //Which checks to do should be read from options, and credential contents
   //(but currently is hard-coded)
   const checks: VerificationFragmentType[] = [

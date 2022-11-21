@@ -16,6 +16,40 @@
     }
   ],
   "paths": {
+    "/storage/documents": {
+      "post": {
+        "summary": "encrypt and upload document",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocumentUploadRequest"
+              }
+            }
+          },
+          "description": "Parameters uploading the document"
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully uploaded the document",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentUploadResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "$ref": "#/components/responses/InternalServerErrorResponse"
+          }
+        }
+      }
+    },
     "/storage/documents/{documentId}": {
       "get": {
         "summary": "Get encrypted document by Id",
@@ -139,38 +173,6 @@
         "format": "uuid",
         "example": "77879ba6-9aaf-4895-9e1c-794e4a3653fe"
       },
-      "EncryptedDocumentObject": {
-        "type": "object",
-        "required": ["document"],
-        "properties": {
-          "document": {
-            "type": "object",
-            "required": ["cipherText", "iv", "tag", "type"],
-            "properties": {
-              "cipherText": {
-                "type": "string",
-                "example": "HSKcfell3ocggQDfvg4CRHNptlfleWW3DEcdBbouFoS5Sp0STZmU2ddmchLcinsxYBkN+VFrFNhC3ws1vB6HEWq/mmz+7Vl0HRiBnC8NP4iZFEdbDelCuyfEoRLVenFXcQu2LnBB63aqicvNhzOs1p/dJQnmkr5zxR3vW0MgH+Xi8/NY+lOUu0+TTDs8S4AkhO3BsX1TnS8eWpjImDUxNDTA7tDiyx0m2Ns+EbqJY1q/wi5Wq1vqezpOLaBiAn4TJ4zYARU1BeiCbBGSaCKPtLZPhFYd9EeCTghqdgVqyL8ZuVONYELgvUATvtqJiOqTxkAVm2H9EoKzmP9hzwCW4r3JOl/glaST+IdXfq/aSxqUVbobLH4q7Ho7gNTM5wnvjmhpfo+K6ycsfTyHLvBGQqnITlH0+RnXsSTimxdmEPShG0ER8ul+5d8e68oozZntB6bkM3TxoZJ8idh2",
-                "description": "Encrypted verifiable credential"
-              },
-              "iv": {
-                "type": "string",
-                "example": "LKwFbAzol64l0OyN",
-                "description": "Initialisation vector"
-              },
-              "tag": {
-                "type": "string",
-                "example": "EOH28x8yC2pJDFCX/wVhqg==",
-                "description": "Message authentication code (MAC)"
-              },
-              "type": {
-                "type": "string",
-                "example": "OPEN-ATTESTATION-TYPE-1",
-                "description": "Encryption algorithm identifier (OA)"
-              }
-            }
-          }
-        }
-      },
       "ErrorSource": {
         "description": "An object containing references to the source of an error.",
         "type": "object",
@@ -251,6 +253,70 @@
             "$ref": "#/components/schemas/ErrorsArray"
           }
         ]
+      },
+      "DocumentUploadResponse": {
+        "type": "object",
+        "required": ["documentId", "encryptionKey"],
+        "properties": {
+          "documentId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "encryptionKey": {
+            "type": "string",
+            "example": "04d49fe8ac0a0afa5e9e2fa617551b5d7be532d0c8586a0809d7d223316d7cc5",
+            "description": "Key used for encryption"
+          }
+        }
+      },
+      "DocumentUploadRequest": {
+        "type": "object",
+        "required": ["document"],
+        "properties": {
+          "document": {
+            "type": "string",
+            "description": "strigified document to upload"
+          },
+          "documentId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "encryptionKey": {
+            "type": "string",
+            "example": "04d49fe8ac0a0afa5e9e2fa617551b5d7be532d0c8586a0809d7d223316d7cc5",
+            "description": "Key used for encryption"
+          }
+        }
+      },
+      "EncryptedDocumentObject": {
+        "type": "object",
+        "required": ["document"],
+        "properties": {
+          "document": {
+            "type": "object",
+            "required": ["cipherText", "iv", "tag", "type"],
+            "properties": {
+              "cipherText": {
+                "type": "string",
+                "example": "HSKcfell3ocggQDfvg4CRHNptlfleWW3DEcdBbouFoS5Sp0STZmU2ddmchLcinsxYBkN+VFrFNhC3ws1vB6HEWq/mmz+7Vl0HRiBnC8NP4iZFEdbDelCuyfEoRLVenFXcQu2LnBB63aqicvNhzOs1p/dJQnmkr5zxR3vW0MgH+Xi8/NY+lOUu0+TTDs8S4AkhO3BsX1TnS8eWpjImDUxNDTA7tDiyx0m2Ns+EbqJY1q/wi5Wq1vqezpOLaBiAn4TJ4zYARU1BeiCbBGSaCKPtLZPhFYd9EeCTghqdgVqyL8ZuVONYELgvUATvtqJiOqTxkAVm2H9EoKzmP9hzwCW4r3JOl/glaST+IdXfq/aSxqUVbobLH4q7Ho7gNTM5wnvjmhpfo+K6ycsfTyHLvBGQqnITlH0+RnXsSTimxdmEPShG0ER8ul+5d8e68oozZntB6bkM3TxoZJ8idh2",
+                "description": "Encrypted verifiable credential"
+              },
+              "iv": {
+                "type": "string",
+                "example": "LKwFbAzol64l0OyN",
+                "description": "Initialisation vector"
+              },
+              "tag": {
+                "type": "string",
+                "example": "EOH28x8yC2pJDFCX/wVhqg==",
+                "description": "Message authentication code (MAC)"
+              },
+              "type": {
+                "type": "string",
+                "example": "OPEN-ATTESTATION-TYPE-1",
+                "description": "Encryption algorithm identifier (OA)"
+              }
+            }
+          }
+        }
       },
       "Credential": {
         "type": "object",
@@ -401,7 +467,6 @@
           }
         }
       },
-
       "VerificationResult": {
         "type": "object",
         "additionalProperties": false,

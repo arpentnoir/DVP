@@ -1,7 +1,9 @@
 trigger:
   - main
+  - develop
 pr:
   - main
+  - develop
 
 parameters:
   - name: ENV
@@ -15,6 +17,7 @@ parameters:
 variables:
   CI: 'true'
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  isDevelop: $[eq(variables['Build.SourceBranch'], 'refs/heads/develop')]
   isPR: $[eq(variables['Build.Reason'], 'PullRequest')]
   ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
     NX_BRANCH: $(System.PullRequest.PullRequestNumber)

@@ -2,7 +2,6 @@ import {
   VerifiableCredential,
   VerificationResult,
   VerifierFunction,
-  VerifyOptions,
 } from '@dvp/api-interfaces';
 import {
   Logger,
@@ -21,9 +20,9 @@ export class VerifyService {
   }
 
   //Choose which backend to use based on the given VC.
-  getVerifier(verifiableCredential: VerifiableCredential) {
+  getVerifier(verifiableCredential: VerifiableCredential): VerifierFunction {
     if (verifiableCredential.type.includes('OpenAttestationCredential')) {
-      return oAVerify;
+      return oAVerify as VerifierFunction;
     } else {
       this.logger.debug(
         '[VerifyService.getVerifier] Unknown credential type found, %s',
@@ -41,8 +40,7 @@ export class VerifyService {
    * We could revisit this after investigating error handling in other VC-API implementations, e.g. didkit
    */
   async verify(
-    verifiableCredential: VerifiableCredential,
-    options: VerifyOptions
+    verifiableCredential: VerifiableCredential
   ): Promise<VerificationResult> {
     let verifier: VerifierFunction;
     try {
@@ -59,8 +57,8 @@ export class VerifyService {
       };
     }
     try {
-      return await verifier(verifiableCredential, options);
-    } catch (err: any) {
+      return await verifier(verifiableCredential);
+    } catch (err: unknown) {
       this.logger.debug(
         '[VerifyService.verify] Unknown exception during verification, %o',
         err

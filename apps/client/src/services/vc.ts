@@ -1,5 +1,5 @@
-import { VerifiableCredential } from '@dvp/api-interfaces';
-import axios from 'axios';
+import { VerifiableCredential, VerificationResult } from '@dvp/api-interfaces';
+import axios, { AxiosError } from 'axios';
 import { API_ENDPOINTS } from '../constants';
 
 export const _getIssuer = (document: VerifiableCredential) =>
@@ -13,7 +13,7 @@ export const _getIssuer = (document: VerifiableCredential) =>
 // TODO: Refactor and write tests once verify endpoint response format is confirmed
 export const verify = async (document: VerifiableCredential) => {
   try {
-    const res = await axios.post(API_ENDPOINTS.VERIFY, {
+    const res = await axios.post<VerificationResult>(API_ENDPOINTS.VERIFY, {
       verifiableCredential: document,
     });
 
@@ -21,12 +21,13 @@ export const verify = async (document: VerifiableCredential) => {
       document,
       results: { ...res.data, issuer: _getIssuer(document) },
     };
-  } catch (err: any) {
+  } catch (err: unknown | AxiosError) {
     // If verification fails a 400 is returned, but we still want to return result
-    if (err.response.data) {
+    if (err instanceof AxiosError && err?.response?.data) {
+      const error = err as AxiosError<VerificationResult>;
       return {
         document,
-        results: { ...err.response.data, issuer: _getIssuer(document) },
+        results: { ...error?.response?.data, issuer: _getIssuer(document) },
       };
     }
     throw err;

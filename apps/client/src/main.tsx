@@ -12,9 +12,7 @@ if (process.env['NODE_ENV'] === 'development') {
   worker.start();
 }
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
-);
+const root = ReactDOM.createRoot(document.getElementById('root') as Element);
 root.render(
   <StrictMode>
     <App />

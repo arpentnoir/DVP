@@ -5,13 +5,14 @@
   "scripts": {
     "start": "NX_API_URL=/api nx run-many --target=serve --all",
     "build": "nx run-many --target=build --all",
-    "test": "nx run-many --target=test --all --ci --code-coverage",
+    "test": "nx run-many --target=test --all --coverage",
     "lint": "nx run-many --target=lint --all",
     "storybook": "nx storybook vc-ui",
     "postinstall": "husky install"
   },
   "private": true,
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.211.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@govtechsg/decentralized-renderer-react-components": "^3.8.0",
@@ -46,6 +47,7 @@
   "devDependencies": {
     "@babel/core": "7.12.13",
     "@babel/preset-typescript": "7.12.13",
+    "@jest-mock/express": "^2.0.1",
     "@nrwl/cli": "15.0.4",
     "@nrwl/cypress": "15.0.4",
     "@nrwl/esbuild": "15.0.4",
@@ -83,6 +85,7 @@
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.36.1",
     "@typescript-eslint/parser": "^5.36.1",
+    "aws-sdk-client-mock": "^2.0.0",
     "babel-jest": "28.1.1",
     "babel-loader": "8.1.0",
     "babel-plugin-styled-components": "1.10.7",
@@ -99,7 +102,6 @@
     "jest": "28.1.1",
     "jest-environment-jsdom": "28.1.1",
     "mime-types": "^2.1.35",
-    "mock-express-request": "^0.2.2",
     "nx": "15.0.4",
     "prettier": "^2.6.2",
     "react-test-renderer": "18.2.0",

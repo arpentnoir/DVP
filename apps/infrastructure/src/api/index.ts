@@ -29,7 +29,7 @@ new aws.s3.BucketPolicy('documentStoreBucketPolicy', {
   bucket: documentStoreBucket.bucket,
   policy: pulumi
     .all([documentStoreBucket.bucket, lambdaRole.arn])
-    .apply(([bucket, arn]: Array<any>) => bucketPolicy(bucket, arn)),
+    .apply(([bucket, arn]) => bucketPolicy(bucket, arn)),
 });
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -42,7 +42,7 @@ const databaseUrl = pulumi
     documentDB.schemaRegistryDocumentDbCluster.endpoint,
     documentDB.schemaRegistryDocumentDbCluster.port,
   ])
-  .apply(([password, username, endpoint, port]: Array<any>) => {
+  .apply(([password, username, endpoint, port]) => {
     const urlParams = new URLSearchParams(config.databaseOptions).toString();
     return `mongodb://${username}:${encodeURIComponent(
       password

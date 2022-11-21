@@ -37,7 +37,7 @@ export const NavBar = () => {
             maxHeight: { xs: 49, sm: 61 },
           }}
           alt={LOGO_ALT_TEXT}
-          src={Logo}
+          src={Logo as string}
         />
 
         <Box sx={{ display: { xs: 'none', sm: 'flex' } }}>

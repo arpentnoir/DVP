@@ -1,6 +1,6 @@
 import { VerifiableCredential } from '@dvp/api-interfaces';
 import { RequestInvocationContext } from '@dvp/server-common';
-import MockExpressRequest from 'mock-express-request';
+import { getMockReq } from '@jest-mock/express';
 import valid_simple_vc from '../../fixtures/genericvc/degree_unsigned.json';
 import signed_OA_V3 from '../../fixtures/oav3/did-signed.json';
 import unsigned_OA_V3 from '../../fixtures/oav3/did.json';
@@ -9,7 +9,7 @@ import { VerifyService } from './verify.service';
 describe('verify.service', () => {
   jest.setTimeout(15000);
 
-  const mockRequest = new MockExpressRequest({
+  const mockRequest = getMockReq({
     method: 'POST',
     headers: {
       'Correlation-ID': 'NUMPTYHEAD1',
@@ -19,41 +19,36 @@ describe('verify.service', () => {
   mockRequest.route = { path: '/verify' };
   const invocationContext = new RequestInvocationContext(mockRequest);
 
-  it('Should verify a valid OA credential', async () => {
+  it('should verify a valid OA credential', async () => {
     const verifyService = new VerifyService(invocationContext);
     const verificationResult = await verifyService.verify(
-      signed_OA_V3 as VerifiableCredential,
-      {}
+      signed_OA_V3 as VerifiableCredential
     );
     expect(verificationResult).toHaveProperty('errors');
     expect(verificationResult.errors).toHaveLength(0);
   });
-  //TODO: add non-OA backend
-  it.skip('Should verify a valid non-OA credential', async () => {
+  it('should return an error for a non-OA credential', async () => {
     const verifyService = new VerifyService(invocationContext);
     const verificationResult = await verifyService.verify(
-      valid_simple_vc as any,
-      {}
+      valid_simple_vc as never
     );
     expect(verificationResult).toHaveProperty('errors');
-    expect(verificationResult.errors).toHaveLength(0);
+    expect(verificationResult.errors).toContain('Unsupported credential type');
   });
-  it('Should fail DOCUMENT_INTEGRITY when tampered', async () => {
+  it('should fail DOCUMENT_INTEGRITY when tampered', async () => {
     const tampered_OA_V3 = { ...signed_OA_V3 };
     tampered_OA_V3.credentialSubject['thisFieldWasAltered'] = 'Yes';
     const verifyService = new VerifyService(invocationContext);
     const verificationResult = await verifyService.verify(
-      tampered_OA_V3 as VerifiableCredential,
-      {}
+      tampered_OA_V3 as VerifiableCredential
     );
     expect(verificationResult).toHaveProperty('errors');
     expect(verificationResult.errors).toContain('proof');
   });
-  it("Should fail DOCUMENT_STATUS when it's unsigned and unwrapped", async () => {
+  it("should fail DOCUMENT_STATUS when it's unsigned and unwrapped", async () => {
     const verifyService = new VerifyService(invocationContext);
     const verificationResult = await verifyService.verify(
-      unsigned_OA_V3 as VerifiableCredential,
-      {}
+      unsigned_OA_V3 as VerifiableCredential
     );
     expect(verificationResult).toHaveProperty('errors');
     expect(verificationResult.errors).toContain('status');

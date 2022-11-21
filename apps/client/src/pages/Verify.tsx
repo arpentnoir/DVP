@@ -1,5 +1,5 @@
 import { Box, CircularProgress, Typography } from '@mui/material';
-import React, { useMemo, useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants';
 import { fetchAndDecryptVC } from '../services/storage';
@@ -16,12 +16,12 @@ export const Verify = () => {
       setLoading(true);
       fetchAndDecryptVC(location.search)
         .then(verify)
-        .then((result: any) => {
+        .then((result) => {
           navigate(ROUTES.VIEWER, {
             state: result,
           });
         })
-        .catch((err) => {
+        .catch(() => {
           setLoading(false);
           setError(true);
         });

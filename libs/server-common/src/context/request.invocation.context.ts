@@ -22,8 +22,7 @@ import { generate } from 'shortid';
  * Note that the [[InvocationContext]] may also be used by applications during processing, to perform
  * other application-specific processing that requires information about the current runtime context.
  */
- export interface InvocationContext {
-
+export interface InvocationContext {
   /** The OpenID Connect access token for this context. This is not directly used for logging,
    *  but may be used for chaining invocations through multiple services. */
   accessToken?: string;
@@ -52,15 +51,12 @@ import { generate } from 'shortid';
   operationOutcome?: string;
 
   /** A dictionary of key / value pairs, for additional metadata for log messages that use this
- *  context. */
+   *  context. */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  metadata?: { [key: string]: any; };
-
+  metadata?: { [key: string]: any };
 }
 
-export class RequestInvocationContext  implements InvocationContext{
-
-
+export class RequestInvocationContext implements InvocationContext {
   public readonly accessToken?: string;
 
   /** The correlation ID. */
@@ -76,11 +72,10 @@ export class RequestInvocationContext  implements InvocationContext{
   public readonly operationId: string;
 
   /** The request id name. */
-  public readonly requestId: string;
+  public readonly requestId: string | undefined;
 
   /** The operation outcome. */
   public readonly operationOutcome?: string;
-
 
   /** The transaction id for log messages wrapped in the same transaction that use this context */
   public transactionId?: string;
@@ -94,20 +89,22 @@ export class RequestInvocationContext  implements InvocationContext{
     const authHeader = request.header('Authorization');
     this.accessToken = authHeader?.split(' ')?.[1];
 
-    this.correlationId = request.header('Correlation-ID') || generate();
-    this.transactionId = request.header('Transaction-ID');
+    this.correlationId =
+      (request.headers['Correlation-ID'] as string) || generate();
+    this.transactionId = request.headers['Transaction-ID'] as string;
 
     this.ipAddress = this.extractRemoteIpAddress(request);
     this.operationId =
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (request as any)?.openapi?.schema?.operationId ||
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       (request as any)['operationId'];
-
 
     if (generateTransactionId && !this.transactionId) {
       this.transactionId = generate();
     }
 
-    this.requestId = request.header('Request-ID') as string;
+    this.requestId = request.header('Request-ID');
   }
 
   /**
@@ -116,7 +113,7 @@ export class RequestInvocationContext  implements InvocationContext{
    * @param request The HTTP request from which to extract the remote IP address.
    */
   private extractRemoteIpAddress(request: Request): string {
-    const forwarderChain = request.header('X-Forwarded-For');
+    const forwarderChain = request.headers['X-Forwarded-For'] as string;
     if (forwarderChain) {
       const commaPos = forwarderChain.indexOf(',');
       return commaPos > -1

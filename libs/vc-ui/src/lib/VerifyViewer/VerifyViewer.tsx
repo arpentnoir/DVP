@@ -1,5 +1,6 @@
+import { VerifiableCredential } from '@dvp/api-interfaces';
 import { Paper } from '@mui/material';
-import { VerifyResults, RendererViewer, IStatusCheck } from '../';
+import { IStatusCheck, RendererViewer, VerifyResults } from '../';
 
 export interface Issuer {
   id?: string;
@@ -14,7 +15,7 @@ export interface VerifyResult {
 }
 
 export interface IVerifyViewer {
-  document: any;
+  document: VerifiableCredential;
   results: VerifyResult;
 }
 

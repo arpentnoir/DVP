@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import pinoExpressLogger from 'express-pino-logger';
 import pino from 'pino';
 import { RequestInvocationContext } from '../context';
@@ -15,6 +16,7 @@ const DEBUG_USE_CONSOLE = process.env['DEBUG_USE_CONSOLE'] === 'true';
 export const expressLogger = pinoExpressLogger();
 
 interface LogFn {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   (msg: string, ...args: any[]): void;
 }
 

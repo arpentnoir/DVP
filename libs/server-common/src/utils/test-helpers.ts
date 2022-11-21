@@ -1,6 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-//@ts-ignore
-import MockExpressRequest from 'mock-express-request';
+import { getMockReq } from '@jest-mock/express';
 import { RequestInvocationContext } from '../context';
 
 export const uuidV4Regex = new RegExp(
@@ -8,7 +6,7 @@ export const uuidV4Regex = new RegExp(
 );
 
 export const getMockInvocationContext = (method: string, path: string) => {
-  const mockRequest = new MockExpressRequest({
+  const mockRequest = getMockReq({
     method,
     headers: {
       'Correlation-ID': 'NUMPTYHEAD1',

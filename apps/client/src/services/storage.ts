@@ -1,9 +1,10 @@
-import axios from 'axios';
+import { EncryptedDocument, VerifiableCredential } from '@dvp/api-interfaces';
 import { decryptString } from '@govtechsg/oa-encryption';
+import axios from 'axios';
 import { FAIL_VC_FETCH_DECRYPT_ERR_MSG } from '../constants';
 
 export const getVC = async (storageUrl: string) => {
-  return axios.get(storageUrl);
+  return axios.get<{ document: EncryptedDocument }>(storageUrl);
 };
 
 /**
@@ -19,19 +20,19 @@ export const fetchAndDecryptVC = async (params: string) => {
   try {
     const searchParams = new URLSearchParams(params);
 
-    const anchorStr: any = searchParams.get('q');
+    const anchorStr: string | null = searchParams.get('q');
 
     const anchor = anchorStr ? JSON.parse(anchorStr) : {};
 
-    const storageUrl = anchor.payload.uri;
+    const storageUrl = anchor.payload.uri as string;
 
-    const key = anchor.payload.key;
+    const key = anchor.payload.key as string;
 
     const res = await getVC(storageUrl);
 
     const document = decryptString({ ...res.data.document, key });
 
-    return JSON.parse(document);
+    return JSON.parse(document) as VerifiableCredential;
   } catch (err) {
     throw new Error(FAIL_VC_FETCH_DECRYPT_ERR_MSG);
   }

@@ -17,10 +17,31 @@ export const getDocumentById = async (
       documentId
     );
     if (!document) {
-      return next(new NotFoundError(`${req.originalUrl}/${documentId}`));
+      return next(new NotFoundError(req.originalUrl));
     }
-    return res.send(document);
+    return res.json({ document });
   } catch (err) {
-    return next(new SystemError(err));
+    return next(new SystemError(err as Error));
+  }
+};
+
+export const uploadDocument = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+): Promise<void | Response<Record<string, EncryptedDocument>>> => {
+  const { document, encryptionKey, documentId } = req.body;
+
+  try {
+    const storageService = new StorageService(req.invocationContext);
+    const result = await storageService.uploadDocument(
+      storageClient,
+      document as string,
+      documentId as string,
+      encryptionKey as string
+    );
+    return res.json(result);
+  } catch (err) {
+    return next(err);
   }
 };
