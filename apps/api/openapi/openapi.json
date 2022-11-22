@@ -320,6 +320,7 @@
       },
       "Credential": {
         "type": "object",
+        "required": ["@context", "type", "credentialSubject"],
         "description": "A JSON-LD Verifiable Credential without a proof.",
         "properties": {
           "@context": {
@@ -445,6 +446,7 @@
       },
       "IssueCredentialRequest": {
         "type": "object",
+        "required": ["credential"],
         "properties": {
           "credential": {
             "$ref": "#/components/schemas/Credential"

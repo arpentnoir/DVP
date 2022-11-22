@@ -1,4 +1,7 @@
-import { OpenAttestationDocument } from '@govtechsg/open-attestation/dist/types/3.0/types';
+import {
+  OpenAttestationDocument,
+  WrappedDocument,
+} from '@govtechsg/open-attestation/dist/types/3.0/types';
 
 export interface Message {
   message: string;
@@ -23,3 +26,5 @@ export interface Issuer {
 export interface VerifiableCredential extends OpenAttestationDocument {
   credentialSubject: CredentialSubject;
 }
+
+export type WrappedVerifiableCredential = WrappedDocument<VerifiableCredential>;
