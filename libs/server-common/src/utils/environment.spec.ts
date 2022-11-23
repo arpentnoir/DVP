@@ -1,10 +1,10 @@
-import { getEnv } from './environment';
+import { checkEnv } from './environment';
 
 const variables = ['CLIENT', 'SECRET'];
 
 describe('environment', () => {
   const OLD_ENV = process.env;
-  describe('getEnv', () => {
+  describe('checkEnv', () => {
     afterEach(() => {
       process.env = OLD_ENV;
     });
@@ -14,7 +14,7 @@ describe('environment', () => {
         SECRET: 'Pat',
       };
 
-      expect(getEnv(variables)).toStrictEqual({
+      expect(checkEnv(variables)).toStrictEqual({
         CLIENT: 'Postman',
         SECRET: 'Pat',
       });
@@ -24,7 +24,7 @@ describe('environment', () => {
         CLIENT: 'Postman',
       };
 
-      expect(() => getEnv(variables)).toThrow(
+      expect(() => checkEnv(variables)).toThrow(
         'Missing the following required environment variable(s): SECRET'
       );
     });

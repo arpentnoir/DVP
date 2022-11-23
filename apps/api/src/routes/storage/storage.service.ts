@@ -1,4 +1,8 @@
-import { StorageClient } from '@dvp/api-interfaces';
+import {
+  QRPayload,
+  StorageClient,
+  VerifiableCredential,
+} from '@dvp/api-interfaces';
 import {
   getUuId,
   Logger,
@@ -23,6 +27,60 @@ export class StorageService {
   async getDocument(storageClient: StorageClient, documentId: string) {
     const documentObject = await storageClient.getDocument(documentId);
     return documentObject?.document;
+  }
+
+  embedQrUrl(verifiableCredential: VerifiableCredential) {
+    try {
+      const { qrUrl, id, key } = this.generateQrUrl();
+
+      const credentialWithQrUrl = JSON.parse(
+        JSON.stringify(verifiableCredential)
+      ) as VerifiableCredential;
+
+      credentialWithQrUrl.credentialSubject.links = {
+        self: {
+          href: qrUrl,
+        },
+      };
+
+      return { credentialWithQrUrl, documentId: id, encryptionKey: key };
+    } catch (err: unknown) {
+      this.logger.debug(
+        '[StorageService.embedQrUrl] Failed to attach QR URL to credential, %o',
+        err
+      );
+
+      throw new Error('Failed to attach QR URL to credential');
+    }
+  }
+
+  generateQrUrl(documentId?: string, encryptionKey?: string) {
+    try {
+      const key = encryptionKey || generateEncryptionKey();
+      const id = documentId || getUuId();
+
+      const uri = `${config.apiURL}/storage/documents/${id}`;
+
+      const payload: QRPayload = {
+        payload: {
+          uri,
+          key,
+        },
+      };
+
+      const qrUrl = `${config.clientURL}/verify?q=${encodeURIComponent(
+        JSON.stringify(payload)
+      )}`;
+
+      return { qrUrl, id, key };
+    } catch (err: unknown) {
+      this.logger.debug(
+        '[StorageService.generateQrUrl] Failed to generate QR URL, %o',
+        err
+      );
+
+      throw new Error('Failed to generate QR URL');
+    }
   }
 
   async uploadDocument(

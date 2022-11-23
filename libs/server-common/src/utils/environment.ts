@@ -7,7 +7,7 @@ import { ApiConfigFile } from '@dvp/api-interfaces';
  * @param vars
  * @returns Partial<ApiConfigFile>
  */
-export const getEnv = (vars: string[]): Partial<ApiConfigFile> => {
+export const checkEnv = (vars: string[]): Partial<ApiConfigFile> => {
   const errs: string[] = [];
   const res: { [key: string]: string } = {};
   vars.forEach((varName) => {

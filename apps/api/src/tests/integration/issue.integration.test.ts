@@ -1,11 +1,23 @@
 import request from 'supertest';
+import { mockClient } from 'aws-sdk-client-mock';
 import { app } from '../../app';
 import oa_doc_base from '../../fixtures/oav3/did.json';
+import {
+  HeadObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 
 let oa_doc;
 
+const s3Mock = mockClient(S3Client);
+
 describe('issue api', () => {
   const endpoint = '/api/issue';
+
+  beforeEach(() => {
+    s3Mock.reset();
+  });
 
   describe('POST /api/issue', () => {
     beforeEach(() => {
@@ -13,6 +25,9 @@ describe('issue api', () => {
     });
 
     it('should issue an OA verifiable credential', async () => {
+      s3Mock.on(PutObjectCommand).resolvesOnce({});
+      s3Mock.on(HeadObjectCommand).rejectsOnce({});
+
       await request(app)
         .post(endpoint)
         .send({
@@ -21,7 +36,8 @@ describe('issue api', () => {
         .expect('Content-Type', /json/)
         .expect(201)
         .expect((res) => {
-          expect(res.body).toHaveProperty('proof');
+          expect(res.body.verifiableCredential).toHaveProperty('proof');
+          expect(res);
         });
     });
 
@@ -70,6 +86,46 @@ describe('issue api', () => {
             'An internal system error has occurred.'
           );
         });
+    });
+
+    // TODO: Currently every VC issued is also stored
+    describe('issue and store', () => {
+      it('should issue an OA verifiable credential with QRUrl and return documentId and key', async () => {
+        s3Mock.on(PutObjectCommand).resolvesOnce({});
+        s3Mock.on(HeadObjectCommand).rejectsOnce({});
+
+        await request(app)
+          .post(endpoint)
+          .send({
+            credential: oa_doc,
+          })
+          .expect('Content-Type', /json/)
+          .expect(201)
+          .expect((res) => {
+            expect(
+              res.body.verifiableCredential.credentialSubject.links.self.href
+            ).toBeDefined();
+            expect(res.body.encryptionKey).toBeDefined();
+            expect(res.body.documentId).toBeDefined();
+          });
+      });
+
+      it('should return error if failed to store VC', async () => {
+        s3Mock.on(HeadObjectCommand).resolvesOnce({});
+
+        await request(app)
+          .post(endpoint)
+          .send({
+            credential: oa_doc,
+          })
+          .expect('Content-Type', /json/)
+          .expect(500)
+          .expect((res) => {
+            expect(res.body.errors[0].detail).toStrictEqual(
+              'An internal system error has occurred.'
+            );
+          });
+      });
     });
   });
 });

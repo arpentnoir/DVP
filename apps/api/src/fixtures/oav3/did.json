@@ -3,7 +3,8 @@
     "https://www.w3.org/2018/credentials/v1",
     "https://schemata.openattestation.com/com/openattestation/1.0/DrivingLicenceCredential.json",
     "https://schemata.openattestation.com/com/openattestation/1.0/OpenAttestation.v3.json",
-    "https://schemata.openattestation.com/com/openattestation/1.0/CustomContext.json"
+    "https://schemata.openattestation.com/com/openattestation/1.0/CustomContext.json",
+    "https://dev-dvp-context.s3.ap-southeast-2.amazonaws.com/AANZFTA-CoO.json"
   ],
   "reference": "SERIAL_NUMBER_123",
   "name": "Republic of Singapore Driving Licence",

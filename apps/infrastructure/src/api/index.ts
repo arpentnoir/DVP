@@ -57,6 +57,8 @@ const enviromentVariables = {
     CONFIGFILE_DATABASE_COLLECTION_NAME: config.databaseCollectionName,
     DATABASE_SERVER_SELECTION_TIMEOUT: config.databaseServerSelectionTimeout,
     KMS_MASTER_KEY_ID: kms.kmsCmkAlias.targetKeyArn,
+    API_URL: config.apiUrl,
+    CLIENT_URL: config.clientUrl,
   },
 };
 

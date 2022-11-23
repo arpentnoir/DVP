@@ -1,4 +1,4 @@
-import { RunError } from "@pulumi/pulumi";
+import { RunError } from '@pulumi/pulumi';
 
 if (
   !(
@@ -16,12 +16,14 @@ if (
 export const config = {
   targetDomain: process.env.TARGET_DOMAIN,
   dvpApiDomain: process.env.DVP_API_DOMAIN,
+  apiUrl: `https://${process.env.DVP_API_DOMAIN}/api`,
+  clientUrl: `https://${process.env.TARGET_DOMAIN}`,
   databaseCollectionName: process.env.CONFIGFILE_DATABASE_COLLECTION_NAME,
   databaseServerSelectionTimeout: process.env.DATABASE_SERVER_SELECTION_TIMEOUT,
   databaseOptions: {
-    tls: "true",
-    replicaSet: "rs0",
-    readPreference: "secondaryPreferred",
-    retryWrites: "false",
+    tls: 'true',
+    replicaSet: 'rs0',
+    readPreference: 'secondaryPreferred',
+    retryWrites: 'false',
   },
 };

@@ -32,3 +32,10 @@ export interface ErrorObject {
   helpUrl?: string;
   helpText?: string;
 }
+
+export type QRPayload = {
+  payload: {
+    uri: string;
+    key: string;
+  };
+};

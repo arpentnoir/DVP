@@ -7,4 +7,6 @@ import { S3Config } from './storage';
 
 export interface ApiConfigFile {
   s3Config: S3Config;
+  apiURL: string;
+  clientURL: string;
 }

@@ -1,7 +1,12 @@
 import { ApiConfigFile, S3Config } from '@dvp/api-interfaces';
-import { getEnv } from '@dvp/server-common';
+import { checkEnv } from '@dvp/server-common';
 
-getEnv(['DOCUMENT_STORAGE_BUCKET_NAME', 'S3_REGION']) as S3Config;
+checkEnv([
+  'DOCUMENT_STORAGE_BUCKET_NAME',
+  'S3_REGION',
+  'API_URL',
+  'CLIENT_URL',
+]);
 
 export const config: ApiConfigFile = {
   s3Config: {
@@ -10,4 +15,6 @@ export const config: ApiConfigFile = {
       region: process.env.S3_REGION,
     },
   } as S3Config,
+  apiURL: process.env.API_URL,
+  clientURL: process.env.CLIENT_URL,
 };
