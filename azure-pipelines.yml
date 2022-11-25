@@ -8,8 +8,9 @@ pr:
 parameters:
   - name: ENV
     displayName: Deployment environment
-    default: dev
+    default: default
     values:
+      - default
       - dev
       - test
       - preprod
@@ -19,6 +20,14 @@ variables:
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
   isDevelop: $[eq(variables['Build.SourceBranch'], 'refs/heads/develop')]
   isPR: $[eq(variables['Build.Reason'], 'PullRequest')]
+  ${{ if eq(variables.isMain, 'true') }}:
+    TARGET_ENV: test # deploy master to test environment
+  ${{ elseif eq(variables.isDevelop, 'true') }}:
+    TARGET_ENV: dev # deploy develop to dev environment
+  ${{ elseif ne(parameters.ENV, 'default')}}:
+    TARGET_ENV: ${{ parameters.ENV }} # ENV parameter overrides TARGET_ENV if set
+  ${{ else }}:
+    TARGET_ENV: dev # set default TARGET_ENV to dev
   ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
     NX_BRANCH: $(System.PullRequest.PullRequestNumber)
     TARGET_BRANCH: $[replace(variables['System.PullRequest.TargetBranch'],'refs/heads/','origin/')]
@@ -35,7 +44,7 @@ stages:
     variables:
       disable.coverage.autogenerate: true
     jobs:
-      - job: test_build
+      - job: build_test
         steps:
           - checkout: self
             fetchDepth: 2
@@ -55,27 +64,30 @@ stages:
           - script: npx nx run-many --target=build --parallel=3
             displayName: 'Run build'
             env:
-              NX_API_URL: https://api.${{ parameters.ENV }}.$(TARGET_DOMAIN)/api
+              NX_API_URL: https://api.${{ variables.TARGET_ENV }}.$(TARGET_DOMAIN)/api
 
           - task: PublishPipelineArtifact@1
-            condition: and(succeeded(), eq(variables.isMain, 'true'))
+            condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
             inputs:
               targetPath: $(System.DefaultWorkingDirectory)/dist/apps/client
               artifactName: 'client-build'
 
           - task: PublishPipelineArtifact@1
-            condition: and(succeeded(), eq(variables.isMain, 'true'))
+            condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
             inputs:
               targetPath: $(System.DefaultWorkingDirectory)/dist/apps/api
               artifactName: 'api-build'
   - stage: deploy
     dependsOn: build_test
-    condition: and(succeeded(), eq(variables.isMain, 'true'))
+    condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
     pool:
       vmImage: ubuntu-latest
     jobs:
       - job: deploy
         steps:
+          - script: |
+              echo "Deployment environment: ${{variables.TARGET_ENV}}"
+
           - task: AzureKeyVault@2
             inputs:
               connectedServiceName: 'gs-ha-dvp-serviceconnection'
@@ -108,7 +120,7 @@ stages:
               npx nx run infrastructure:preview --verbose
             displayName: Run `pulumi preview`
             env:
-              ENV: ${{ parameters.ENV }}
+              ENV: ${{ variables.TARGET_ENV }}
               AWS_ACCESS_KEY_ID: $(AWS-ACCESS-KEY-ID)
               AWS_SECRET_ACCESS_KEY: $(aws-secret-access-key)
 
@@ -116,6 +128,6 @@ stages:
               npx nx run infrastructure:up --verbose
             displayName: Run `pulumi up`
             env:
-              ENV: ${{ parameters.ENV }}
+              ENV: ${{ variables.TARGET_ENV }}
               AWS_ACCESS_KEY_ID: $(AWS-ACCESS-KEY-ID)
               AWS_SECRET_ACCESS_KEY: $(aws-secret-access-key)
