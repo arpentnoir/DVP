@@ -58,8 +58,30 @@ stages:
           - script: npx nx run-many --target=lint --parallel=3
             displayName: 'Run linting'
 
-          - script: npx nx run-many --target=test --parallel=3 --ci --code-coverage
+          - script: npx nx run-many --target=test --parallel=3 --coverage --reporters=default --reporters=jest-junit --coverageReporters=cobertura
             displayName: 'Run tests'
+
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: '**/junit.xml'
+              failTaskOnFailedTests: true
+            displayName: Publish test results to AzDo
+
+          - task: reportgenerator@5
+            inputs:
+              reports: '**/cobertura-coverage.xml'
+              reporttypes: 'HtmlInline_AzurePipelines;Cobertura'
+              targetdir: '$(System.DefaultWorkingDirectory)/Coverage'
+            displayName: 'Generate code coverage results'
+
+          - task: PublishCodeCoverageResults@1
+            inputs:
+              codeCoverageTool: 'Cobertura'
+              summaryFileLocation: '$(System.DefaultWorkingDirectory)/Coverage/Cobertura.xml'
+              reportDirectory: '$(System.DefaultWorkingDirectory)/Coverage'
+              failTaskOnFailedTests: true
+            displayName: Publish code coverage results to AzDo
 
           - script: npx nx run-many --target=build --parallel=3
             displayName: 'Run build'
