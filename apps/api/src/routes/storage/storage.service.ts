@@ -96,6 +96,11 @@ export class StorageService {
     if (await storageClient.isDocumentExists(id)) {
       throw new ValidationError('documentId', id);
     }
+
+    // When a VC is fetched from storage, the consumer must have the
+    // corresponding key to decrypt the document
+    delete encryptedDocument.key;
+
     const documentObjectId = await storageClient.uploadDocument(
       JSON.stringify({
         document: encryptedDocument,
