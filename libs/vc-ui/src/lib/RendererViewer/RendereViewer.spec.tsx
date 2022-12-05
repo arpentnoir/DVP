@@ -45,13 +45,18 @@ describe('RendererViewer', () => {
 
 describe('_getRendererURl', () => {
   it('should return renderer url if url is specified in document', () => {
-    CHAFTA_COO.openAttestationMetadata.template.url = 'http://soopadoopa.com';
+    if (CHAFTA_COO.openAttestationMetadata.template) {
+      CHAFTA_COO.openAttestationMetadata.template.url = 'http://soopadoopa.com';
+    }
+
     const res = _getRendererURl(CHAFTA_COO);
     expect(res).toStrictEqual('http://soopadoopa.com');
   });
 
   it('should return default renderer url if url is not specified in document', () => {
-    CHAFTA_COO.openAttestationMetadata.template.url = '';
+    if (CHAFTA_COO.openAttestationMetadata.template) {
+      CHAFTA_COO.openAttestationMetadata.template.url = '';
+    }
 
     const res = _getRendererURl(CHAFTA_COO);
     expect(res).toStrictEqual('https://generic-templates.tradetrust.io');

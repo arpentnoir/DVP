@@ -6,7 +6,10 @@ import App from './app/app';
 axios.defaults.baseURL = process.env['NX_API_URL'];
 
 // Start the mocking conditionally.
-if (process.env['NODE_ENV'] === 'development') {
+if (
+  process.env['NODE_ENV'] === 'development' &&
+  process.env['NX_SERVICE_WORKER']
+) {
   // eslint-disable-next-line
   const { worker } = require('./mocks');
   worker.start();

@@ -15,7 +15,3 @@ const Template: ComponentStory<typeof RendererViewer> = (args) => (
 export const Primary = Template.bind({});
 
 Primary.args = { document: CHAFTA_COO };
-
-export const Generic = Template.bind({});
-
-Generic.args = { document: { test: 'generic template' } };

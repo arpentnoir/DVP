@@ -1,3 +1,4 @@
+export * from './CertificateUpload';
 export * from './FooBar';
 export * from './RendererViewer';
 export * from './VerifyResults';

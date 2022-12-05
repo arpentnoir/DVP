@@ -79,7 +79,7 @@ export const CHAFTA_COO = {
     signature:
       '0x1098f92c7d320a4c33e86417cb8a99b2beb6a2f965e7d944748d94f5c8263f3616b25e40c99f0016664807c52af24ca84853c0b7d25c87aeddc39ad0a7670f381b',
   },
-};
+} as VerifiableCredential;
 
 export const AANZFTA_COO = {
   version: 'https://schema.openattestation.com/3.0/schema.json',

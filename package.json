@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "NX_API_URL=/api nx run-many --target=serve --all",
+    "start": "nx run-many --target=serve --all",
+    "start:worker": "NX_SERVICE_WORKER=true nx run-many --target=serve --all",
     "build": "nx run-many --target=build --all",
     "test": "nx run-many --target=test --all",
     "test:ci": "nx run-many --target=test --all --coverage --reporters=default --reporters=jest-junit --coverageReporters=cobertura",
