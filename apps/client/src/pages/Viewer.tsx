@@ -26,6 +26,7 @@ export const Viewer = () => {
       <VerifyViewer
         document={state.document}
         results={{ ...state.results, checks }}
+        hideVerifyResults={state.hideVerifyResults}
       />
     </Box>
   ) : null;

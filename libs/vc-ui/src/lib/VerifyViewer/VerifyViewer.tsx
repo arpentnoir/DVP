@@ -17,6 +17,7 @@ export interface VerifyResult {
 export interface IVerifyViewer {
   document: VerifiableCredential;
   results: VerifyResult;
+  hideVerifyResults?: boolean;
 }
 
 // TODO: Since we don't yet know how verify API will return valid checks,
@@ -40,7 +41,7 @@ export const VALID_CHECKS: IStatusCheck[] = [
   },
 ];
 
-export const VerifyViewer = ({ document, results }: IVerifyViewer) => {
+export const VerifyViewer = ({ document, results, hideVerifyResults }: IVerifyViewer) => {
   return (
     <Paper
       sx={{
@@ -51,7 +52,7 @@ export const VerifyViewer = ({ document, results }: IVerifyViewer) => {
       }}
       elevation={0}
     >
-      <VerifyResults {...results} />
+      {!hideVerifyResults && <VerifyResults {...results} />}
       {!results.errors.length && <RendererViewer document={document} />}
     </Paper>
   );
