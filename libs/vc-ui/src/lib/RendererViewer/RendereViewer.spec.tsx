@@ -1,6 +1,12 @@
 import { act, render, waitFor } from '@testing-library/react';
-import { RendererViewer, _getRendererURl } from './RendererViewer';
+import {
+  reducer,
+  RendererViewer,
+  VCDocumentActionType,
+  _getRendererURl,
+} from './RendererViewer';
 import { CHAFTA_COO } from '../fixtures';
+import { WrappedVerifiableCredential } from '@dvp/api-interfaces';
 
 describe('RendererViewer', () => {
   it('should render successfully', () => {
@@ -60,5 +66,39 @@ describe('_getRendererURl', () => {
 
     const res = _getRendererURl(CHAFTA_COO);
     expect(res).toStrictEqual('https://generic-templates.tradetrust.io');
+  });
+
+  describe('reducer', () => {
+    it('should return the initial state', () => {
+      const action = {
+        type: 'TEST' as VCDocumentActionType,
+        payload: [],
+      };
+
+      expect(reducer({ document: CHAFTA_COO }, action)).toStrictEqual({
+        document: CHAFTA_COO,
+      });
+    });
+
+    it('should handle OBFUSCATE', () => {
+      const action = {
+        type: VCDocumentActionType.Obfuscate,
+        payload: 'credentialSubject.links',
+      };
+
+      expect(CHAFTA_COO.credentialSubject['links']).toBeDefined();
+      expect(
+        (CHAFTA_COO as WrappedVerifiableCredential).proof.privacy.obfuscated
+          .length
+      ).toStrictEqual(0);
+
+      const res = reducer({ document: CHAFTA_COO }, action);
+
+      expect(res.document?.credentialSubject['links']).not.toBeDefined();
+      expect(
+        (res.document as WrappedVerifiableCredential).proof.privacy.obfuscated
+          .length
+      ).toStrictEqual(1);
+    });
   });
 });

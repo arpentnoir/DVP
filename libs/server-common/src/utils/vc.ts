@@ -16,7 +16,11 @@ export const isVerifiableCredential = (
   document: WrappedVerifiableCredential
 ) => {
   if (isOpenAttestationType(document)) {
-    return validateSchema(document) && utils.isWrappedV3Document(document);
+    return (
+      validateSchema(document) &&
+      (utils.isWrappedV2Document(document) ||
+        utils.isWrappedV3Document(document))
+    );
   } else {
     // TODO: Implement check for non-OA credential
     return false;

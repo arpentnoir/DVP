@@ -1,17 +1,56 @@
-import { VerifiableCredential } from '@dvp/api-interfaces';
+import { useReducer, useRef, useState } from 'react';
 import {
   FrameActions,
   FrameConnector,
   renderDocument,
-  updateTemplates,
   print,
 } from '@govtechsg/decentralized-renderer-react-components';
-import { Tab } from '@mui/material';
+import { obfuscateDocument } from '@govtechsg/open-attestation';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { Tab } from '@mui/material';
 import { Box } from '@mui/system';
-import { useCallback, useRef, useState } from 'react';
+import {
+  VerifiableCredential,
+  WrappedVerifiableCredential,
+} from '@dvp/api-interfaces';
 import { DEFAULT_RENDERER } from '../constants';
 import { VcUtility } from '../VcUtility';
+
+export type VCDocumentState = {
+  document?: VerifiableCredential;
+};
+
+export enum VCDocumentActionType {
+  'Obfuscate' = 'obfuscate',
+}
+
+export type VCDocumentAction = {
+  type: VCDocumentActionType.Obfuscate;
+  payload: string[] | string;
+};
+
+// We're implementing a reducer to separate state management.
+// This enables the document to be updated and shared across the renderer, viewer and utility
+export const reducer = (
+  state: VCDocumentState,
+  action: VCDocumentAction
+): VCDocumentState => {
+  switch (action.type) {
+    case VCDocumentActionType.Obfuscate: {
+      let res = state.document as WrappedVerifiableCredential;
+      if (res) {
+        res = obfuscateDocument(res, action.payload);
+        // Redact self url as well if present
+        if (res.credentialSubject.links) {
+          res = obfuscateDocument(res, 'credentialSubject.links');
+        }
+      }
+      return { document: res };
+    }
+    default:
+      return state;
+  }
+};
 
 export interface IRendererViewer {
   document: VerifiableCredential;
@@ -32,24 +71,29 @@ export const RendererViewer = ({ document }: IRendererViewer) => {
   const toFrame = useRef<any>();
   const [tabIndex, setTabIndex] = useState('0');
 
-  const onConnected = useCallback(
+  const [state, dispatchAction] = useReducer(reducer, {
+    document,
+  });
+
+  const onConnected =
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (frame: any) => {
       toFrame.current = frame;
-      if (toFrame.current) {
-        toFrame.current(renderDocument({ document }));
+      if (toFrame.current && state.document) {
+        toFrame.current(renderDocument({ document: state.document }));
       }
-    },
-    [document]
-  );
+    };
 
   const dispatch = (action: FrameActions): void => {
     if (action.type === 'UPDATE_HEIGHT') {
-      setHeight(action.payload + SCROLLBAR_WIDTH); // adding SCROLLBAR_WIDTH in case the frame content overflow horizontally, which will cause scrollbars to appear
+      setHeight(action.payload + SCROLLBAR_WIDTH);
     }
 
-    if (action.type === 'UPDATE_TEMPLATES') {
-      updateTemplates(action.payload);
+    if (action.type === 'OBFUSCATE') {
+      dispatchAction({
+        type: VCDocumentActionType.Obfuscate,
+        payload: action.payload,
+      });
     }
   };
 
@@ -65,11 +109,13 @@ export const RendererViewer = ({ document }: IRendererViewer) => {
 
   return (
     <>
-      <VcUtility
-        document={document}
-        onPrint={onPrint}
-        isPrintable={tabIndex === '0' ? true : false}
-      />
+      {state.document && (
+        <VcUtility
+          document={state.document}
+          onPrint={onPrint}
+          isPrintable={tabIndex === '0' ? true : false}
+        />
+      )}
       <TabContext value={`${tabIndex}`} data-testid={'tabs'}>
         <Box
           sx={{
@@ -104,8 +150,8 @@ export const RendererViewer = ({ document }: IRendererViewer) => {
             aria-label="Credential subject"
           >
             <pre tabIndex={0} style={{ overflow: 'auto' }}>
-              {document?.credentialSubject
-                ? JSON.stringify(document?.credentialSubject, null, 2)
+              {state.document?.credentialSubject
+                ? JSON.stringify(state.document?.credentialSubject, null, 2)
                 : 'Credential subject is empty or does not exist.'}
             </pre>
           </Box>
