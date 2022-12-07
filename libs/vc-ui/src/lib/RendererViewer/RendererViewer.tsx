@@ -6,9 +6,8 @@ import {
   print,
 } from '@govtechsg/decentralized-renderer-react-components';
 import { obfuscateDocument } from '@govtechsg/open-attestation';
+import { Tab, Typography, Box } from '@mui/material';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Tab } from '@mui/material';
-import { Box } from '@mui/system';
 import {
   VerifiableCredential,
   WrappedVerifiableCredential,
@@ -128,8 +127,24 @@ export const RendererViewer = ({ document }: IRendererViewer) => {
             onChange={handleChange}
             aria-label="Display Verifiable Credential"
           >
-            <Tab label="Render" value={'0'} />
-            <Tab label="Json" value={'1'} />
+            <Tab
+              aria-label="Render view"
+              label="Render"
+              sx={{ color: 'black' }}
+              value={'0'}
+              onFocus={() => {
+                setTabIndex('0');
+              }}
+            />
+            <Tab
+              aria-label="Json view"
+              label="Json"
+              sx={{ color: 'black' }}
+              value={'1'}
+              onFocus={() => {
+                setTabIndex('1');
+              }}
+            />
           </TabList>
         </Box>
         <TabPanel value={'0'} data-testid={'tab-panel-0'}>
@@ -147,13 +162,17 @@ export const RendererViewer = ({ document }: IRendererViewer) => {
               paddingLeft: { xs: 0, sm: '2rem' },
             }}
             tabIndex={0}
-            aria-label="Credential subject"
+            aria-label="JSON version of the Credential subject"
           >
-            <pre tabIndex={0} style={{ overflow: 'auto' }}>
-              {state.document?.credentialSubject
-                ? JSON.stringify(state.document?.credentialSubject, null, 2)
-                : 'Credential subject is empty or does not exist.'}
-            </pre>
+            {state.document?.credentialSubject ? (
+              <pre aria-hidden="true" style={{ overflow: 'auto' }}>
+                {JSON.stringify(state.document?.credentialSubject, null, 2)}
+              </pre>
+            ) : (
+              <Typography tabIndex={0}>
+                Credential subject is empty or does not exist.
+              </Typography>
+            )}
           </Box>
         </TabPanel>
       </TabContext>

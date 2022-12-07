@@ -26,7 +26,7 @@ describe('RendererViewer', () => {
 
     await waitFor(() => {
       expect(getByRole('tab', { selected: true }).textContent).toBe('Render');
-      expect(getByRole('tab', { name: 'Json' })).toBeTruthy();
+      expect(getByRole('tab', { name: 'Json view' })).toBeTruthy();
       expect(getByTestId('tab-panel-0')).toBeTruthy();
     });
   });
@@ -37,13 +37,13 @@ describe('RendererViewer', () => {
     );
 
     act(() => {
-      getByRole('tab', { name: 'Json' }).click();
+      getByRole('tab', { name: 'Json view' }).click();
     });
 
     await waitFor(() => {
       expect(getByRole('tab', { selected: true }).textContent).toBe('Json');
-      expect(getByTestId('tab-panel-1').textContent).toBe(
-        JSON.stringify(CHAFTA_COO.credentialSubject, null, 2)
+      expect(JSON.parse(getByTestId('tab-panel-1')?.textContent)).toMatchObject(
+        CHAFTA_COO.credentialSubject
       );
     });
   });

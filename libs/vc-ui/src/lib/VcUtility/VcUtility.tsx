@@ -24,6 +24,8 @@ export interface IVcUtility {
 
 export const VcUtility = ({ document, onPrint, isPrintable }: IVcUtility) => {
   const [isQrCodePopoverOpen, setIsQrCodePopoverOpen] = useState(false);
+  const [isUriCopiedToClipboard, setIsUriCopiedToClipboard] = useState(false);
+
   const verifiableCredential = document;
   const { name, links } = verifiableCredential.credentialSubject ?? {};
 
@@ -44,8 +46,9 @@ export const VcUtility = ({ document, onPrint, isPrintable }: IVcUtility) => {
         <Box>
           <IconButton
             tabIndex={0}
-            aria-label="Access the Verifiable Credentials Uniform Resource Identifier and QRCode dropdown"
+            aria-label="View QRCode & Uniform Resource Identifier"
             data-testid="uri-dropdown-button"
+            aria-expanded={isQrCodePopoverOpen}
             onClick={() => {
               setIsQrCodePopoverOpen(!isQrCodePopoverOpen);
             }}
@@ -71,21 +74,34 @@ export const VcUtility = ({ document, onPrint, isPrintable }: IVcUtility) => {
           >
             <TextField
               aria-label="Verifiable Credentials Uniform Resource Identifier"
+              disabled
               data-testid="vc-uri"
               value={qrcodeUrl}
-              style={{
+              sx={{
                 width: '92%',
                 marginBottom: '10px',
+                '& input.Mui-disabled': {
+                  WebkitTextFillColor: 'black',
+                },
               }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton
                       tabIndex={0}
-                      aria-label="Copy the Verifiable Credentials Uniform Resource Identifier to the clipboard"
+                      aria-label={
+                        isUriCopiedToClipboard
+                          ? 'Uniform Resource Identifier copied to the clipboard'
+                          : 'Copy the Verifiable Credentials Uniform Resource Identifier to the clipboard'
+                      }
                       data-testid="copy-uri-button"
                       onClick={() => {
                         void copyToClipboard(qrcodeUrl);
+                        setIsUriCopiedToClipboard(true);
+                        setInterval(
+                          () => setIsUriCopiedToClipboard(false),
+                          1000
+                        );
                       }}
                     >
                       <ContentCopyIcon color={'primary'} />
@@ -104,6 +120,7 @@ export const VcUtility = ({ document, onPrint, isPrintable }: IVcUtility) => {
             tabIndex={0}
             aria-label="Print the Verifiable Credential"
             data-testid="print-button"
+            aria-expanded={false}
             onClick={() => {
               onPrint();
             }}
@@ -125,7 +142,8 @@ export const VcUtility = ({ document, onPrint, isPrintable }: IVcUtility) => {
         >
           <IconButton
             tabIndex={0}
-            aria-label="Download the Verifiable Credential"
+            aria-label={'Download the Verifiable Credential'}
+            aria-expanded={false}
             data-testid="download-button"
             sx={{ border: '1px solid grey', borderRadius: '10px' }}
           >
