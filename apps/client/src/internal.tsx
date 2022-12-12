@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
-import { InternetApp } from './apps';
+import { InternalApp } from './apps';
 
 axios.defaults.baseURL = process.env['NX_API_URL'];
 
@@ -16,8 +16,9 @@ if (
 }
 
 const root = ReactDOM.createRoot(document.getElementById('root') as Element);
+
 root.render(
   <StrictMode>
-    <InternetApp />
+    <InternalApp />
   </StrictMode>
 );
