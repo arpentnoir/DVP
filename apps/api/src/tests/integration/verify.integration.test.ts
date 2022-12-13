@@ -1,9 +1,9 @@
 import request from 'supertest';
 import { app } from '../../app';
-import degree_vc from '../../fixtures/genericvc/degree_signed.json'; //Used in failing test
+import validNonOAVC from '../../fixtures/genericvc/degree_signed.json';
 import broken_doc from '../../fixtures/oav3/broken.json';
-import valid_OA_V3_doc from '../../fixtures/oav3/did-signed.json';
-import invalid_OA_V3_doc from '../../fixtures/oav3/did-invalid.json';
+import invalidOAV3 from '../../fixtures/oav3/did-invalid.json';
+import validOAV3 from '../../fixtures/oav3/did-signed.json';
 
 describe('verify api', () => {
   jest.setTimeout(20000);
@@ -14,7 +14,7 @@ describe('verify api', () => {
       await request(app)
         .post(endpoint)
         .send({
-          verifiableCredential: valid_OA_V3_doc,
+          verifiableCredential: validOAV3,
         })
         .expect('Content-Type', /json/)
         .expect(200)
@@ -23,23 +23,25 @@ describe('verify api', () => {
           expect(res.body.checks).toContain('proof');
         });
     });
-    it('should return bad request for non-OA document', async () => {
+
+    it('should verify a valid non OA document', async () => {
       await request(app)
         .post(endpoint)
         .send({
-          verifiableCredential: degree_vc,
+          verifiableCredential: validNonOAVC,
         })
         .expect('Content-Type', /json/)
-        .expect(400)
         .expect((res) => {
-          expect(res.body).toHaveProperty('errors');
+          expect(res.body).toHaveProperty('checks');
+          expect(res.body.checks).toContain('proof');
         });
     });
+
     it('should give BadRequest if given a non-valid VC', async () => {
       await request(app)
         .post(endpoint)
         .send({
-          verifiableCredential: invalid_OA_V3_doc,
+          verifiableCredential: invalidOAV3,
         })
         .expect('Content-Type', /json/)
         .expect(400)
@@ -59,17 +61,17 @@ describe('verify api', () => {
         .expect(400)
         .expect((res) => {
           expect(res.body.errors[0].detail).toStrictEqual(
-            ".body.verifiableCredential.credentialSubject: should have required property 'credentialSubject'"
+            "/body/verifiableCredential/credentialSubject: must have required property 'credentialSubject'"
           );
         });
     });
     it('should fail to validate a tampered vc', async () => {
-      const invalid_OA_V3_doc = { ...valid_OA_V3_doc };
-      invalid_OA_V3_doc.credentialSubject['thisFieldWasAltered'] = 'Yes';
+      const invalidOAV3 = { ...validOAV3 };
+      invalidOAV3.credentialSubject['thisFieldWasAltered'] = 'Yes';
       await request(app)
         .post(endpoint)
         .send({
-          verifiableCredential: invalid_OA_V3_doc,
+          verifiableCredential: invalidOAV3,
         })
         .expect('Content-Type', /json/)
         .expect(400)

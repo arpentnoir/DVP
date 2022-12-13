@@ -1,10 +1,10 @@
 {
   "info": {
-    "_postman_id": "afbdac93-261f-49cb-a978-0f85d2764ef9",
+    "_postman_id": "77fdacb4-872e-4328-8f8f-641d8c4c822a",
     "name": "DVP",
     "description": "API for the Digital Verification Platform",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-    "_exporter_id": "15915209"
+    "_exporter_id": "1430871"
   },
   "item": [
     {
@@ -640,6 +640,87 @@
               "body": "{\n    \"errors\": [\n        \"Unsupported credential type\"\n    ],\n    \"warnings\": [],\n    \"checks\": []\n}"
             }
           ]
+        },
+        {
+          "name": "Verify a non OA VC",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"verifiableCredential\": {\n        \"@context\": [\n            \"https://www.w3.org/2018/credentials/v1\",\n            \"https://www.w3.org/2018/credentials/examples/v1\"\n        ],\n        \"id\": \"http://example.edu/credentials/3732\",\n        \"type\": [\n            \"VerifiableCredential\",\n            \"UniversityDegreeCredential\"\n        ],\n        \"credentialSubject\": {\n            \"id\": \"did:example:ebfeb1f712ebc6f1c276e12ec21\",\n            \"degree\": {\n                \"name\": \"Bachelor of Science and Arts\",\n                \"type\": \"BachelorDegree\"\n            }\n        },\n        \"issuer\": \"did:key:z6Mksr8sziCfheZ9x8KL8ATZLovEipQrcpXNT63ovrfkf4d9\",\n        \"issuanceDate\": \"2010-01-01T00:00:00Z\",\n        \"proof\": {\n            \"type\": \"Ed25519Signature2018\",\n            \"proofPurpose\": \"assertionMethod\",\n            \"verificationMethod\": \"did:key:z6Mksr8sziCfheZ9x8KL8ATZLovEipQrcpXNT63ovrfkf4d9#z6Mksr8sziCfheZ9x8KL8ATZLovEipQrcpXNT63ovrfkf4d9\",\n            \"created\": \"2022-08-15T04:40:15.882Z\",\n            \"jws\": \"eyJhbGciOiJFZERTQSIsImNyaXQiOlsiYjY0Il0sImI2NCI6ZmFsc2V9..uaDB5ryv_3cHLMzxFfyg7qUiakOYfWkDXbYRKUqEc6AKNk1wZxxPx1a-j8uDxgfEvwqtUsWEjus6avxj6u00DQ\"\n        }\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/verify",
+              "host": ["{{baseUrl}}"],
+              "path": ["verify"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify a non OA tampered VC",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"verifiableCredential\": {\n        \"@context\": [\n            \"https://www.w3.org/2018/credentials/v1\",\n            \"https://www.w3.org/2018/credentials/examples/v1\"\n        ],\n        \"id\": \"http://example.edu/credentials/3732\",\n        \"type\": [\n            \"VerifiableCredential\",\n            \"UniversityDegreeCredential\"\n        ],\n        \"credentialSubject\": {\n            \"id\": \"did:example:ebfeb1f712ebc6f1c276e12ec21\",\n            \"degree\": {\n                \"name\": \"Bachelor of Science and Arts\",\n                \"type\": \"BachelorDegree\"\n            }\n        },\n        \"issuer\": \"did:key:z6Mksr8sziCfheZ9x8KL8ATZLovEipQrcpXNT63ovrfkf4d9\",\n        \"issuanceDate\": \"2010-02-01T00:00:00Z\",\n        \"proof\": {\n            \"type\": \"Ed25519Signature2018\",\n            \"proofPurpose\": \"assertionMethod\",\n            \"verificationMethod\": \"did:key:z6Mksr8sziCfheZ9x8KL8ATZLovEipQrcpXNT63ovrfkf4d9#z6Mksr8sziCfheZ9x8KL8ATZLovEipQrcpXNT63ovrfkf4d9\",\n            \"created\": \"2022-08-15T04:40:15.882Z\",\n            \"jws\": \"eyJhbGciOiJFZERTQSIsImNyaXQiOlsiYjY0Il0sImI2NCI6ZmFsc2V9..uaDB5ryv_3cHLMzxFfyg7qUiakOYfWkDXbYRKUqEc6AKNk1wZxxPx1a-j8uDxgfEvwqtUsWEjus6avxj6u00DQ\"\n        }\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/verify",
+              "host": ["{{baseUrl}}"],
+              "path": ["verify"]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify a non OA inactive VC",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"verifiableCredential\": {\n        \"@context\": [\n            \"https://www.w3.org/2018/credentials/v1\",\n            \"https://www.w3.org/2018/credentials/examples/v1\"\n        ],\n        \"id\": \"http://example.edu/credentials/3732\",\n        \"type\": [\n            \"VerifiableCredential\",\n            \"UniversityDegreeCredential\"\n        ],\n        \"credentialSubject\": {\n            \"id\": \"did:example:ebfeb1f712ebc6f1c276e12ec21\",\n            \"degree\": {\n                \"name\": \"Bachelor of Science and Arts\",\n                \"type\": \"BachelorDegree\"\n            }\n        },\n        \"issuer\": \"did:key:z6Mksr8sziCfheZ9x8KL8ATZLovEipQrcpXNT63ovrfkf4d9\",\n        \"issuanceDate\": \"2040-02-01T00:00:00Z\",\n        \"proof\": {\n            \"type\": \"Ed25519Signature2018\",\n            \"proofPurpose\": \"assertionMethod\",\n            \"verificationMethod\": \"did:key:z6Mksr8sziCfheZ9x8KL8ATZLovEipQrcpXNT63ovrfkf4d9#z6Mksr8sziCfheZ9x8KL8ATZLovEipQrcpXNT63ovrfkf4d9\",\n            \"created\": \"2022-08-15T04:40:15.882Z\",\n            \"jws\": \"eyJhbGciOiJFZERTQSIsImNyaXQiOlsiYjY0Il0sImI2NCI6ZmFsc2V9..uaDB5ryv_3cHLMzxFfyg7qUiakOYfWkDXbYRKUqEc6AKNk1wZxxPx1a-j8uDxgfEvwqtUsWEjus6avxj6u00DQ\"\n        }\n    }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/verify",
+              "host": ["{{baseUrl}}"],
+              "path": ["verify"]
+            }
+          },
+          "response": []
         }
       ]
     },

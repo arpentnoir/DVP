@@ -44,7 +44,6 @@
             "$ref": "#/components/responses/BadRequestErrorResponse"
           },
           "500": {
-            "description": "Internal Server Error",
             "$ref": "#/components/responses/InternalServerErrorResponse"
           }
         }
@@ -83,7 +82,6 @@
             "$ref": "#/components/responses/ResourceNotFoundErrorResponse"
           },
           "500": {
-            "description": "Internal Server Error",
             "$ref": "#/components/responses/InternalServerErrorResponse"
           }
         }
@@ -117,11 +115,9 @@
             }
           },
           "400": {
-            "description": "Bad User Input",
             "$ref": "#/components/responses/BadRequestErrorResponse"
           },
           "500": {
-            "description": "Internal Server Error",
             "$ref": "#/components/responses/InternalServerErrorResponse"
           }
         }
@@ -149,17 +145,15 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/VerifyCredentialResponse"
+                  "$ref": "#/components/schemas/VerificationResult"
                 }
               }
             }
           },
           "400": {
-            "description": "Bad User Input",
             "$ref": "#/components/responses/BadRequestErrorResponse"
           },
           "500": {
-            "description": "Internal Server Error",
             "$ref": "#/components/responses/InternalServerErrorResponse"
           }
         }
@@ -322,6 +316,7 @@
         "type": "object",
         "required": ["@context", "type", "credentialSubject"],
         "description": "A JSON-LD Verifiable Credential without a proof.",
+        "additionalProperties": true,
         "properties": {
           "@context": {
             "type": "array",
@@ -341,9 +336,6 @@
               "type": "string"
             }
           },
-          "issuer": {
-            "$ref": "#/components/schemas/Issuer"
-          },
           "issuanceDate": {
             "type": "string",
             "description": "The issuanceDate"
@@ -362,7 +354,7 @@
             "https://www.w3.org/2018/credentials/v1",
             "https://www.w3.org/2018/credentials/examples/v1"
           ],
-          "id": "http://example.gov/credentials/3732",
+          "id": "http://example.gov/credentials/3733",
           "type": ["VerifiableCredential", "UniversityDegreeCredential"],
           "issuer": "did:example:123",
           "issuanceDate": "2020-03-16T22:37:26.544Z",
@@ -502,9 +494,6 @@
           "errors": []
         }
       },
-      "VerifyCredentialResponse": {
-        "$ref": "#/components/schemas/VerificationResult"
-      },
       "VerifiableCredential": {
         "type": "object",
         "description": "A JSON-LD Verifiable Credential with a proof.",
@@ -528,10 +517,10 @@
           ],
           "id": "http://example.gov/credentials/3732",
           "type": ["VerifiableCredential", "UniversityDegreeCredential"],
-          "issuer": "did:example:123",
+          "issuer": "did:example:1234",
           "issuanceDate": "2020-03-16T22:37:26.544Z",
           "credentialSubject": {
-            "id": "did:example:123",
+            "id": "did:example:1234",
             "degree": {
               "type": "BachelorDegree",
               "name": "Bachelor of Science and Arts"
@@ -540,7 +529,7 @@
           "proof": {
             "type": "Ed25519Signature2018",
             "created": "2020-04-02T18:28:08Z",
-            "verificationMethod": "did:example:123#z6MksHh7qHWvybLg5QTPPdG2DgEjjduBDArV9EF9mRiRzMBN",
+            "verificationMethod": "did:example:1234#z6MksHh7qHWvybLg5QTPPdG2DgEjjduBDArV9EF9mRiRzMBN",
             "proofPurpose": "assertionMethod",
             "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..YtqjEYnFENT7fNW-COD0HAACxeuQxPKAmp4nIl8jYAu__6IH2FpSxv81w-l5PvE1og50tS9tH8WyXMlXyo45CA"
           }

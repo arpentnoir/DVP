@@ -52,6 +52,9 @@
       ],
       "env": {
         "jest": true
+      },
+      "rules": {
+        "@typescript-eslint/unbound-method": "off"
       }
     }
   ],

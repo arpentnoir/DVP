@@ -2,7 +2,7 @@ import { VerifiableCredential } from '../vc';
 
 export interface VerificationResult {
   checks: string[];
-  warnings: string[];
+  warnings?: string[];
   errors: string[];
 }
 

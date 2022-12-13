@@ -1,4 +1,5 @@
 import { logger } from '@dvp/server-common';
+
 import { app } from './app';
 
 const port = process.env.port || 3333;

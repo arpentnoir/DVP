@@ -1,12 +1,12 @@
-import request from 'supertest';
-import { mockClient } from 'aws-sdk-client-mock';
-import { app } from '../../app';
-import oa_doc_base from '../../fixtures/oav3/did.json';
 import {
   HeadObjectCommand,
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
+import { mockClient } from 'aws-sdk-client-mock';
+import request from 'supertest';
+import { app } from '../../app';
+import oa_doc_base from '../../fixtures/oav3/did.json';
 
 let oa_doc;
 
@@ -51,7 +51,7 @@ describe('issue api', () => {
         .expect(400)
         .expect((res) => {
           expect(res.body.errors[0].detail).toStrictEqual(
-            ".body.credential: should have required property 'credential'"
+            "/body/credential: must have required property 'credential'"
           );
         });
     });
