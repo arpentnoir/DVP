@@ -7,7 +7,7 @@
     "start:worker": "NX_SERVICE_WORKER=true nx run-many --target=serve --all",
     "start:internal": "nx run-many --target=serve --all --configuration=development-internal",
     "start:internal:worker": "NX_SERVICE_WORKER=true nx run-many --target=serve --all --configuration=development-internal",
-    "build": "nx run-many --target=build --all --skip-nx-cache ",
+    "build": "nx run-many --target=build --all --skip-nx-cache",
     "build:internal": "nx run-many --target=build --all --configuration=production-internal --skip-nx-cache ",
     "test": "nx run-many --target=test --all",
     "ci:test": "nx run-many --target=test --all --coverage --reporters=default --reporters=jest-junit --coverageReporters=cobertura",
@@ -62,7 +62,6 @@
     "shortid": "^2.2.16",
     "styled-components": "5.3.5",
     "supertest": "^6.3.1",
-    "tslib": "^2.3.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
@@ -71,7 +70,6 @@
     "@jest-mock/express": "^2.0.1",
     "@nrwl/cli": "15.0.4",
     "@nrwl/cypress": "15.0.4",
-    "@nrwl/esbuild": "15.0.4",
     "@nrwl/eslint-plugin-nx": "15.0.4",
     "@nrwl/express": "15.0.4",
     "@nrwl/jest": "15.0.4",

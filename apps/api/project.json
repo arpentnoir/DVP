@@ -5,29 +5,24 @@
   "projectType": "application",
   "targets": {
     "build": {
-      "executor": "@nrwl/esbuild:esbuild",
+      "executor": "@nrwl/node:webpack",
       "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
       "options": {
-        "minify": true,
-        "target": "esnext",
-        "platform": "node",
-        "format": ["esm"],
+        "compiler": "babel",
+        "generatePackageJson": true,
+        "outputFileName": "index.js",
+        "externalDependencies": "none",
         "outputPath": "dist/apps/api",
         "main": "apps/api/src/index.ts",
-        "tsConfig": "apps/api/tsconfig.app.json",
-        "assets": ["apps/api/src/assets"],
-        "outputFileName": "index.js",
-        "esbuildOptions": {
-          "banner": {
-            "js": "import { createRequire } from 'module';const require = createRequire(import.meta.url);"
-          }
-        }
+        "tsConfig": "apps/api/tsconfig.app.json"
       },
       "configurations": {
         "production": {
           "optimization": true,
-          "extractLicenses": true,
           "inspect": false,
+          "sourceMap": false,
+          "extractLicenses": false,
           "fileReplacements": [
             {
               "replace": "apps/api/src/environments/environment.ts",
@@ -50,7 +45,6 @@
       "configurations": {
         "production": {
           "optimization": true,
-          "extractLicenses": true,
           "inspect": false,
           "fileReplacements": [
             {
