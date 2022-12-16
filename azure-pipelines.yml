@@ -92,7 +92,18 @@ stages:
             condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
             inputs:
               targetPath: $(System.DefaultWorkingDirectory)/dist/apps/client
-              artifactName: 'client-build'
+              artifactName: 'client-build-internet'
+
+          - script: npx nx build client --configuration=production-internal --skip-nx-cache
+            displayName: 'Run build internal client app'
+            env:
+              NX_API_URL: https://api.${{ variables.TARGET_ENV }}.$(TARGET_DOMAIN)/api
+
+          - task: PublishPipelineArtifact@1
+            condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
+            inputs:
+              targetPath: $(System.DefaultWorkingDirectory)/dist/apps/client
+              artifactName: 'client-build-internal'
 
           - task: PublishPipelineArtifact@1
             condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))

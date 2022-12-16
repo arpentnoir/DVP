@@ -12221,10 +12221,10 @@ graceful-fs@^4.1.11, graceful-fs@^4.1.15, graceful-fs@^4.1.2, graceful-fs@^4.1.6
   resolved "https://registry.yarnpkg.com/graphql/-/graphql-16.6.0.tgz#c2dcffa4649db149f6282af726c8c83f1c7c5fdb"
   integrity sha512-KPIBPDlW7NxrbT/eh4qPXz5FiFdL5UbaA0XUNz2Rp3Z3hqBSkbj0GVjwFDztsWVauZUWsbKHgMg++sk8UX0bkw==
 
-gs-pulumi-library@^0.2.2:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/gs-pulumi-library/-/gs-pulumi-library-0.2.2.tgz#a106ab6f07cdcb3dab2fdffe56483a5418043445"
-  integrity sha512-RbIwbuZUk37wzoZuZ3wofM9Yar3EIgYM14GqsH5XHv4+XCBqdm2Mk6H5QqrLJdwrEDSWz3OPpLcIJn5+Rwv34g==
+gs-pulumi-library@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.yarnpkg.com/gs-pulumi-library/-/gs-pulumi-library-0.2.3.tgz#abc8a63e7f8550830ffcff8b8a263009a57f2162"
+  integrity sha512-87slE4CuEVm8bEgBTXLVS8e7eveLCPXryy6XMN78nZRqTAE0Mnco3alCTuxyajbt978xktXCynA/NnRK5663Ig==
   dependencies:
     "@pulumi/aws" "^5.0.0"
     "@pulumi/awsguard" "^0.3.1"

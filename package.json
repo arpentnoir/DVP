@@ -49,7 +49,7 @@
     "express-openapi-validator": "5.0.0",
     "express-pino-logger": "^7.0.0",
     "fs": "^0.0.1-security",
-    "gs-pulumi-library": "^0.2.2",
+    "gs-pulumi-library": "^0.2.3",
     "msw": "^0.47.4",
     "path": "^0.12.7",
     "pino": "^8.7.0",
