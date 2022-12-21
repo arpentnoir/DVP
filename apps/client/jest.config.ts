@@ -9,4 +9,7 @@ export default {
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/apps/client',
   setupFilesAfterEnv: ['./jest.setup.ts'],
+  moduleNameMapper: {
+    '^react-pdf': 'react-pdf/dist/umd/entry',
+  },
 };

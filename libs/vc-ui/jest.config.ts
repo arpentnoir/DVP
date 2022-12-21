@@ -8,4 +8,7 @@ export default {
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
   coverageDirectory: '../../coverage/libs/vc-ui',
+  moduleNameMapper: {
+    '^react-pdf': 'react-pdf/dist/umd/entry.jest',
+  },
 };

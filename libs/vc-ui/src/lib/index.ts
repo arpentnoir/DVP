@@ -4,3 +4,7 @@ export * from './RendererViewer';
 export * from './VerifyResults';
 export * from './VerifyViewer';
 export * from './GenericJsonForm';
+export * from './QrCode';
+export * from './FromSelect';
+export * from './PdfViewer';
+export * from './ChooseForm';

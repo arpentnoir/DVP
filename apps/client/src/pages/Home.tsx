@@ -1,4 +1,4 @@
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 export const Home = () => {
@@ -7,12 +7,18 @@ export const Home = () => {
   const goToVerify = () => {
     navigate('/verify');
   };
+  const goToIssue = () => {
+    navigate('/issue');
+  };
 
   return (
-    <div>
+    <Box>
+      <Button variant="outlined" onClick={goToIssue}>
+        Issue Documents
+      </Button>
       <Button variant="outlined" onClick={goToVerify}>
         Verify Documents
       </Button>
-    </div>
+    </Box>
   );
 };

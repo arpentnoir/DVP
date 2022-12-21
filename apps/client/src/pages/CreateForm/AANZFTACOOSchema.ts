@@ -20,15 +20,12 @@ const postalAddressData = {
       type: 'string',
     },
   },
-}
-
+};
 
 const postalAddressDataRequired = {
   ...postalAddressData,
   required: ['line1', 'cityName', 'postcode', 'countryCode'],
-}
-
-
+};
 
 export const schema = {
   type: 'object',
@@ -250,7 +247,7 @@ export const schema = {
                           properties: {
                             uRI: {
                               type: 'string',
-                              title:"URI"
+                              title: 'URI',
                             },
                           },
                         },
@@ -334,7 +331,11 @@ export const schema = {
       ],
     },
   },
-  required: ['supplyChainConsignment', 'firstSignatoryAuthentication' ,'secondSignatoryAuthentication'],
+  required: [
+    'supplyChainConsignment',
+    'firstSignatoryAuthentication',
+    'secondSignatoryAuthentication',
+  ],
 };
 export const schemaUI = {
   type: 'VerticalLayout',
@@ -367,7 +368,7 @@ export const schemaUI = {
               type: 'Control',
               scope:
                 '#/properties/firstSignatoryAuthentication/properties/signature',
-              label:"Signature"
+              label: 'Signature',
             },
             {
               type: 'Control',
@@ -389,7 +390,7 @@ export const schemaUI = {
               type: 'Control',
               scope:
                 '#/properties/secondSignatoryAuthentication/properties/signature',
-              label:"Signature"
+              label: 'Signature',
             },
             {
               type: 'Control',
@@ -446,13 +447,13 @@ export const schemaUI = {
                   type: 'Control',
                   scope:
                     '#/properties/supplyChainConsignment/properties/consignor/properties/iD',
-                  label:"ABN"
+                  label: 'ABN',
                 },
                 {
                   type: 'Control',
                   scope:
                     '#/properties/supplyChainConsignment/properties/consignor/properties/name',
-                    label:"Name"
+                  label: 'Name',
                 },
               ],
             },
@@ -464,7 +465,7 @@ export const schemaUI = {
               type: 'Control',
               scope:
                 '#/properties/supplyChainConsignment/properties/consignor/properties/postalAddress/properties/line1',
-                label:"Line 1"
+              label: 'Line 1',
             },
             {
               type: 'Control',
@@ -478,13 +479,13 @@ export const schemaUI = {
                   type: 'Control',
                   scope:
                     '#/properties/supplyChainConsignment/properties/consignor/properties/postalAddress/properties/cityName',
-                    label:"City Name"
+                  label: 'City Name',
                 },
                 {
                   type: 'Control',
                   scope:
                     '#/properties/supplyChainConsignment/properties/consignor/properties/postalAddress/properties/postcode',
-                    label:"Post Code"
+                  label: 'Post Code',
                 },
               ],
             },
@@ -500,7 +501,7 @@ export const schemaUI = {
                   type: 'Control',
                   scope:
                     '#/properties/supplyChainConsignment/properties/consignor/properties/postalAddress/properties/countryCode',
-                    label:"Country Code"
+                  label: 'Country Code',
                 },
               ],
             },
@@ -517,13 +518,13 @@ export const schemaUI = {
                   type: 'Control',
                   scope:
                     '#/properties/supplyChainConsignment/properties/consignee/properties/iD',
-                    label:"ABN"
+                  label: 'ABN',
                 },
                 {
                   type: 'Control',
                   scope:
                     '#/properties/supplyChainConsignment/properties/consignee/properties/name',
-                    label:"Name"
+                  label: 'Name',
                 },
               ],
             },
@@ -535,7 +536,7 @@ export const schemaUI = {
               type: 'Control',
               scope:
                 '#/properties/supplyChainConsignment/properties/consignee/properties/postalAddress/properties/line1',
-                label:"Line 1"
+              label: 'Line 1',
             },
             {
               type: 'Control',
@@ -549,13 +550,13 @@ export const schemaUI = {
                   type: 'Control',
                   scope:
                     '#/properties/supplyChainConsignment/properties/consignee/properties/postalAddress/properties/cityName',
-                    label:"City Name"
+                  label: 'City Name',
                 },
                 {
                   type: 'Control',
                   scope:
                     '#/properties/supplyChainConsignment/properties/consignee/properties/postalAddress/properties/postcode',
-                    label:"Post Code"
+                  label: 'Post Code',
                 },
               ],
             },
@@ -571,7 +572,7 @@ export const schemaUI = {
                   type: 'Control',
                   scope:
                     '#/properties/supplyChainConsignment/properties/consignee/properties/postalAddress/properties/countryCode',
-                    label:"Country Code"
+                  label: 'Country Code',
                 },
               ],
             },
@@ -591,7 +592,7 @@ export const schemaUI = {
               type: 'Control',
               scope:
                 '#/properties/supplyChainConsignment/properties/loadingBaseportLocation/properties/name',
-                label: "Name"
+              label: 'Name',
             },
           ],
         },
@@ -613,7 +614,7 @@ export const schemaUI = {
               type: 'Control',
               scope:
                 '#/properties/supplyChainConsignment/properties/mainCarriageTransportMovement/properties/departureEvent/properties/departureDateTime',
-                label: "Departure Date Time"
+              label: 'Departure Date Time',
             },
             {
               type: 'Label',
@@ -623,7 +624,7 @@ export const schemaUI = {
               type: 'Control',
               scope:
                 '#/properties/supplyChainConsignment/properties/mainCarriageTransportMovement/properties/usedTransportMeans/properties/iD',
-                label: "Vessel / Aircraft Number"
+              label: 'Vessel / Aircraft Number',
             },
             {
               type: 'Control',
@@ -634,28 +635,29 @@ export const schemaUI = {
         },
         {
           type: 'Group',
-          label:"Unloading Baseport Location",
-            elements: [
-              {
-                type: 'Control',
-                scope:
-                  '#/properties/supplyChainConsignment/properties/unloadingBaseportLocation/properties/iD',
-                  label:"Id"
-              },
-              {
-                type: 'Control',
-                scope:
-                  '#/properties/supplyChainConsignment/properties/unloadingBaseportLocation/properties/name',
-                  label:"Name"
-              },
-            ],
+          label: 'Unloading Baseport Location',
+          elements: [
+            {
+              type: 'Control',
+              scope:
+                '#/properties/supplyChainConsignment/properties/unloadingBaseportLocation/properties/iD',
+              label: 'Id',
+            },
+            {
+              type: 'Control',
+              scope:
+                '#/properties/supplyChainConsignment/properties/unloadingBaseportLocation/properties/name',
+              label: 'Name',
+            },
+          ],
         },
         {
           type: 'Control',
-          scope: '#/properties/supplyChainConsignment/properties/includedConsignmentItems',
+          scope:
+            '#/properties/supplyChainConsignment/properties/includedConsignmentItems',
           options: {
             detail: {
-              type: "VerticalLayout",
+              type: 'VerticalLayout',
               elements: [
                 {
                   type: 'Control',
@@ -671,8 +673,9 @@ export const schemaUI = {
                 },
                 {
                   type: 'Control',
-                  scope: '#/properties/crossBorderRegulatoryProcedure/properties/originCriteriaText',
-                  label:"Origin"
+                  scope:
+                    '#/properties/crossBorderRegulatoryProcedure/properties/originCriteriaText',
+                  label: 'Origin',
                 },
                 {
                   type: 'Label',
@@ -695,61 +698,66 @@ export const schemaUI = {
                   scope: '#/properties/tradeLineItems',
                   options: {
                     detail: {
-                      type: "VerticalLayout",
+                      type: 'VerticalLayout',
                       elements: [
                         {
                           type: 'Control',
                           scope: '#/properties/sequenceNumber',
-                          label:"Sequence Number"
+                          label: 'Sequence Number',
                         },
                         {
                           type: 'Group',
                           scope: '#/properties/invoiceReference',
-                          label:"Invoice Reference",
+                          label: 'Invoice Reference',
                           elements: [
                             {
                               type: 'Control',
-                              scope: '#/properties/invoiceReference/properties/iD',
-                              label:"Invoice Number"
+                              scope:
+                                '#/properties/invoiceReference/properties/iD',
+                              label: 'Invoice Number',
                             },
                             {
                               type: 'Control',
-                              scope: '#/properties/invoiceReference/properties/issueDateTime',
-                              label:"Issue Date Time"
+                              scope:
+                                '#/properties/invoiceReference/properties/issueDateTime',
+                              label: 'Issue Date Time',
                             },
-                          ]
+                          ],
                         },
                         {
                           scope: '#/properties/tradeProduct',
                           type: 'Group',
-                          label:"Trade Product",
+                          label: 'Trade Product',
                           elements: [
                             {
                               type: 'Control',
                               scope: '#/properties/tradeProduct/properties/iD',
-                              label:"Id"
+                              label: 'Id',
                             },
                             {
                               type: 'Control',
-                              scope: '#/properties/tradeProduct/properties/description',
-                              label:"Description"
+                              scope:
+                                '#/properties/tradeProduct/properties/description',
+                              label: 'Description',
                             },
                             {
                               type: 'Control',
-                              scope: '#/properties/tradeProduct/properties/harmonisedTariffCode',
+                              scope:
+                                '#/properties/tradeProduct/properties/harmonisedTariffCode',
                             },
                             {
                               type: 'Control',
-                              scope: '#/properties/tradeProduct/properties/originCountry',
+                              scope:
+                                '#/properties/tradeProduct/properties/originCountry',
                             },
-                          ]
+                          ],
                         },
                         {
                           type: 'Control',
                           scope: '#/properties/transportPackages',
                           options: {
                             detail: {
-                              type: "HorizontalLayout",
+                              type: 'HorizontalLayout',
                               elements: [
                                 {
                                   type: 'Control',
@@ -766,13 +774,12 @@ export const schemaUI = {
                                   scope: '#/properties/grossWeight',
                                   label: 'Gross Weight',
                                 },
-                              ]
-                            }
-                          }
-                        }
-
-                      ]
-                    }
+                              ],
+                            },
+                          },
+                        },
+                      ],
+                    },
                   },
                 },
               ],
@@ -784,128 +791,127 @@ export const schemaUI = {
   ],
 };
 
-
 export const sampleData = {
-  "iD": "678888777",
-  "issueDateTime": "2022-11-28T12:59:00+11:00",
-  "firstSignatoryAuthentication": {
-      "signature": "Bob",
-      "actualDateTime": "2022-11-29T00:00:00+11:00"
+  iD: '678888777',
+  issueDateTime: '2022-11-28T12:59:00+11:00',
+  firstSignatoryAuthentication: {
+    signature: 'Bob',
+    actualDateTime: '2022-11-29T00:00:00+11:00',
   },
-  "secondSignatoryAuthentication": {
-      "signature": "Gary",
-      "actualDateTime": "2022-11-28T12:00:00+11:00"
+  secondSignatoryAuthentication: {
+    signature: 'Gary',
+    actualDateTime: '2022-11-28T12:00:00+11:00',
   },
-  "supplyChainConsignment": {
-      "exportCountry": {
-          "name": "Australia"
+  supplyChainConsignment: {
+    exportCountry: {
+      name: 'Australia',
+    },
+    importCountry: {
+      name: 'Singapore',
+    },
+    consignor: {
+      iD: '65667-88776-80998778-89898988-8787988',
+      name: 'Bobs Builders',
+      postalAddress: {
+        line1: '1 Builders Lane',
+        postcode: '0000',
+        countryCode: 'AUD',
+        cityName: 'Bobtown',
       },
-      "importCountry": {
-          "name": "Singapore"
+    },
+    consignee: {
+      iD: '7777777777777777777',
+      postalAddress: {
+        line1: '5 Street name',
+        cityName: 'Singapore',
+        postcode: '6556',
+        countryCode: 'SGP',
       },
-      "consignor": {
-          "iD": "65667-88776-80998778-89898988-8787988",
-          "name": "Bobs Builders",
-          "postalAddress": {
-              "line1": "1 Builders Lane",
-              "postcode": "0000",
-              "countryCode": "AUD",
-              "cityName": "Bobtown"
-          }
+      name: 'Bills Construction',
+    },
+    loadingBaseportLocation: {
+      name: 'ggyy78',
+    },
+    mainCarriageTransportMovement: {
+      departureEvent: {
+        departureDateTime: '2022-11-29T00:00:00+11:00',
       },
-      "consignee": {
-          "iD": "7777777777777777777",
-          "postalAddress": {
-              "line1": "5 Street name",
-              "cityName": "Singapore",
-              "postcode": "6556",
-              "countryCode": "SGP"
-          },
-          "name": "Bills Construction"
+      usedTransportMeans: {
+        iD: 'QF 101',
       },
-      "loadingBaseportLocation": {
-          "name": "ggyy78"
-      },
-      "mainCarriageTransportMovement": {
-          "departureEvent": {
-              "departureDateTime": "2022-11-29T00:00:00+11:00"
-          },
-          "usedTransportMeans": {
-              "iD": "QF 101"
-          }
-      },
-      "unloadingBaseportLocation": {
-          "iD": "Brisbane"
-      },
-      "includedConsignmentItems": [
+    },
+    unloadingBaseportLocation: {
+      iD: 'Brisbane',
+    },
+    includedConsignmentItems: [
+      {
+        iD: '6',
+        information: 'Building equipment',
+        tradeLineItems: [
           {
-              "iD": "6",
-              "information": "Building equipment",
-              "tradeLineItems": [
-                  {
-                      "sequenceNumber": 555.5,
-                      "invoiceReference": {
-                          "iD": "876ffJ",
-                          "issueDateTime": "2022-11-16T00:00:00+11:00"
-                      },
-                      "tradeProduct": {
-                          "description": "excavator"
-                      },
-                      "transportPackages": [
-                          {
-                              "iD": "HH99",
-                              "grossVolume": "987",
-                              "grossWeight": "1.8T"
-                          }
-                      ]
-                  },
-                  {
-                      "sequenceNumber": 777.99,
-                      "invoiceReference": {
-                          "iD": "798",
-                          "issueDateTime": "2022-11-29T12:00:00+11:00"
-                      },
-                      "tradeProduct": {
-                          "description": "excavator parts"
-                      },
-                      "transportPackages": [
-                          {
-                              "iD": "8889",
-                              "grossVolume": "799",
-                              "grossWeight": "800kg"
-                          }
-                      ]
-                  }
-              ],
-              "crossBorderRegulatoryProcedure": {
-                  "originCriteriaText": "WO"
-              }
-          },
-          {
-              "iD": "9",
-              "crossBorderRegulatoryProcedure": {
-                  "originCriteriaText": "WO"
+            sequenceNumber: 555.5,
+            invoiceReference: {
+              iD: '876ffJ',
+              issueDateTime: '2022-11-16T00:00:00+11:00',
+            },
+            tradeProduct: {
+              description: 'excavator',
+            },
+            transportPackages: [
+              {
+                iD: 'HH99',
+                grossVolume: '987',
+                grossWeight: '1.8T',
               },
-              "tradeLineItems": [
-                  {
-                      "sequenceNumber": 987789,
-                      "invoiceReference": {
-                          "iD": "998878",
-                          "issueDateTime": "2022-11-29T12:00:00+11:00"
-                      },
-                      "tradeProduct": {
-                          "description": "Tools"
-                      },
-                      "transportPackages": [
-                          {
-                              "iD": "9909",
-                              "grossVolume": "5",
-                              "grossWeight": "10kg"
-                          }
-                      ]
-                  }
-              ]
-          }
-      ]
-  }
-}
+            ],
+          },
+          {
+            sequenceNumber: 777.99,
+            invoiceReference: {
+              iD: '798',
+              issueDateTime: '2022-11-29T12:00:00+11:00',
+            },
+            tradeProduct: {
+              description: 'excavator parts',
+            },
+            transportPackages: [
+              {
+                iD: '8889',
+                grossVolume: '799',
+                grossWeight: '800kg',
+              },
+            ],
+          },
+        ],
+        crossBorderRegulatoryProcedure: {
+          originCriteriaText: 'WO',
+        },
+      },
+      {
+        iD: '9',
+        crossBorderRegulatoryProcedure: {
+          originCriteriaText: 'WO',
+        },
+        tradeLineItems: [
+          {
+            sequenceNumber: 987789,
+            invoiceReference: {
+              iD: '998878',
+              issueDateTime: '2022-11-29T12:00:00+11:00',
+            },
+            tradeProduct: {
+              description: 'Tools',
+            },
+            transportPackages: [
+              {
+                iD: '9909',
+                grossVolume: '5',
+                grossWeight: '10kg',
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+};

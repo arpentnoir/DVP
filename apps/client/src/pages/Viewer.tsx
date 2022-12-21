@@ -3,6 +3,7 @@ import { IStatusCheck, VerifyViewer, VALID_CHECKS } from '@dvp/vc-ui';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { ROUTES } from '../constants';
+import { PdfViewer } from '@dvp/vc-ui';
 
 export const Viewer = () => {
   const [checks, setChecks] = useState<IStatusCheck[]>([]);
@@ -22,12 +23,22 @@ export const Viewer = () => {
   }, []);
 
   return state ? (
-    <Box paddingTop={6} position={'relative'}>
-      <VerifyViewer
-        document={state.document}
-        results={{ ...state.results, checks }}
-        hideVerifyResults={state.hideVerifyResults}
-      />
+    <Box
+      paddingTop={6}
+      position={'relative'}
+      sx={{ '@media print': { paddingTop: 0 } }}
+    >
+      {state.viewer === 'PDF-VIEW' && state.document ? (
+        <PdfViewer document={state.document} />
+      ) : (
+        <>
+          <VerifyViewer
+            document={state.document}
+            results={{ ...state.results, checks }}
+            hideVerifyResults={state.hideVerifyResults}
+          />
+        </>
+      )}
     </Box>
   ) : null;
 };

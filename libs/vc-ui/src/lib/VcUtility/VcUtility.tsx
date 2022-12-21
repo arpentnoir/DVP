@@ -36,7 +36,7 @@ export const VcUtility = ({ document, onPrint, isPrintable }: IVcUtility) => {
     <Stack
       direction={'row'}
       justifyContent={'flex-end'}
-      style={{ flexWrap: 'wrap' }}
+      sx={{ flexWrap: 'wrap' }}
       spacing={2}
       marginBottom={'15px'}
       marginTop={'15px'}

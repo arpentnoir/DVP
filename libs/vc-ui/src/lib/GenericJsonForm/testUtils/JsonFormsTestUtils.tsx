@@ -1,12 +1,10 @@
-import {  createAjv, ControlElement } from "@jsonforms/core";
-import {  JsonFormsStateProvider } from "@jsonforms/react";
-import React from "react";
-import { Renderers } from "../Renders";
-import {
-  render,
-} from '@testing-library/react';
+import { createAjv, ControlElement } from '@jsonforms/core';
+import { JsonFormsStateProvider } from '@jsonforms/react';
+import React from 'react';
+import { Renderers } from '../Renders';
+import { render } from '@testing-library/react';
 
-window.matchMedia = jest.fn().mockImplementation(query => {
+window.matchMedia = jest.fn().mockImplementation((query) => {
   return {
     matches: true,
     media: query,
@@ -15,15 +13,14 @@ window.matchMedia = jest.fn().mockImplementation(query => {
     removeListener: jest.fn(),
     addEventListener: jest.fn(),
     removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn()
+    dispatchEvent: jest.fn(),
   };
 });
-
 
 export const testUISchema: ControlElement = {
   type: 'Control',
   scope: '#/properties/sample',
-}
+};
 
 export const testRootSchema = {
   type: 'object',
@@ -42,7 +39,7 @@ export const testRootSchemaRequired = {
       title: 'sample',
     },
   },
-  required: ['sample' ],
+  required: ['sample'],
 };
 
 export const samplePropsInputFeilds = {
@@ -75,14 +72,31 @@ export const samplePropsInputFeildsRequired = {
   errors: 'required',
 };
 
-export const initCore = ( required = false, data?: any) => {
-  if(required) return { schema: testRootSchemaRequired, uiSchema: testUISchema, data, ajv: createAjv() };
-  return { schema: testRootSchema, uiSchema: testUISchema, data, ajv: createAjv() };
+export const initCore = (required = false, data?: any) => {
+  if (required)
+    return {
+      schema: testRootSchemaRequired,
+      uiSchema: testUISchema,
+      data,
+      ajv: createAjv(),
+    };
+  return {
+    schema: testRootSchema,
+    uiSchema: testUISchema,
+    data,
+    ajv: createAjv(),
+  };
 };
 
-export const jsonFormsTestHarness = ( data:any,  child: React.ReactNode, required = false) => {
+export const jsonFormsTestHarness = (
+  data: any,
+  child: React.ReactNode,
+  required = false
+) => {
   const core = initCore(required, data);
-  return render(<JsonFormsStateProvider initState={{ renderers: Renderers, core }}>
-    {child}
-  </JsonFormsStateProvider>);
+  return render(
+    <JsonFormsStateProvider initState={{ renderers: Renderers, core }}>
+      {child}
+    </JsonFormsStateProvider>
+  );
 };

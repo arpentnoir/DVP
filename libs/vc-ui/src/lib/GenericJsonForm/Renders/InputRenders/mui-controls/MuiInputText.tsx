@@ -1,6 +1,6 @@
 /* Original from
-* https://github.com/eclipsesource/jsonforms/blob/6a6af7e7aca7e44c7ba745edb8611f0b7d7acd77/packages/material/src/mui-controls/MuiInputText.tsx
-*/
+ * https://github.com/eclipsesource/jsonforms/blob/6a6af7e7aca7e44c7ba745edb8611f0b7d7acd77/packages/material/src/mui-controls/MuiInputText.tsx
+ */
 import React, { useState } from 'react';
 import { CellProps, WithClassname } from '@jsonforms/core';
 import {
@@ -48,7 +48,8 @@ export const MuiInputText = React.memo(
     }
 
     inputProps = merge(inputProps, muiInputProps, {
-      'data-testid':"test-input"});
+      'data-testid': 'test-input',
+    });
 
     if (appliedUiSchemaOptions.trim && maxLength !== undefined) {
       inputProps['size'] = maxLength;
@@ -93,10 +94,7 @@ export const MuiInputText = React.memo(
           <InputAdornment
             position="end"
             style={{
-              display:
-                !showAdornment
-                  ? 'none'
-                  : 'flex',
+              display: !showAdornment ? 'none' : 'flex',
               position: 'absolute',
               right: 0,
             }}
@@ -111,9 +109,7 @@ export const MuiInputText = React.memo(
             </IconButton>
           </InputAdornment>
         }
-        inputProps={
-          inputProps
-        }
+        inputProps={inputProps}
       />
     );
   }

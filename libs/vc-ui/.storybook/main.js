@@ -21,6 +21,17 @@ module.exports = {
 
     // add your own webpack tweaks if needed
 
-    return config;
+    return {
+      ...config,
+      resolve: {
+        ...config.resolve,
+        fallback: {
+          ...config.fallback,
+          crypto: require.resolve('crypto-browserify/'),
+          stream: require.resolve('stream-browserify'),
+          buffer: require.resolve('buffer'),
+        },
+      },
+    };
   },
 };

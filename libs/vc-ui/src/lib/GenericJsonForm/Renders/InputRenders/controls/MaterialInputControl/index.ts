@@ -1,1 +1,1 @@
-export * from "./MaterialInputControl"
+export * from './MaterialInputControl';

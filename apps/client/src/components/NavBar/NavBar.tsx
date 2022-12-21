@@ -16,6 +16,7 @@ export const NavBar = () => {
         height: '90px',
         justifyContent: 'center',
         alignItems: 'center',
+        '@media print': { display: 'none' },
       }}
     >
       <Stack

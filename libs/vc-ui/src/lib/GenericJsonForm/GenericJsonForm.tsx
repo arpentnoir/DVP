@@ -5,13 +5,9 @@ import {
 } from '@jsonforms/material-renderers';
 import { useState } from 'react';
 import { Container } from '@mui/system';
-import {
-  createAjv,
-  JsonSchema,
-  UISchemaElement,
-} from '@jsonforms/core';
+import { createAjv, JsonSchema, UISchemaElement } from '@jsonforms/core';
 import Typography from '@mui/material/Typography';
-import { Alert, ThemeProvider, Divider } from '@mui/material';
+import { Alert, ThemeProvider, Divider, Box } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import { ErrorObject } from 'ajv';
 import { Renderers } from './Renders';
@@ -49,20 +45,20 @@ export const GenericJsonForm = ({
   const onFormUpdate = (formData: FormsData) => {
     setFormValues(formData);
     if (formData.errors && formData.errors.length === 0) {
-
       //Json forms dosnt do deep checks for requird. so this checks for that.
       const isValid = ajv.validate(schema, formData?.data);
       if (isValid) setIsFormValid(true);
       else setIsFormValid(false);
-
     } else setIsFormValid(false);
   };
   return (
-    <Container sx={{  '@media (min-width:800px)': { width: '80%', }, marginBottom: "1em" }}>
-      <Typography variant="h5">
-        {title}
-      </Typography>
-      <Divider sx={{ marginTop: "0.5em", marginBottom: "0.5em" }}/>
+    <Container
+      sx={{
+        '@media (min-width:800px)': { width: '90%' },
+      }}
+    >
+      <Typography variant="h5">{title}</Typography>
+      <Divider sx={{ marginTop: '0.5em', marginBottom: '0.5em' }} />
       <ThemeProvider theme={jsonFormTheme}>
         <JsonForms
           ajv={ajv}
@@ -76,15 +72,24 @@ export const GenericJsonForm = ({
         />
       </ThemeProvider>
       {submissionError && <Alert severity="error">{submissionError}</Alert>}
-      <LoadingButton
-        disabled={!isFormValid}
-        loading={submitting}
-        onClick={() => onSubmit(formValues?.data)}
-        variant="contained"
-        sx={{ float: 'right', color: 'white', marginTop: "2em", marginBottom: "2em" }}
+      <Box
+        display={'flex'}
+        flexDirection={'row'}
+        justifyContent={'flex-end'}
+        marginTop={'2rem'}
       >
-        Submit
-      </LoadingButton>
+        <LoadingButton
+          disabled={!isFormValid}
+          loading={submitting}
+          onClick={() => onSubmit(formValues?.data)}
+          variant="contained"
+          sx={{
+            color: 'white',
+          }}
+        >
+          Submit
+        </LoadingButton>
+      </Box>
     </Container>
   );
 };

@@ -10,7 +10,7 @@ const Story: ComponentMeta<typeof MaterialInputControl> = {
 export default Story;
 
 const Template: ComponentStory<typeof MaterialInputControl> = (args) => (
-  <MaterialInputControl  {...args} input={MuiInputText}/>
+  <MaterialInputControl {...args} input={MuiInputText} />
 );
 
 export const Primary = Template.bind({});

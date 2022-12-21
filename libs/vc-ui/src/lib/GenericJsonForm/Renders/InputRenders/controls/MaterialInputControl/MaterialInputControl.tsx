@@ -31,7 +31,11 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
     input,
   } = props;
   const isValid = errors.length === 0;
-  const appliedUiSchemaOptions: {showUnfocusedDescription: boolean, hideRequiredAsterisk: boolean, trim:boolean} = merge({}, config, uischema.options);
+  const appliedUiSchemaOptions: {
+    showUnfocusedDescription: boolean;
+    hideRequiredAsterisk: boolean;
+    trim: boolean;
+  } = merge({}, config, uischema.options);
 
   const showDescription = !isDescriptionHidden(
     visible,
@@ -58,7 +62,8 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
         variant={'outlined'}
       >
         <InputLabel
-          htmlFor={id + '-input'}
+          id="form-select-label"
+          htmlFor={`${id}-input`}
           error={!isValid}
           required={showAsRequired(
             required || false,
@@ -70,7 +75,8 @@ export const MaterialInputControl = (props: ControlProps & WithInput) => {
         </InputLabel>
         <InnerComponent
           {...props}
-          id={id + '-input'}
+          id={`${id}-input`}
+          labelId="form-select-label"
           isValid={isValid}
           visible={visible}
           label={label}
