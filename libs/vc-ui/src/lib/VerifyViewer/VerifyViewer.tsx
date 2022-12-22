@@ -1,4 +1,7 @@
-import { VerifiableCredential } from '@dvp/api-interfaces';
+import {
+  OAVerifiableCredential,
+  VerifiableCredential,
+} from '@dvp/api-interfaces';
 import { Paper } from '@mui/material';
 import { IStatusCheck, RendererViewer, VerifyResults } from '../';
 
@@ -15,7 +18,7 @@ export interface VerifyResult {
 }
 
 export interface IVerifyViewer {
-  document: VerifiableCredential;
+  document: VerifiableCredential | OAVerifiableCredential;
   results: VerifyResult;
   hideVerifyResults?: boolean;
 }
@@ -41,7 +44,11 @@ export const VALID_CHECKS: IStatusCheck[] = [
   },
 ];
 
-export const VerifyViewer = ({ document, results, hideVerifyResults }: IVerifyViewer) => {
+export const VerifyViewer = ({
+  document,
+  results,
+  hideVerifyResults,
+}: IVerifyViewer) => {
   return (
     <Paper
       sx={{

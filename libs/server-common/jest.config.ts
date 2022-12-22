@@ -7,9 +7,16 @@ export default {
       tsconfig: '<rootDir>/tsconfig.spec.json',
     },
   },
+  testEnvironment: 'node',
   transform: {
     '^.+\\.[tj]s$': 'ts-jest',
   },
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/libs/server-common',
+  testMatch: ['**/**/*.spec.{ts, js}', '**/**/*.test.{ts, js}'],
+  coverageThreshold: {
+    global: {
+      lines: 80,
+    },
+  },
 };

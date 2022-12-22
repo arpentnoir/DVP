@@ -1,14 +1,8 @@
 import { VerifiableCredential, VerificationResult } from '@dvp/api-interfaces';
-import { ApplicationError } from '@dvp/server-common';
-import {
-  Ed25519Signature2018,
-  Ed25519VerificationKey2018,
-} from '@transmute/ed25519-signature-2018';
+import { Ed25519Signature2018 } from '@transmute/ed25519-signature-2018';
+import { ApplicationError } from '../../error';
 
-export { Ed25519VerificationKey2018, Ed25519Signature2018 };
-export { JsonWebSignature, JsonWebKey };
-
-import { JsonWebKey, JsonWebSignature } from '@transmute/json-web-signature';
+import { JsonWebSignature } from '@transmute/json-web-signature';
 
 import { checkStatus } from '@transmute/vc-status-rl-2020';
 import { verifiable } from '@transmute/vc.js';
@@ -38,32 +32,34 @@ export const verifyCredential = async (
       };
     }
     const proofCheckFailed = !!(
-      result.error &&
-      result.error.find(
-        (e) => e?.proofResult?.verified === false || e?.proofResult === false
+      result['error'] &&
+      result['error'].find(
+        (e: any) =>
+          e?.proofResult?.verified === false || e?.proofResult === false
       )
     );
     const statusCheckFailed = !!(
-      result.error &&
-      result.error.find(
-        (e) => e?.statusResult?.verified === false || e?.statusResult === false
+      result['error'] &&
+      result['error'].find(
+        (e: any) =>
+          e?.statusResult?.verified === false || e?.statusResult === false
       )
     );
 
     // Credential not active
     const inactive = !!(
-      result.verifications &&
-      result.verifications.find(
-        (verification) =>
+      result['verifications'] &&
+      result['verifications'].find(
+        (verification: any) =>
           verification.status === 'bad' && verification.title === 'Activation'
       )
     );
 
     // Credential Expired
     const expired =
-      result.verifications &&
-      result.verifications.find(
-        (verification) =>
+      result['verifications'] &&
+      result['verifications'].find(
+        (verification: any) =>
           verification.status === 'bad' && verification.title === 'Expired'
       );
 

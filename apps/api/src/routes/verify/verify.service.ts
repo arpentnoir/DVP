@@ -5,12 +5,13 @@ import {
 } from '@dvp/api-interfaces';
 import {
   ApplicationError,
+  BadRequestError,
   Logger,
+  openAttestation,
   RequestInvocationContext,
+  transmute,
   ValidationError,
 } from '@dvp/server-common';
-import { verify as oAVerify } from './openAttestation';
-import { verifyCredential as transmuteVerify } from './transmute';
 
 export class VerifyService {
   logger: Logger;
@@ -24,9 +25,9 @@ export class VerifyService {
   //Choose which backend to use based on the given VC.
   getVerifier(verifiableCredential: VerifiableCredential): VerifierFunction {
     if (verifiableCredential.type.includes('OpenAttestationCredential')) {
-      return oAVerify as VerifierFunction;
+      return openAttestation.verifyCredential as VerifierFunction;
     } else if (verifiableCredential.type.includes('VerifiableCredential')) {
-      return transmuteVerify as never;
+      return transmute.verifyCredential as never;
     } else {
       this.logger.debug(
         '[VerifyService.getVerifier] Unknown credential type found, %s',
@@ -55,7 +56,7 @@ export class VerifyService {
         err
       );
 
-      throw new ApplicationError('Unsupported credential type', 400);
+      throw new BadRequestError(new Error('Unsupported credential type'));
     }
     try {
       return await verifier(verifiableCredential);

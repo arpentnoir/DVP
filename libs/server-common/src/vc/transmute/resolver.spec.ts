@@ -15,12 +15,12 @@ describe('resolvers', () => {
       getRequest.mockImplementation(() =>
         Promise.resolve({
           data: {
-            test: 'test',
+            id: 'test',
           },
         })
       );
       const res = await resolvers.http(url);
-      expect(res.test).toBe('test');
+      expect(res['id']).toBe('test');
     });
   });
 
@@ -28,7 +28,7 @@ describe('resolvers', () => {
     it('should call transmute did key resolve for did:key', async () => {
       const resolve = didKey.resolve as jest.Mock;
       const didDocument = {
-        test: 'test',
+        id: 'test',
       };
       resolve.mockImplementation(() =>
         Promise.resolve({
@@ -43,7 +43,7 @@ describe('resolvers', () => {
     it('should call transmute did web resolve for did:web', async () => {
       const resolve = didWeb.resolve as jest.Mock;
       const didDocument = {
-        test: 'test',
+        id: 'test',
       };
       resolve.mockImplementation(() => Promise.resolve(didDocument));
       const res = await resolvers.resolve('did:web:http://example.com');

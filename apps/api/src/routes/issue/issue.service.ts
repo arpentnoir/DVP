@@ -1,10 +1,14 @@
+import { IssueCredentialRequestSigningMethodEnum } from '@dvp/api-client';
+import { IssuerFunction, VerifiableCredential } from '@dvp/api-interfaces';
 import {
-  IssueResult,
-  IssuerFunction,
-  VerifiableCredential,
-} from '@dvp/api-interfaces';
-import { Logger, RequestInvocationContext } from '@dvp/server-common';
-import { issue as oAIssue } from './openAttestation';
+  ApplicationError,
+  Logger,
+  openAttestation,
+  RequestInvocationContext,
+  transmute,
+  ValidationError,
+} from '@dvp/server-common';
+import { config } from '../../config';
 
 export class IssueService {
   logger: Logger;
@@ -16,26 +20,35 @@ export class IssueService {
   }
 
   // Currently only OpenAttestation is supported
-  getIssuer(credential: VerifiableCredential) {
-    if (credential?.type?.includes('OpenAttestationCredential')) {
-      return oAIssue;
+  getIssuer(
+    signingMethod: IssueCredentialRequestSigningMethodEnum,
+    credential: VerifiableCredential
+  ): IssuerFunction {
+    if (signingMethod === IssueCredentialRequestSigningMethodEnum.Oa) {
+      return openAttestation.issueCredential;
+    } else if (signingMethod === IssueCredentialRequestSigningMethodEnum.Svip) {
+      return (credential) =>
+        transmute.issueCredential({
+          credential: credential as VerifiableCredential,
+          mnemonic: config.didConfig.mnemonic,
+        }) as Promise<VerifiableCredential>;
     } else {
       this.logger.debug(
         '[IssuerService.getIssuer] Unknown credential type found, %o',
+        signingMethod,
         credential
       );
 
-      throw new Error(
-        'Only OpenAttestation credential type is currently supported'
-      );
+      throw new ValidationError('signingMethod', signingMethod);
     }
   }
 
-  async issue(credential: VerifiableCredential): Promise<IssueResult> {
-    let issuer: IssuerFunction;
-
+  async issue(
+    signingMethod: IssueCredentialRequestSigningMethodEnum,
+    credential: VerifiableCredential
+  ): Promise<VerifiableCredential> {
     try {
-      issuer = this.getIssuer(credential);
+      const issuer = this.getIssuer(signingMethod, credential);
 
       // Temporarily hardcoding verificationMethod and key
       const issuerKeyId =
@@ -51,6 +64,9 @@ export class IssueService {
         '[IssueService.issue] Failed to issue verifiable credential, %o',
         err
       );
+      if (err instanceof ApplicationError) {
+        throw err;
+      }
       throw new Error(`Failed to issue verifiable credential`);
     }
   }

@@ -1,20 +1,15 @@
+import { WrappedVerifiableCredential } from '@dvp/api-interfaces';
+import { NON_OA_CREDENTIAL, OA_CREDENTIAL, OA_SIGNED } from '../fixtures';
 import { isOpenAttestationType, isVerifiableCredential } from './vc';
-import { OA_CREDENTIAL, OA_SIGNED, NON_OA_CREDENTIAL } from '../fixtures';
-import {
-  VerifiableCredential,
-  WrappedVerifiableCredential,
-} from '@dvp/api-interfaces';
 
 describe('isOpenAttestationType', () => {
   it('should return true for document that contains OpenAttestation type', () => {
-    const result = isOpenAttestationType(OA_CREDENTIAL as VerifiableCredential);
+    const result = isOpenAttestationType(OA_CREDENTIAL as never);
     expect(result).toBe(true);
   });
 
   it('should return true for document that does not contain OpenAttestation type', () => {
-    const result = isOpenAttestationType(
-      NON_OA_CREDENTIAL as VerifiableCredential
-    );
+    const result = isOpenAttestationType(NON_OA_CREDENTIAL as never);
     expect(result).toBe(false);
   });
 });

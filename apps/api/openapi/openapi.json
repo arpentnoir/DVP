@@ -314,7 +314,13 @@
       },
       "Credential": {
         "type": "object",
-        "required": ["@context", "type", "credentialSubject"],
+        "required": [
+          "@context",
+          "type",
+          "credentialSubject",
+          "issuer",
+          "issuanceDate"
+        ],
         "description": "A JSON-LD Verifiable Credential without a proof.",
         "additionalProperties": true,
         "properties": {
@@ -347,6 +353,9 @@
           "credentialSubject": {
             "type": "object",
             "description": "The subject"
+          },
+          "issuer": {
+            "$ref": "#/components/schemas/Issuer"
           }
         },
         "example": {
@@ -368,7 +377,6 @@
         }
       },
       "Issuer": {
-        "type": "object",
         "description": "A JSON-LD Verifiable Credential Issuer.",
         "oneOf": [
           {
@@ -376,8 +384,12 @@
           },
           {
             "type": "object",
+            "required": ["id"],
             "properties": {
               "id": {
+                "type": "string"
+              },
+              "name": {
                 "type": "string"
               }
             }
@@ -440,6 +452,11 @@
         "type": "object",
         "required": ["credential"],
         "properties": {
+          "signingMethod": {
+            "type": "string",
+            "enum": ["SVIP", "OA"],
+            "default": "OA"
+          },
           "credential": {
             "$ref": "#/components/schemas/Credential"
           }

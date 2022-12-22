@@ -1,12 +1,11 @@
-import { Box, CircularProgress, Typography } from '@mui/material';
-import React, { useEffect, useMemo, useState } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
 import {
   VerifiableCredential,
   WrappedVerifiableCredential,
 } from '@dvp/api-interfaces';
-import { isVerifiableCredential } from '@dvp/server-common';
-import { CertificateUpload } from '@dvp/vc-ui';
+import { CertificateUpload, isVerifiableCredential } from '@dvp/vc-ui';
+import { Box, CircularProgress, Typography } from '@mui/material';
+import React, { useEffect, useMemo, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants';
 import { fetchAndDecryptVC } from '../services/storage';
 import { verify } from '../services/vc';

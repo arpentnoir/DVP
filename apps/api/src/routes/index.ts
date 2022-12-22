@@ -1,7 +1,7 @@
 import { Router } from 'express';
+import { issueRoutes } from './issue';
 import { storageRoutes } from './storage/index';
 import { verifyRoutes } from './verify';
-import { issueRoutes } from './issue';
 
 export const router = Router();
 

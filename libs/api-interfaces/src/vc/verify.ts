@@ -1,4 +1,4 @@
-import { VerifiableCredential } from '../vc';
+import { VerifiableCredential } from './vc';
 
 export interface VerificationResult {
   checks: string[];

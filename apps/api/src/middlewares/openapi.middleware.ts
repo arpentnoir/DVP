@@ -1,14 +1,13 @@
 import { logger } from '@dvp/server-common';
 import * as OpenApiValidator from 'express-openapi-validator';
-import { OpenAPIV3 } from 'express-openapi-validator/dist/framework/types';
+import { OpenAPIV3 as OpenAPIV3Validator } from 'express-openapi-validator/dist/framework/types';
+import { OpenAPIV3 } from 'openapi-types';
 
 export type OpenAPIV3Document = OpenAPIV3.Document;
 
-export const openApiValidatorMiddleware = (
-  apiSpec: OpenAPIV3Document | string
-) => {
+export const openApiValidatorMiddleware = (apiSpec: OpenAPIV3Document) => {
   return OpenApiValidator.middleware({
-    apiSpec,
+    apiSpec: apiSpec as OpenAPIV3Validator.Document,
     validateRequests: {
       allowUnknownQueryParameters: false,
       removeAdditional: 'failing',

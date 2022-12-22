@@ -1,6 +1,7 @@
 export * from './api';
 export * from './applicationError';
 export * from './authorizationError';
+export * from './badRequestError';
 export * from './configError';
 export * from './notFoundError';
 export * from './notImplementedError';

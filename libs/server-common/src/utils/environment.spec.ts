@@ -24,7 +24,9 @@ describe('environment', () => {
         CLIENT: 'Postman',
       };
 
-      expect(() => checkEnv(variables)).toThrow(
+      expect(() => {
+        checkEnv(variables);
+      }).toThrow(
         'Missing the following required environment variable(s): SECRET'
       );
     });

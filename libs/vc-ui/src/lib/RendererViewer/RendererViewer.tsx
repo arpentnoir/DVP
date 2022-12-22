@@ -1,22 +1,24 @@
-import { useReducer, useRef, useState } from 'react';
 import {
-  FrameActions,
-  FrameConnector,
-  renderDocument,
-  print,
-} from '@govtechsg/decentralized-renderer-react-components';
-import { obfuscateDocument } from '@govtechsg/open-attestation';
-import { Tab, Typography, Box } from '@mui/material';
-import { TabContext, TabList, TabPanel } from '@mui/lab';
-import {
+  OAVerifiableCredential,
   VerifiableCredential,
   WrappedVerifiableCredential,
 } from '@dvp/api-interfaces';
+
+import {
+  FrameActions,
+  FrameConnector,
+  print,
+  renderDocument,
+} from '@govtechsg/decentralized-renderer-react-components';
+import { obfuscateDocument } from '@govtechsg/open-attestation';
+import { TabContext, TabList, TabPanel } from '@mui/lab';
+import { Box, Tab, Typography } from '@mui/material';
+import { useReducer, useRef, useState } from 'react';
 import { DEFAULT_RENDERER } from '../constants';
 import { VcUtility } from '../VcUtility';
 
 export type VCDocumentState = {
-  document?: VerifiableCredential;
+  document?: OAVerifiableCredential | VerifiableCredential;
 };
 
 export enum VCDocumentActionType {
@@ -52,13 +54,19 @@ export const reducer = (
 };
 
 export interface IRendererViewer {
-  document: VerifiableCredential;
+  document: OAVerifiableCredential | VerifiableCredential;
 }
 
-export const _getRendererURl = (document: VerifiableCredential) => {
-  return document?.openAttestationMetadata?.template?.url
-    ? document.openAttestationMetadata.template.url
-    : DEFAULT_RENDERER;
+export const _getRendererURl = (
+  document: OAVerifiableCredential | VerifiableCredential
+) => {
+  const rendererURl = (document as OAVerifiableCredential)
+    ?.openAttestationMetadata?.template?.url;
+  if (rendererURl) {
+    // interpolation is done to make ts happy
+    return `${rendererURl}`;
+  }
+  return DEFAULT_RENDERER;
 };
 
 export const RendererViewer = ({ document }: IRendererViewer) => {
@@ -79,7 +87,9 @@ export const RendererViewer = ({ document }: IRendererViewer) => {
     (frame: any) => {
       toFrame.current = frame;
       if (toFrame.current && state.document) {
-        toFrame.current(renderDocument({ document: state.document }));
+        toFrame.current(
+          renderDocument({ document: state.document as OAVerifiableCredential })
+        );
       }
     };
 
@@ -110,7 +120,7 @@ export const RendererViewer = ({ document }: IRendererViewer) => {
     <>
       {state.document && (
         <VcUtility
-          document={state.document}
+          document={state.document as VerifiableCredential}
           onPrint={onPrint}
           isPrintable={tabIndex === '0' ? true : false}
         />

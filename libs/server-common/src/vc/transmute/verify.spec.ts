@@ -1,5 +1,5 @@
-import invalidVC from '../../../fixtures/genericvc/degree_invalid.json';
-import signedValidVC from '../../../fixtures/genericvc/degree_signed.json';
+import invalidVC from '../../fixtures/genericvc/degree_invalid.json';
+import signedValidVC from '../../fixtures/genericvc/degree_signed.json';
 import { verifyCredential } from './verify';
 
 describe('verify', () => {

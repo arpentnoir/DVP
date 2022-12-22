@@ -3,9 +3,11 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
+import { IssueCredentialRequestSigningMethodEnum } from '@dvp/api-client';
 import { mockClient } from 'aws-sdk-client-mock';
 import request from 'supertest';
 import { app } from '../../app';
+import unsignedSvip from '../../fixtures/genericvc/degree_unsigned.json';
 import oa_doc_base from '../../fixtures/oav3/did.json';
 
 let oa_doc;
@@ -13,6 +15,7 @@ let oa_doc;
 const s3Mock = mockClient(S3Client);
 
 describe('issue api', () => {
+  jest.setTimeout(20000);
   const endpoint = '/api/issue';
 
   beforeEach(() => {
@@ -56,20 +59,20 @@ describe('issue api', () => {
         });
     });
 
-    it('should return error for non-OA document', async () => {
-      oa_doc['type'] = ['VerifiableCredential'];
-
+    it('should issue a non-OA verifiable credential', async () => {
+      s3Mock.on(PutObjectCommand).resolvesOnce({});
+      s3Mock.on(HeadObjectCommand).rejectsOnce({});
       await request(app)
         .post(endpoint)
         .send({
-          credential: oa_doc,
+          credential: unsignedSvip,
+          signingMethod: IssueCredentialRequestSigningMethodEnum.Svip,
         })
         .expect('Content-Type', /json/)
-        .expect(500)
+        .expect(201)
         .expect((res) => {
-          expect(res.body.errors[0].detail).toStrictEqual(
-            'An internal system error has occurred.'
-          );
+          expect(res.body.verifiableCredential).toHaveProperty('proof');
+          expect(res);
         });
     });
 
@@ -82,7 +85,7 @@ describe('issue api', () => {
         .expect('Content-Type', /json/)
         .expect(500)
         .expect((res) => {
-          expect(res.body.errors[0].detail).toStrictEqual(
+          expect(res.body.errors[0].detail).toContain(
             'An internal system error has occurred.'
           );
         });
@@ -119,11 +122,9 @@ describe('issue api', () => {
             credential: oa_doc,
           })
           .expect('Content-Type', /json/)
-          .expect(500)
+          .expect(422)
           .expect((res) => {
-            expect(res.body.errors[0].detail).toStrictEqual(
-              'An internal system error has occurred.'
-            );
+            expect(res.body.errors[0].id).toContain('DVPAPI-002');
           });
       });
     });

@@ -1,4 +1,3 @@
-import { ApiConfigFile } from '@dvp/api-interfaces';
 /**
  * Checks and returns environment variables.
  * If variables are not defined then an error is thrown
@@ -7,7 +6,7 @@ import { ApiConfigFile } from '@dvp/api-interfaces';
  * @param vars
  * @returns Partial<ApiConfigFile>
  */
-export const checkEnv = (vars: string[]): Partial<ApiConfigFile> => {
+export const checkEnv = (vars: string[]): { [key: string]: string } => {
   const errs: string[] = [];
   const res: { [key: string]: string } = {};
   vars.forEach((varName) => {

@@ -29,7 +29,7 @@ const builtVerifier = verificationBuilder(oaVerifiersToRun, {
   provider: ethProvider,
 });
 
-export const verify = async (
+export const verifyCredential = async (
   verifiableCredential: DocumentsToVerify
 ): Promise<VerificationResult> => {
   //Which checks to do should be read from options, and credential contents
