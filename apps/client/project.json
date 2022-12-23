@@ -19,6 +19,7 @@
         "assets": [
           "apps/client/src/favicon.ico",
           "apps/client/src/assets",
+          "apps/client/src/env/env-config.js",
           "apps/client/src/mockServiceWorker.js"
         ],
         "styles": [],
@@ -30,7 +31,8 @@
           "extractLicenses": false,
           "optimization": false,
           "sourceMap": true,
-          "vendorChunk": true
+          "vendorChunk": true,
+          "scripts": []
         },
         "development-internal": {
           "extractLicenses": false,
@@ -53,6 +55,7 @@
           ],
           "optimization": true,
           "outputHashing": "all",
+          "outputPath": "dist/apps/client-internet",
           "sourceMap": false,
           "namedChunks": false,
           "extractLicenses": true,
@@ -70,6 +73,7 @@
             }
           ],
           "optimization": true,
+          "outputPath": "dist/apps/client-internal",
           "outputHashing": "all",
           "sourceMap": false,
           "namedChunks": false,

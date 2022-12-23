@@ -50,6 +50,7 @@
     "express-openapi-validator": "5.0.0",
     "express-pino-logger": "^7.0.0",
     "fs": "^0.0.1-security",
+    "fs-extra": "^11.1.0",
     "hdkey": "^2.0.1",
     "gs-pulumi-library": "^0.2.3",
     "lodash": "^4.17.21",

@@ -1,5 +1,9 @@
-import { Components } from 'gs-pulumi-library';
+/* eslint-disable no-console */
 import { OriginAccessIdentity } from '@pulumi/aws/cloudfront';
+import { ComponentResourceOptions } from '@pulumi/pulumi';
+import fs from 'fs-extra';
+import { Components } from 'gs-pulumi-library';
+import path from 'path';
 
 export interface S3HostedWebsiteConfig {
   bucketName: string;
@@ -10,8 +14,54 @@ export interface S3HostedWebsiteConfig {
   originAccessIdentity: OriginAccessIdentity;
 }
 
-export const createS3HostedWebsite = (config: S3HostedWebsiteConfig) => {
-  //
+export interface AppConfig {
+  siteUrl: string;
+  apiUrl: string;
+
+  vcContextEndpoint: string;
+  vcRendererEndpoint: string;
+
+  // pulumi outputs
+  authRegion: string;
+  authDomain: string;
+  authClient: string;
+  authUserPool: string;
+  authOauthScope: string;
+}
+
+export const injectConfigFile = (pathToArtifact: string, config: AppConfig) => {
+  const configFilePath = path.resolve(
+    __dirname,
+    `../../${pathToArtifact}/env/env-config.js`
+  );
+
+  fs.ensureFileSync(configFilePath);
+  console.log(`Injecting config file into ${configFilePath}...`);
+
+  const envConfig = {
+    SITE_URL: config.siteUrl,
+    API_URL: config.apiUrl,
+
+    // auth settings
+    AUTH_DOMAIN: config.authDomain,
+    AUTH_REGION: config.authRegion,
+    AUTH_CLIENT: config.authClient,
+    AUTH_USER_POOL: config.authUserPool,
+    AUTH_OAUTH_SCOPE: config.authOauthScope,
+
+    VC_CONTEXT_ENDPOINT: config.vcContextEndpoint,
+    VC_RENDERER_ENDPOINT: config.vcRendererEndpoint,
+  };
+
+  const data = `window._env_ = ${JSON.stringify(envConfig)}`;
+  fs.writeFileSync(configFilePath, data);
+  console.log(`Injecting config file into ${pathToArtifact}...done`);
+};
+
+export const createS3HostedWebsite = (
+  config: S3HostedWebsiteConfig,
+  options?: ComponentResourceOptions
+) => {
   // Create S3 Bucket and Cloudfront Distribution for `dvpWebsite`
   const websiteS3Bucket = new Components.aws.S3Bucket(
     `${config.bucketName}S3Bucket`,
@@ -31,7 +81,8 @@ export const createS3HostedWebsite = (config: S3HostedWebsiteConfig) => {
       pathToBucketContents: config.pathToBucketContents,
       website: { indexDocument: 'index.html', errorDocument: 'index.html' },
       forceDestroy: true,
-    }
+    },
+    options
   );
 
   const website = new Components.aws.CloudfrontWebsite(config.bucketName, {

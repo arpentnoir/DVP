@@ -1,9 +1,9 @@
-import { rest, RequestHandler } from 'msw';
+import { RequestHandler, rest } from 'msw';
 import {
-  validEncryptedVCPayload,
   invalidEncryptedVCPayload,
-  validVC,
   invalidVC,
+  validEncryptedVCPayload,
+  validVC,
 } from './fixtures';
 
 export const handlers: RequestHandler[] = [

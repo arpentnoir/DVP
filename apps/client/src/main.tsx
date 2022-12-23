@@ -2,8 +2,9 @@ import axios from 'axios';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import { InternetApp } from './apps';
+import { getApiBaseUrl } from './config';
 
-axios.defaults.baseURL = process.env['NX_API_URL'];
+axios.defaults.baseURL = getApiBaseUrl();
 
 // Start the mocking conditionally.
 if (

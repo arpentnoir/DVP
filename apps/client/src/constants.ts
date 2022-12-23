@@ -1,5 +1,6 @@
-export const VC_CONTEXT_ENDPOINT = process.env['VC_CONTEXT_ENDPOINT'];
-export const VC_RENDERER_ENDPOINT = process.env['VC_RENDERER_ENDPOINT'];
+import { getVcContextAndRendererEndpoints } from './config';
+
+export const { contextUrl, rendererUrl } = getVcContextAndRendererEndpoints();
 
 export const APP_NAME = 'Digital Verification Platform';
 export const SHORT_APP_NAME = 'DVP';
@@ -22,15 +23,15 @@ export const GENERIC_COO_META_DATA = {
   type: ['VerifiableCredential', 'OpenAttestationCredential'],
   '@context': [
     'https://www.w3.org/2018/credentials/v1',
-    `${VC_CONTEXT_ENDPOINT}/AANZFTA-CoO.json`,
-    `${VC_CONTEXT_ENDPOINT}/AANZFTA-CoO-Context-Partial.json`,
+    `${contextUrl}/AANZFTA-CoO.json`,
+    `${rendererUrl}/AANZFTA-CoO-Context-Partial.json`,
     'https://schemata.openattestation.com/com/openattestation/1.0/OpenAttestation.v3.json',
   ],
   openAttestationMetadata: {
     template: {
       type: 'EMBEDDED_RENDERER',
       name: 'AANZFTACoO',
-      url: VC_RENDERER_ENDPOINT,
+      url: rendererUrl,
     },
     proof: {
       type: 'OpenAttestationProofMethod',

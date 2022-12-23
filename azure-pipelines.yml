@@ -93,7 +93,7 @@ stages:
           - task: PublishPipelineArtifact@1
             condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
             inputs:
-              targetPath: $(System.DefaultWorkingDirectory)/dist/apps/client
+              targetPath: $(System.DefaultWorkingDirectory)/dist/apps/client-internet
               artifactName: 'client-build-internet'
 
           - script: npx nx build client --configuration=production-internal --skip-nx-cache
@@ -104,7 +104,7 @@ stages:
           - task: PublishPipelineArtifact@1
             condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
             inputs:
-              targetPath: $(System.DefaultWorkingDirectory)/dist/apps/client
+              targetPath: $(System.DefaultWorkingDirectory)/dist/apps/client-internal
               artifactName: 'client-build-internal'
 
           - task: PublishPipelineArtifact@1
@@ -146,7 +146,8 @@ stages:
               rm -rf /usr/local/bin/pulumi*
               curl -fsSL https://get.pulumi.com | sh -s -- --version 3.46.0
               /bin/cp -rf $HOME/.pulumi/bin/* /usr/local/bin
-
+              ls -ld ./artifacts
+              chmod 777 ./artifacts
               cd apps/infrastructure/policypack && yarn install
 
             displayName: Install pulumi

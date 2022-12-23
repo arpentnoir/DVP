@@ -1,16 +1,16 @@
-import { fetchAndDecryptVC } from './storage';
 import {
-  validQRParams,
+  invalidKeyQRParams,
   invalidQRParams,
   invalidUrlQRParams,
-  invalidKeyQRParams,
+  validQRParams,
 } from '../mocks/fixtures/responses';
+import { fetchAndDecryptVC } from './storage';
 
 describe('fetchAndDecryptVC', () => {
   it('should fetch and decrypt VC successfully', async () => {
     const r = await fetchAndDecryptVC(validQRParams);
 
-    expect(r.credentialSubject.iD).toStrictEqual('sdf');
+    expect(r.credentialSubject['iD']).toStrictEqual('sdf');
   });
 
   it('should throw error if params contains invalid query', async () => {

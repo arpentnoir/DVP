@@ -1,11 +1,14 @@
 import { setupCognitoAuth } from './cognito';
 
 export const {
-  audience: dvpInternalAudience,
+  userPool: dvpInternalUserPool,
+  userPoolClient: dvpInternalUserPoolClient,
+  userPoolDomain: dvpInternalUserPoolDomain,
   issuer: dvpInternalIssuer,
   jwksUri: dvpInternalJwksUri,
   userPoolClientId: dvpInternalUserPoolClientId,
-  userPoolDomain: dvpInternalUserPoolDomain,
+  userPoolDomainUrl: dvpInternalUserPoolDomainUrl,
+  userPoolId: dvpInternalUserPoolId,
 } = setupCognitoAuth('auth-internal', {
   googleClientId: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -14,12 +17,15 @@ export const {
 });
 
 export const {
-  audience: dvpExternalAudience,
-  issuer: dvpExternalIssuer,
-  jwksUri: dvpExternalJwksUri,
-  userPoolClientId: dvpExternalUserPoolClientId,
-  userPoolDomain: dvpExternalUserPoolDomain,
-} = setupCognitoAuth('auth-external', {
+  userPool: dvpInternetUserPool,
+  userPoolClient: dvpInternetUserPoolClient,
+  userPoolDomain: dvpInternetUserPoolDomain,
+  issuer: dvpInternetIssuer,
+  jwksUri: dvpInternetJwksUri,
+  userPoolClientId: dvpInternetUserPoolClientId,
+  userPoolDomainUrl: dvpInternetUserPoolDomainUrl,
+  userPoolId: dvpInternetUserPoolId,
+} = setupCognitoAuth('auth-internet', {
   googleClientId: process.env.GOOGLE_CLIENT_ID,
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   region: process.env.AWS_REGION,

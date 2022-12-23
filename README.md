@@ -17,6 +17,11 @@ TODO: Describe and show how to build your code and run the tests.
 
 ## Client
 
+### Environment variables
+
+The config for the client is loaded from `/apps/client/src/env/env-config.js`, the file should be committed to the repository.
+the environment config gets overwritten during the deployment, whenever `env-config.js` needs to updated, please update the pulumi scripts as well to inject variables during the deployment
+
 ### Internet
 
 To build the internet app, run `yarn build`. This will create a bundle which only includes the base app and internet specific routes.

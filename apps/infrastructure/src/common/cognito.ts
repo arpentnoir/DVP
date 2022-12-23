@@ -13,7 +13,7 @@ export interface CognitoAuthArgs {
 export class CognitoAuth extends pulumi.ComponentResource {
   readonly userPool: aws.cognito.UserPool;
   readonly userPoolDomain: aws.cognito.UserPoolDomain;
-  readonly userClient: aws.cognito.UserPoolClient;
+  readonly userPoolClient: aws.cognito.UserPoolClient;
   readonly googleProvider: aws.cognito.IdentityProvider;
 
   /**
@@ -42,7 +42,7 @@ export class CognitoAuth extends pulumi.ComponentResource {
       }
     );
 
-    this.userClient = new aws.cognito.UserPoolClient(
+    this.userPoolClient = new aws.cognito.UserPoolClient(
       `${name}-user-pool-client`,
       {
         userPoolId: this.userPool.id.apply((val) => val),
@@ -86,24 +86,21 @@ export const setupCognitoAuth = (name: string, config: CognitoAuthArgs) => {
   });
 
   // User Pool
-  const usePoolDomain = cognitoAuth.userPoolDomain.domain.apply(
-    (val) =>
-      `https://${val}.auth.${config.region}.amazoncognito.com/oauth2/authorize`
-  );
-  const jwksUri = cognitoAuth.userPool.id.apply(
-    (id) =>
-      `https://cognito-idp.${config.region}.amazonaws.com/${id}/.well-known/jwks.json`
-  );
-  const issuer = cognitoAuth.userPool.id.apply(
-    (id) => `https://cognito-idp.${config.region}.amazonaws.com/${id}`
-  );
-  const userPoolClientId = cognitoAuth.userClient.id.apply((val) => val);
-  const audience = cognitoAuth.userClient.id.apply((val) => val);
+
+  const userPoolDomainUrl = pulumi.interpolate`https://${cognitoAuth.userPoolDomain.domain}.auth.${config.region}.amazoncognito.com/oauth2/authorize`;
+  const userPoolId = pulumi.interpolate`${cognitoAuth.userPool.id}`;
+  const userPoolClientId = pulumi.interpolate`${cognitoAuth.userPoolClient.id}`;
+  const jwksUri = pulumi.interpolate`https://cognito-idp.${config.region}.amazonaws.com/${userPoolId}/.well-known/jwks.json`;
+  const issuer = pulumi.interpolate`https://cognito-idp.${config.region}.amazonaws.com/${userPoolId}`;
+
   return {
-    userPoolDomain: usePoolDomain,
+    userPool: cognitoAuth.userPool,
+    userPoolDomain: cognitoAuth.userPoolDomain,
+    userPoolClient: cognitoAuth.userPoolClient,
+    userPoolId,
+    userPoolClientId,
+    userPoolDomainUrl,
     jwksUri,
     issuer,
-    userPoolClientId,
-    audience,
   };
 };
