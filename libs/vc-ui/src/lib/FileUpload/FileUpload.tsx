@@ -1,6 +1,7 @@
+import { Box, InputLabel } from '@mui/material';
 import { ChangeEvent, FunctionComponent, useRef } from 'react';
-import { Button, Box, InputLabel } from '@mui/material';
-import { fileToBase64, FileData } from '../../utils/fileToBase64';
+import { FileData, fileToBase64 } from '../../utils/fileToBase64';
+import { Button } from '../Button';
 
 interface FileUploadProps {
   buttonText: string;
@@ -60,13 +61,12 @@ export const FileUpload: FunctionComponent<FileUploadProps> = ({
         htmlFor="file-upload-input"
       >
         <Button
+          label={buttonText}
           aria-label={buttonText}
-          variant="contained"
+          variant="outlined"
           onClick={handleClick}
           data-testid="file-upload-button"
-        >
-          {buttonText}
-        </Button>
+        />
       </InputLabel>
     </Box>
   );

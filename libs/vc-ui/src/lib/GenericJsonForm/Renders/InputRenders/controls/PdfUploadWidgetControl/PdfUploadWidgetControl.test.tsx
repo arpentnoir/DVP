@@ -2,7 +2,7 @@
 import { act, screen, waitFor } from '@testing-library/react';
 import { PdfUploadWidgetControl } from './PdfUploadWidgetControl';
 import {
-  samplePropsInputFeilds,
+  samplePropsInputFields,
   jsonFormsTestHarness,
 } from '../../../../testUtils';
 import { AANZFTA_COO_PARTIAL } from '../../../../../fixtures/documents';
@@ -10,9 +10,9 @@ import { AANZFTA_COO_PARTIAL } from '../../../../../fixtures/documents';
 const mockCallback = jest.fn();
 
 const sampleProps = {
-  ...samplePropsInputFeilds,
+  ...samplePropsInputFields,
   uischema: {
-    ...samplePropsInputFeilds.uischema,
+    ...samplePropsInputFields.uischema,
     options: { widget: 'fileUpload' },
   },
 };

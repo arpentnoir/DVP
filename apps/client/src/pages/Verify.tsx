@@ -2,11 +2,12 @@ import {
   VerifiableCredential,
   WrappedVerifiableCredential,
 } from '@dvp/api-interfaces';
-import { CertificateUpload, isVerifiableCredential } from '@dvp/vc-ui';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { CertificateUpload, isVerifiableCredential, Text } from '@dvp/vc-ui';
+import { Alert, Box, CircularProgress, Stack } from '@mui/material';
 import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants';
+import { BaseLayout } from '../layouts';
 import { fetchAndDecryptVC } from '../services/storage';
 import { verify } from '../services/vc';
 
@@ -20,11 +21,12 @@ export const Verify = () => {
   const [errorKeyId, setErrorKeyId] = useState('');
   const location = useLocation();
   const navigate = useNavigate();
+  const verifyRef = React.createRef<HTMLParagraphElement>();
 
   const setErrorMessage = (message: string) => {
     setUploadErrorMessage(message);
     /**
-     * For accessible users, the upload error message needs to be read out
+     * Accesibility: the upload error message needs to be read out
      * every time. As such, to force a re-render of the upload component
      * a random number is generated and assigned as the key.
      **/
@@ -93,45 +95,90 @@ export const Verify = () => {
   }, []);
 
   const displayResult = useMemo(() => {
-    return error ? (
-      <ErrorMessage />
-    ) : (
-      <CertificateUpload
-        handleFiles={handleFiles}
-        errorMessage={uploadErrorMessage}
-        key={errorKeyId.toString()}
-        acceptMessage={ACCEPT_MESSAGE}
-      />
+    return (
+      <>
+        {error && <ErrorMessage />}
+        <CertificateUpload
+          handleFiles={handleFiles}
+          errorMessage={uploadErrorMessage}
+          key={errorKeyId.toString()}
+          acceptMessage={ACCEPT_MESSAGE}
+        />
+      </>
     );
   }, [error, uploadErrorMessage, errorKeyId]);
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexGrow: 1,
-        paddingTop: '100px',
-        flexDirection: 'column',
-        alignItems: 'center',
-      }}
-    >
-      {loading ? (
-        <React.Fragment>
-          <CircularProgress />
-          <Typography fontSize={24} paddingTop={3} tabIndex={0}>
-            Verifying Document <span aria-hidden="true">...</span>
-          </Typography>
-        </React.Fragment>
-      ) : (
-        displayResult
-      )}
-    </Box>
+    <BaseLayout title="Verify a document">
+      <Stack
+        sx={{ display: 'flex', height: '100%' }}
+        spacing={{ xs: '16px', md: 0 }}
+      >
+        <Box>
+          <Text variant="h4" fontWeight="bold" paddingBottom="24px">
+            Verify a document
+          </Text>
+          <Text>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
+            turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus
+            nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum
+            tellus elit sed risus. Maecenas eget condimentum velit, sit amet
+            feugiat lectus. Class aptent taciti sociosqu ad litora torquent per
+            conubia nostra, per inceptos himenaeos. Praesent auctor purus luctus
+            enim egestas, ac scelerisque ante pulvinar. Donec ut rhoncus ex.
+            Suspendisse ac rhoncus nisl, eu tempor urna. Curabitur vel bibendum
+            lorem. Morbi convallis convallis diam sit amet lacinia. Aliquam in
+            elementum tellus.
+          </Text>
+        </Box>
+        <Box
+          sx={{
+            flex: 1,
+          }}
+        >
+          <Stack
+            height="100%"
+            maxWidth="800px"
+            justifyContent="center"
+            margin="auto"
+          >
+            {loading ? (
+              <Stack
+                sx={{
+                  height: '100%',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              >
+                <CircularProgress />
+                <Text
+                  variant="h5"
+                  paddingTop={3}
+                  ref={verifyRef}
+                  aria-label="Please wait while your document is being verified"
+                >
+                  Verifying Document <span aria-hidden>...</span>
+                </Text>
+              </Stack>
+            ) : (
+              displayResult
+            )}
+          </Stack>
+        </Box>
+      </Stack>
+    </BaseLayout>
   );
 };
 
 const ErrorMessage = () => (
-  <p tabIndex={0}>
-    There was an error verifying your document. Please rescan the QR and try
-    again
-  </p>
+  <Stack alignItems="center" paddingY="16px">
+    <Alert severity="error" tabIndex={0}>
+      <Stack alignItems="center">
+        <Text>There was an error verifying your document</Text>
+        <Text variant="body1" fontWeight="bold" paddingTop="12px">
+          Please rescan the QR and try again
+        </Text>
+      </Stack>
+    </Alert>
+  </Stack>
 );

@@ -1,15 +1,19 @@
-import { getByText, getByTestId, render } from '@testing-library/react';
+import { getByTestId, getByText, render } from '@testing-library/react';
+import { invalidResults, validResults } from '../fixtures';
 import { VerifyResults } from './VerifyResults';
-import { validResults, invalidResults } from '../fixtures';
 
 describe('VerifyResults', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<VerifyResults {...validResults} />);
+    const { baseElement } = render(
+      <VerifyResults {...(validResults as any)} />
+    );
     expect(baseElement).toBeTruthy();
   });
 
   it('should display correct checks if valid', () => {
-    const { baseElement } = render(<VerifyResults {...validResults} />);
+    const { baseElement } = render(
+      <VerifyResults {...(validResults as any)} />
+    );
 
     const integrityCheck = getByTestId(baseElement, 'INTEGRITY');
     const statusCheck = getByTestId(baseElement, 'STATUS');

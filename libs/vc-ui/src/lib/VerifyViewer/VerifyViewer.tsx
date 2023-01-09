@@ -52,15 +52,11 @@ export const VerifyViewer = ({
   return (
     <Paper
       sx={{
-        padding: '22px',
-        border: '1px solid #ebebeb',
-        boxShadow: '0 2px 5px #00000012',
-        borderRadius: '5px',
+        padding: { xs: '8px', md: '22px' },
       }}
-      elevation={0}
     >
       {!hideVerifyResults && <VerifyResults {...results} />}
-      {!results.errors.length && <RendererViewer document={document} />}
+      {!results?.errors?.length && <RendererViewer document={document} />}
     </Paper>
   );
 };

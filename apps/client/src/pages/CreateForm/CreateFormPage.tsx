@@ -1,15 +1,17 @@
-import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
-import { Box, Paper } from '@mui/material';
 import { GenericJsonForm } from '@dvp/vc-ui';
-import { IssueVC } from '../../services/issueVC';
+import { Paper } from '@mui/material';
+import { useEffect, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants';
+import { BaseLayout } from '../../layouts';
+import { IssueVC } from '../../services/issueVC';
 
 export interface CreateFormPageProps {
-  readonly formTitle: string;
+  readonly title: string;
+  readonly subTitle?: string;
 }
 
-export const CreateFormPage = ({ formTitle }: CreateFormPageProps) => {
+export const CreateFormPage = ({ title, subTitle }: CreateFormPageProps) => {
   const [submitting, setSubmitting] = useState<boolean>(false);
   const [serverError, setServerError] = useState<string>();
 
@@ -29,7 +31,7 @@ export const CreateFormPage = ({ formTitle }: CreateFormPageProps) => {
       ...formValues,
     };
 
-    IssueVC(credentialSubject)
+    IssueVC(credentialSubject, state?.credentialType as string)
       .then((response) => {
         setServerError(undefined);
         navigate(ROUTES.VIEWER, {
@@ -45,30 +47,29 @@ export const CreateFormPage = ({ formTitle }: CreateFormPageProps) => {
         });
       })
       .catch((_e) => {
-        //Check server validations when avaliable
-        setServerError('Somthing went wrong please try again later');
+        //Check server validations when available
+        setServerError('Something went wrong. Please try again later');
         setSubmitting(false);
       });
   };
 
   return (
-    <Box marginTop={'6rem'} marginBottom={'6rem'}>
+    <BaseLayout title="Issue Form">
       <Paper
         sx={{
           position: 'relative',
-          paddingTop: '2.5rem',
-          paddingBottom: '2.5rem',
         }}
       >
         <GenericJsonForm
           schema={state?.form?.schema}
           uiSchema={state?.form?.uiSchema}
           onSubmit={submitForm}
-          title={formTitle}
+          title={title}
+          subTitle={subTitle}
           submitting={submitting}
           submissionError={serverError}
         />
       </Paper>
-    </Box>
+    </BaseLayout>
   );
 };

@@ -1,6 +1,6 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react';
-import { VerifyResults } from './VerifyResults';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { validChecks } from '../fixtures';
+import { VerifyResults } from './VerifyResults';
 
 const Story: ComponentMeta<typeof VerifyResults> = {
   component: VerifyResults,
@@ -15,7 +15,7 @@ const Template: ComponentStory<typeof VerifyResults> = (args) => (
 export const Valid = Template.bind({});
 
 Valid.args = {
-  issuer: 'demo.tradetrust.io',
+  issuer: { id: 'demo.tradetrust.io', name: 'Demo' },
   errors: [],
   warnings: [],
   checks: validChecks,

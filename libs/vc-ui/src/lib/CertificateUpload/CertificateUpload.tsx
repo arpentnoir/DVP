@@ -1,39 +1,47 @@
 import {
   Alert,
   Box,
-  Button,
-  Divider,
   Input,
   InputLabel,
   Stack,
-  Typography,
+  SxProps,
+  useTheme,
 } from '@mui/material';
 import React, {
   DragEvent,
   FormEvent,
   useEffect,
+  useMemo,
   useRef,
   useState,
 } from 'react';
+import OpenBoxSVG from '../../assets/OpenBox.svg';
+import { Text } from '../Text';
+
+interface ICertificateUpload {
+  handleFiles: (files: FileList) => void;
+  errorMessage?: string;
+  acceptMessage?: string;
+  style?: SxProps;
+}
 
 export const CertificateUpload = ({
   handleFiles,
   errorMessage,
   acceptMessage,
-}: {
-  handleFiles: (files: FileList) => void;
-  errorMessage: string;
-  acceptMessage: string;
-}) => {
+  style,
+}: ICertificateUpload) => {
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
-  const errorRef = useRef<HTMLDivElement>(null);
+  const errorRef = useRef<HTMLParagraphElement>(null);
+
+  const theme = useTheme();
 
   useEffect(() => {
     if (errorMessage && errorRef.current) {
       errorRef.current.focus();
     }
-  }, []);
+  }, [errorMessage]);
 
   const handleDrag = function (
     event: DragEvent<HTMLDivElement | HTMLFormElement>
@@ -66,103 +74,153 @@ export const CertificateUpload = ({
     }
   };
 
-  const onButtonClick = () => {
-    if (null !== inputRef.current) {
-      inputRef.current.click();
+  const onButtonClick = (event: any) => {
+    event.preventDefault();
+    if (event.key === ' ' || event.key === 'Enter') {
+      inputRef?.current?.click();
     }
   };
 
-  return (
-    <Box
-      onDragEnter={handleDrag}
-      id="certificate-upload"
-      sx={{
-        width: { xs: '22rem', sm: '28rem' },
-        height: '16rem',
-        maxWidth: ' 100%',
-        textAlign: 'center',
-        position: 'relative',
-      }}
-    >
-      <Input
-        inputRef={inputRef}
-        type="file"
-        id="input-file-upload"
-        inputProps={{ 'data-testid': 'input-file-upload' }}
-        onChange={handleChange}
-        sx={{ display: 'none' }}
-      />
+  const textColor = useMemo(
+    () => (errorMessage ? 'white' : 'black'),
+    [errorMessage]
+  );
 
-      <InputLabel
-        id="label-file-upload"
-        htmlFor="input-file-upload"
-        style={{
-          height: '100%',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderWidth: '2px',
-          borderRadius: '1rem',
-          borderStyle: 'dashed',
-          borderColor: '#cbd5e1',
-          backgroundColor: '#f8fafc',
+  return (
+    <React.Fragment>
+      <Box
+        onDragEnter={handleDrag}
+        id="certificate-upload"
+        sx={{
+          height: '16rem',
+          textAlign: 'center',
         }}
       >
-        <Stack sx={{ justifyContent: 'space-evenly', height: '100%' }}>
-          <Stack sx={{ justifyContent: 'space-evenly', height: '100%' }}>
-            <Typography>Drag and drop your file here</Typography>
-            <div>
-              <Divider>or</Divider>
-            </div>
-            <Button
-              variant="contained"
-              sx={{ textTransform: 'none' }}
-              onClick={onButtonClick}
-            >
-              <Typography
-                color="white"
-                aria-label={`Select a file. ${acceptMessage}`}
-              >
-                Select a file
-              </Typography>
-            </Button>
-
-            <Typography sx={{ fontSize: { xs: 'smaller', sm: 'medium' } }}>
-              {acceptMessage}
-            </Typography>
-            {errorMessage ? (
-              <Alert
-                tabIndex={1}
-                severity="error"
-                id="vc-upload-error"
-                ref={errorRef}
-                aria-label={errorMessage}
-              >
-                {errorMessage}
-              </Alert>
-            ) : null}
-          </Stack>
-        </Stack>
-      </InputLabel>
-      {dragActive && (
-        <Box
-          sx={{
-            position: 'absolute',
-            width: '100%',
-            height: ' 100%',
-            borderRadius: '1rem',
-            top: '0px',
-            right: '0px',
-            bottom: '0px',
-            left: '0px',
-          }}
-          id="drag-file-element"
-          onDragEnter={handleDrag}
-          onDragExit={handleDrag}
-          onDragOver={handleDrag}
-          onDrop={handleDrop}
+        <Input
+          inputRef={inputRef}
+          type="file"
+          id="input-file-upload"
+          inputProps={{ 'data-testid': 'input-file-upload' }}
+          onChange={handleChange}
+          sx={{ display: 'none' }}
         />
-      )}
-    </Box>
+
+        <InputLabel
+          id="label-file-upload"
+          htmlFor="input-file-upload"
+          sx={{
+            height: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderWidth: '2px',
+            borderRadius: '1rem',
+            borderStyle: 'dashed',
+            borderColor: '#cbd5e1',
+            backgroundColor: errorMessage
+              ? theme.palette.error.main || '#AD1A1F'
+              : 'white',
+            // Override style
+            ...style,
+          }}
+          aria-label="Upload file"
+        >
+          <Stack
+            sx={{
+              justifyContent: 'space-evenly',
+              height: '100%',
+            }}
+          >
+            <Stack
+              sx={{
+                justifyContent: 'space-evenly',
+                alignItems: 'center',
+                height: '100%',
+                color: textColor,
+              }}
+            >
+              <Box
+                component="img"
+                sx={{
+                  maxHeight: 61,
+                }}
+                src={OpenBoxSVG as string}
+              />
+              <Text
+                fontWeight="bold"
+                color={textColor}
+                variant="h6"
+                tabIndex={-1}
+              >
+                Drop your document to verify
+              </Text>
+              {errorMessage && (
+                <span ref={errorRef} aria-label={errorMessage} tabIndex={0} />
+              )}
+
+              <Box>
+                <Text
+                  sx={{
+                    display: 'inline',
+                  }}
+                  variant="body1"
+                  tabIndex={-1}
+                >
+                  Or &nbsp;
+                </Text>
+                <Box
+                  role="button"
+                  aria-controls="filename"
+                  tabIndex={0}
+                  aria-label={`Select a file. ${acceptMessage}`}
+                  onKeyUp={onButtonClick}
+                  sx={{
+                    display: 'inline',
+                    borderBottom: '1px solid',
+                    ':hover': { cursor: 'pointer' },
+                  }}
+                >
+                  Select a file
+                </Box>
+              </Box>
+
+              {acceptMessage && (
+                <Text variant="body1" tabIndex={-1}>
+                  {acceptMessage}
+                </Text>
+              )}
+              {errorMessage && (
+                <Alert
+                  severity="error"
+                  id="vc-upload-error"
+                  aria-hidden
+                  sx={{ width: 'fit-content' }}
+                >
+                  {errorMessage}
+                </Alert>
+              )}
+            </Stack>
+          </Stack>
+        </InputLabel>
+        {dragActive && (
+          <Box
+            sx={{
+              position: 'absolute',
+              height: ' 100%',
+              borderRadius: '1rem',
+              top: '0px',
+              right: '0px',
+              bottom: '0px',
+              left: '0px',
+            }}
+            id="drag-file-element"
+            onDragEnter={handleDrag}
+            onDragExit={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+          />
+        )}
+      </Box>
+    </React.Fragment>
   );
 };

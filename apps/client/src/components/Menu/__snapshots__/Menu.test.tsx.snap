@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Menu should render correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="css-phqqqs-MuiStack-root"
+    >
+      <button
+        aria-expanded="false"
+        aria-label="Menu"
+        class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium css-1nm1vzb-MuiButtonBase-root-MuiButton-root"
+        data-testid="menu-button"
+        tabindex="0"
+        type="button"
+      >
+        <div
+          class="css-doi3ij-MuiStack-root"
+        >
+          <svg
+            aria-hidden="true"
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-4fyam7-MuiSvgIcon-root"
+            data-testid="MenuIcon"
+            focusable="false"
+            viewBox="0 0 24 24"
+          >
+            <path
+              d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"
+            />
+          </svg>
+          <p
+            class="MuiTypography-root MuiTypography-body2 css-1dnu2q9-MuiTypography-root"
+            data-testid="button:Menu:label"
+            style="margin-left: 8px;"
+            tabindex="0"
+          >
+            Menu
+          </p>
+        </div>
+        <span
+          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+        />
+      </button>
+    </div>
+  </div>
+</body>
+`;

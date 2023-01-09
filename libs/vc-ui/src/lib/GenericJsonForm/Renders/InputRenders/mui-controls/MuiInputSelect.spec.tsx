@@ -1,7 +1,7 @@
 import { fireEvent } from '@testing-library/react';
 import { MuiSelect } from './MuiInputSelect';
 import {
-  samplePropsInputFeilds,
+  samplePropsInputFields,
   jsonFormsTestHarness,
 } from '../../../testUtils';
 
@@ -19,7 +19,7 @@ const options = [
 ];
 
 const sampleProps = {
-  ...samplePropsInputFeilds,
+  ...samplePropsInputFields,
   schema: { type: 'string', enum: options },
   options,
 };

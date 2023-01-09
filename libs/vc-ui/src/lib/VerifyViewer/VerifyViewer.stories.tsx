@@ -1,7 +1,7 @@
-import type { ComponentStory, ComponentMeta } from '@storybook/react';
-import { VerifyViewer } from './VerifyViewer';
-import { CHAFTA_COO } from '../fixtures';
+import type { ComponentMeta, ComponentStory } from '@storybook/react';
 import { IStatusCheck } from '..';
+import { CHAFTA_COO } from '../fixtures';
+import { VerifyViewer } from './VerifyViewer';
 
 const Story: ComponentMeta<typeof VerifyViewer> = {
   component: VerifyViewer,
@@ -37,7 +37,7 @@ Primary.args = {
   document: CHAFTA_COO,
   results: {
     errors: [],
-    issuer: 'testing123',
+    issuer: { id: '123', name: 'Demo Issuer' },
     checks: validChecks,
     warnings: [],
   },

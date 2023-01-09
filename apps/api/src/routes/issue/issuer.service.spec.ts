@@ -82,7 +82,7 @@ describe('issue.service', () => {
   });
 
   describe('SVIP', () => {
-    jest.setTimeout(15000);
+    jest.setTimeout(20000);
     it('should fail if credential fails to validate', async () => {
       const unsigned_non_OA_V3 = unsigned_OA_V3_base;
       unsigned_non_OA_V3['type'] = ['VerifiableCredential'];

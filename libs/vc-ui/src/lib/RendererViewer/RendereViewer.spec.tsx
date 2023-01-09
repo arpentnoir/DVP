@@ -1,12 +1,12 @@
+import { WrappedVerifiableCredential } from '@dvp/api-interfaces';
 import { act, render, waitFor } from '@testing-library/react';
+import { CHAFTA_COO } from '../fixtures';
 import {
   reducer,
   RendererViewer,
   VCDocumentActionType,
   _getRendererURl,
 } from './RendererViewer';
-import { CHAFTA_COO } from '../fixtures';
-import { WrappedVerifiableCredential } from '@dvp/api-interfaces';
 
 describe('RendererViewer', () => {
   it('should render successfully', () => {

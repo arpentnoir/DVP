@@ -244,7 +244,6 @@ export const PdfRenderer: FunctionComponent<PdfRendererProps> = ({
             boxShadow: 'none',
           },
         }}
-        elevation={5}
       >
         <Document file={pdfDocument} onLoadSuccess={onDocumentLoadSuccess}>
           {Array.from(new Array(numPages), (el, index) => (

@@ -1,14 +1,14 @@
 import { fireEvent } from '@testing-library/react';
 import { MuiCheckbox } from './MuiInputCheckbox';
 import {
-  samplePropsInputFeilds,
+  samplePropsInputFields,
   jsonFormsTestHarness,
 } from '../../../testUtils';
 
 const mockCallback = jest.fn();
 
 const sampleProps = {
-  ...samplePropsInputFeilds,
+  ...samplePropsInputFields,
   schema: { type: 'boolean' },
 };
 
@@ -34,7 +34,7 @@ describe('MuiInputCheckbox', () => {
     fireEvent.click(field);
 
     expect(mockCallback).toHaveBeenCalledWith(
-      samplePropsInputFeilds.path,
+      samplePropsInputFields.path,
       true
     );
   });

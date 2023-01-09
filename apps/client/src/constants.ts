@@ -5,6 +5,7 @@ export const { contextUrl, rendererUrl } = getVcContextAndRendererEndpoints();
 export const APP_NAME = 'Digital Verification Platform';
 export const SHORT_APP_NAME = 'DVP';
 export const LOGO_ALT_TEXT = 'Australian Border Force Logo';
+export const FOOTER_LOGO_ALT_TEXT = 'Australian Government';
 
 export const ROUTES = {
   HOME: '/',
@@ -19,14 +20,24 @@ export const FAIL_VC_FETCH_DECRYPT_ERR_MSG =
 export const FAIL_CREATE_VC = 'Unable to create Verifiable Credential';
 export const API_ENDPOINTS = { VERIFY: '/verify', ISSUE: '/issue' };
 
-export const GENERIC_COO_META_DATA = {
-  type: ['VerifiableCredential', 'OpenAttestationCredential'],
+export const GENERIC_SVIP_META_DATA = {
   '@context': [
     'https://www.w3.org/2018/credentials/v1',
     `${contextUrl}/AANZFTA-CoO.json`,
-    `${rendererUrl}/AANZFTA-CoO-Context-Partial.json`,
+    `${contextUrl}/AANZFTA-CoO-Context-Partial.json`,
     'https://schemata.openattestation.com/com/openattestation/1.0/OpenAttestation.v3.json',
   ],
+  type: ['VerifiableCredential'],
+  issuer: {
+    id: 'did:ethr:0x4Bf4190a27A37d1677c8ADE25b53F1e22885531f#controller',
+    name: 'GoSource Pty Ltd',
+    type: 'OpenAttestationIssuer',
+  },
+};
+
+export const GENERIC_OA_META_DATA = {
+  ...GENERIC_SVIP_META_DATA,
+  type: ['VerifiableCredential', 'OpenAttestationCredential'],
   openAttestationMetadata: {
     template: {
       type: 'EMBEDDED_RENDERER',
@@ -45,10 +56,5 @@ export const GENERIC_COO_META_DATA = {
       type: 'DNS-DID',
       identifier: 'dvp.ha.showthething.com',
     },
-  },
-  issuer: {
-    id: 'did:ethr:0x4Bf4190a27A37d1677c8ADE25b53F1e22885531f#controller',
-    name: 'GoSource Pty Ltd',
-    type: 'OpenAttestationIssuer',
   },
 };

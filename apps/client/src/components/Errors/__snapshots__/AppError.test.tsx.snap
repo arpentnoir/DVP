@@ -1,0 +1,34 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`AppError should render correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="css-1ootpi0-MuiStack-root"
+    >
+      <div
+        class="css-1p5q5e5-MuiStack-root"
+      >
+        <h6
+          class="MuiTypography-root MuiTypography-h6 css-tjvwag-MuiTypography-root"
+          tabindex="0"
+        >
+          500
+        </h6>
+        <h4
+          class="MuiTypography-root MuiTypography-h4 css-5lbw0b-MuiTypography-root"
+          tabindex="0"
+        >
+          Something went wrong
+        </h4>
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-e784if-MuiTypography-root"
+          tabindex="0"
+        >
+          Please contact us for further information.
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+`;

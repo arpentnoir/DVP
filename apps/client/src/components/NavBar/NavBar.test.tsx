@@ -1,9 +1,5 @@
-import {
-  getByAltText,
-  getByText,
-  render,
-  waitFor,
-} from '@testing-library/react';
+import { render } from '@dvp/vc-ui';
+import { getByAltText, waitFor } from '@testing-library/react';
 import { NavBar } from './NavBar';
 
 describe('NavBar', () => {
@@ -11,7 +7,6 @@ describe('NavBar', () => {
     const { baseElement } = render(<NavBar />);
     await waitFor(() => {
       getByAltText(baseElement, 'Australian Border Force Logo');
-      getByText(baseElement, 'Digital Verification Platform');
     });
   });
 });

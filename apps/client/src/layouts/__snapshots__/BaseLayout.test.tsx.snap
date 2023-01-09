@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`BaseLayout should render correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="MuiContainer-root MuiContainer-disableGutters css-1gwj8np-MuiContainer-root"
+    />
+  </div>
+</body>
+`;

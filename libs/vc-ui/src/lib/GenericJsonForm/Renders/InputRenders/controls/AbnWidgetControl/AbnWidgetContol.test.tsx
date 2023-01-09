@@ -1,15 +1,15 @@
 import { fireEvent, waitFor } from '@testing-library/react';
 import { AbnWidgetControl } from './AbnWidgetContol';
 import {
-  samplePropsInputFeilds,
+  samplePropsInputFields,
   jsonFormsTestHarness,
 } from '../../../../testUtils';
 
 const mockCallback = jest.fn();
 
 const sampleProps = {
-  ...samplePropsInputFeilds,
-  uischema: { ...samplePropsInputFeilds.uischema, options: { widget: 'ABN' } },
+  ...samplePropsInputFields,
+  uischema: { ...samplePropsInputFields.uischema, options: { widget: 'ABN' } },
 };
 
 describe('AbnWidgetContol', () => {
@@ -35,7 +35,7 @@ describe('AbnWidgetContol', () => {
     await waitFor(() => {
       expect(textBox.value).toBe('test123');
       expect(mockCallback).toHaveBeenCalledWith(
-        samplePropsInputFeilds.path,
+        samplePropsInputFields.path,
         'test123'
       );
     });

@@ -12,9 +12,10 @@ import {
 } from '@govtechsg/decentralized-renderer-react-components';
 import { obfuscateDocument } from '@govtechsg/open-attestation';
 import { TabContext, TabList, TabPanel } from '@mui/lab';
-import { Box, Tab, Typography } from '@mui/material';
-import { useReducer, useRef, useState } from 'react';
+import { Box, Tab } from '@mui/material';
+import { useMemo, useReducer, useRef, useState } from 'react';
 import { DEFAULT_RENDERER } from '../constants';
+import { Text } from '../Text';
 import { VcUtility } from '../VcUtility';
 
 export type VCDocumentState = {
@@ -72,11 +73,17 @@ export const _getRendererURl = (
 export const RendererViewer = ({ document }: IRendererViewer) => {
   const source = _getRendererURl(document);
 
+  // TODO: Ascertain why the renderer url lives in SVIP Document
+  const hasRenderer = useMemo(
+    () => !!(document as OAVerifiableCredential)?.openAttestationMetadata,
+    [document]
+  );
+
   const [height, setHeight] = useState(250);
   const SCROLLBAR_WIDTH = 20; // giving scrollbar a default width as there are no perfect ways to get it
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const toFrame = useRef<any>();
-  const [tabIndex, setTabIndex] = useState('0');
+  const [tabIndex, setTabIndex] = useState(hasRenderer ? '0' : '1');
 
   const [state, dispatchAction] = useReducer(reducer, {
     document,
@@ -137,15 +144,17 @@ export const RendererViewer = ({ document }: IRendererViewer) => {
             onChange={handleChange}
             aria-label="Display Verifiable Credential"
           >
-            <Tab
-              aria-label="Render view"
-              label="Render"
-              sx={{ color: 'black' }}
-              value={'0'}
-              onFocus={() => {
-                setTabIndex('0');
-              }}
-            />
+            {hasRenderer && (
+              <Tab
+                aria-label="Render view"
+                label="Render"
+                sx={{ color: 'black' }}
+                value={'0'}
+                onFocus={() => {
+                  setTabIndex('0');
+                }}
+              />
+            )}
             <Tab
               aria-label="Json view"
               label="Json"
@@ -157,14 +166,16 @@ export const RendererViewer = ({ document }: IRendererViewer) => {
             />
           </TabList>
         </Box>
-        <TabPanel value={'0'} data-testid={'tab-panel-0'}>
-          <FrameConnector
-            style={{ height: `${height}px`, width: '100%', border: '0px' }}
-            source={source}
-            dispatch={dispatch}
-            onConnected={onConnected}
-          />
-        </TabPanel>
+        {hasRenderer && (
+          <TabPanel value={'0'} data-testid={'tab-panel-0'}>
+            <FrameConnector
+              style={{ height: `${height}px`, width: '100%', border: '0px' }}
+              source={source}
+              dispatch={dispatch}
+              onConnected={onConnected}
+            />
+          </TabPanel>
+        )}
         <TabPanel value={'1'} data-testid={'tab-panel-1'}>
           <Box
             sx={{
@@ -179,9 +190,7 @@ export const RendererViewer = ({ document }: IRendererViewer) => {
                 {JSON.stringify(state.document?.credentialSubject, null, 2)}
               </pre>
             ) : (
-              <Typography tabIndex={0}>
-                Credential subject is empty or does not exist.
-              </Typography>
+              <Text>Credential subject is empty or does not exist.</Text>
             )}
           </Box>
         </TabPanel>

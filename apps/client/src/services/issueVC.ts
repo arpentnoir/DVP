@@ -1,18 +1,29 @@
+import { IssueCredentialRequestSigningMethodEnum } from '@dvp/api-client';
 import axios, { AxiosError } from 'axios';
 import {
   API_ENDPOINTS,
   FAIL_CREATE_VC,
-  GENERIC_COO_META_DATA,
+  GENERIC_OA_META_DATA,
+  GENERIC_SVIP_META_DATA,
 } from '../constants';
 
-export const IssueVC = async (credentialSubject: any) => {
+export const IssueVC = async (
+  credentialSubject: any,
+  credentialType: string
+) => {
   try {
     const response = await axios.post(API_ENDPOINTS.ISSUE, {
       credential: {
-        credentialSubject: credentialSubject,
-        ...GENERIC_COO_META_DATA,
+        ...(credentialType === 'oa'
+          ? GENERIC_OA_META_DATA
+          : GENERIC_SVIP_META_DATA),
         issuanceDate: new Date().toISOString(),
+        credentialSubject: credentialSubject,
       },
+      signingMethod:
+        credentialType === 'oa'
+          ? IssueCredentialRequestSigningMethodEnum.Oa
+          : IssueCredentialRequestSigningMethodEnum.Svip,
     });
 
     return response;

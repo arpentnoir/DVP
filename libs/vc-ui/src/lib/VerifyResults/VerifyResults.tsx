@@ -1,6 +1,7 @@
-import React from 'react';
-import { Box, Stack, Typography } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import { Box, Stack } from '@mui/material';
+import React from 'react';
+import { Text } from '../Text';
 import { Issuer, VerifyResult } from '../VerifyViewer';
 
 export interface IVerificationResults {
@@ -18,7 +19,7 @@ export const StatusCheck = ({ text, valid }: IStatusCheck) => {
   return (
     <Box alignItems="center" display="flex">
       valid <InfoOutlinedIcon color={valid ? 'success' : 'error'} />
-      <Typography
+      <Text
         fontWeight={400}
         fontStyle="italic"
         fontSize="16px"
@@ -27,7 +28,7 @@ export const StatusCheck = ({ text, valid }: IStatusCheck) => {
         paddingLeft="4px"
       >
         {text}
-      </Typography>
+      </Text>
     </Box>
   );
 };
@@ -46,47 +47,51 @@ export const Valid = ({ issuer, checks }: IValid) => {
         display="inline-flex"
         data-testid="valid-box"
       >
-        <Typography
-          tabIndex={0}
+        <Text
           color="white"
           fontWeight="bold"
-          fontSize="24px"
-          lineHeight="24px"
-          padding="6px 10px"
+          variant="h5"
+          padding="8px 16px"
+          aria-label="Document is valid"
         >
           Valid
-        </Typography>
+        </Text>
       </Box>
-      {issuer?.name && (
-        <Box paddingTop={2} paddingBottom={2}>
-          <Typography
-            tabIndex={0}
-            fontWeight={500}
-            fontSize="24px"
-            lineHeight="24px"
-            marginBottom="8px"
-            marginTop="8px"
-            style={{ wordWrap: 'break-word' }}
+
+      <Stack direction={{ xs: 'column', md: 'row' }} spacing="16px">
+        {issuer?.name && (
+          <Box
+            paddingTop={2}
+            paddingBottom={2}
+            sx={{
+              maxWidth: { md: '360px' },
+              marginRight: { md: '16px', lg: '88px' },
+            }}
           >
-            Issued by: {issuer.name}
-          </Typography>
-          {issuer?.id && (
-            <Typography
-              tabIndex={0}
-              fontWeight={500}
-              fontSize="18px"
-              lineHeight="18px"
+            <Text
+              fontWeight="bold"
+              fontSize="24px"
+              lineHeight="24px"
               marginBottom="8px"
               marginTop="8px"
               style={{ wordWrap: 'break-word' }}
             >
-              ({issuer.id})
-            </Typography>
-          )}
-        </Box>
-      )}
-
-      <Stack spacing="4px">
+              Issued by: {issuer.name}
+            </Text>
+            {issuer?.id && (
+              <Text
+                fontWeight={500}
+                fontSize="18px"
+                lineHeight="18px"
+                marginBottom="8px"
+                marginTop="8px"
+                style={{ wordWrap: 'break-word' }}
+              >
+                ({issuer.id})
+              </Text>
+            )}
+          </Box>
+        )}
         {checks.map((check) => (
           <Box
             alignItems="center"
@@ -96,8 +101,7 @@ export const Valid = ({ issuer, checks }: IValid) => {
           >
             <InfoOutlinedIcon color={check.valid ? 'success' : 'error'} />
 
-            <Typography
-              tabIndex={0}
+            <Text
               fontWeight={400}
               fontStyle="italic"
               fontSize="16px"
@@ -106,7 +110,7 @@ export const Valid = ({ issuer, checks }: IValid) => {
               paddingLeft="4px"
             >
               {check.text}
-            </Typography>
+            </Text>
           </Box>
         ))}
       </Stack>
@@ -119,18 +123,18 @@ export const Invalid = () => {
   return (
     <React.Fragment>
       <Box bgcolor="#dc3545" borderRadius="3px" display="inline-flex">
-        <Typography
+        <Text
           color="white"
           fontWeight="bold"
           fontSize="24px"
           lineHeight="24px"
-          padding="6px 10px"
+          padding="8px 16px"
         >
           Invalid
-        </Typography>
+        </Text>
       </Box>
       <Box paddingTop={2} paddingBottom={2}>
-        <Typography
+        <Text
           fontWeight={500}
           fontSize="24px"
           lineHeight="24px"
@@ -139,7 +143,7 @@ export const Invalid = () => {
         >
           The document hasn't been verified yet, or some verification aspects
           are invalid or document has been tampered with
-        </Typography>
+        </Text>
       </Box>
     </React.Fragment>
   );

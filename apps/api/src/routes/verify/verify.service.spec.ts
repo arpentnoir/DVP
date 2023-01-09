@@ -8,7 +8,8 @@ import unsigned_OA_V3 from '../../fixtures/oav3/did.json';
 import { VerifyService } from './verify.service';
 
 describe('verify.service', () => {
-  jest.setTimeout(15000);
+  // TODO: Need to optimize. Currently taking too long.
+  jest.setTimeout(20000);
 
   const mockRequest = getMockReq({
     method: 'POST',

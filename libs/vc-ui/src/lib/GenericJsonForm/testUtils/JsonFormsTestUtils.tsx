@@ -3,6 +3,8 @@ import { JsonFormsStateProvider } from '@jsonforms/react';
 import React from 'react';
 import { Renderers } from '../Renders';
 import { render } from '@testing-library/react';
+import { ThemeProvider } from '@mui/material';
+import { jsonFormTheme } from '../../../theme';
 
 window.matchMedia = jest.fn().mockImplementation((query) => {
   return {
@@ -42,7 +44,7 @@ export const testRootSchemaRequired = {
   required: ['sample'],
 };
 
-export const samplePropsInputFeilds = {
+export const samplePropsInputFields = {
   uischema: testUISchema,
   schema: {
     type: 'Control',
@@ -66,8 +68,8 @@ export const samplePropsInputFeilds = {
   rootSchema: testRootSchema,
 };
 
-export const samplePropsInputFeildsRequired = {
-  ...samplePropsInputFeilds,
+export const samplePropsInputFieldsRequired = {
+  ...samplePropsInputFields,
   required: true,
   errors: 'required',
 };
@@ -95,8 +97,10 @@ export const jsonFormsTestHarness = (
 ) => {
   const core = initCore(required, data);
   return render(
-    <JsonFormsStateProvider initState={{ renderers: Renderers, core }}>
-      {child}
-    </JsonFormsStateProvider>
+    <ThemeProvider theme={jsonFormTheme}>
+      <JsonFormsStateProvider initState={{ renderers: Renderers, core }}>
+        {child}
+      </JsonFormsStateProvider>
+    </ThemeProvider>
   );
 };

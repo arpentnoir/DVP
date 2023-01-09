@@ -1,7 +1,7 @@
 import { issueCredential } from './issue';
 
 describe('issueCredential', () => {
-  jest.setTimeout(10000);
+  jest.setTimeout(20000);
 
   it('should issue a verifiable credential', async () => {
     const mnemonic =

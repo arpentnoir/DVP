@@ -1,7 +1,7 @@
 import { act, render } from '@testing-library/react';
-import { VcUtility } from './VcUtility';
-import { AANZFTA_COO } from '../fixtures/documents';
 import * as utils from '../../utils';
+import { AANZFTA_COO } from '../fixtures/documents';
+import { VcUtility } from './VcUtility';
 
 const mockOnPrint = jest.fn();
 const mockCopyToClipboard = jest

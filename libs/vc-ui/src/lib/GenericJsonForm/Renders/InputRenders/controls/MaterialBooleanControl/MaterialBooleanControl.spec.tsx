@@ -1,15 +1,15 @@
 import { fireEvent } from '@testing-library/react';
 import { MaterialBooleanControl } from './MaterialBooleanControl';
 import {
-  samplePropsInputFeilds,
+  samplePropsInputFields,
   jsonFormsTestHarness,
 } from '../../../../testUtils';
 
 const mockCallback = jest.fn();
 
 const sampleProps = {
-  ...samplePropsInputFeilds,
-  schema: { ...samplePropsInputFeilds.schema, type: 'boolean' },
+  ...samplePropsInputFields,
+  schema: { ...samplePropsInputFields.schema, type: 'boolean' },
 };
 
 describe('MaterialBooleanControl', () => {
@@ -20,7 +20,7 @@ describe('MaterialBooleanControl', () => {
       '',
       <MaterialBooleanControl handleChange={mockCallback} {...sampleProps} />
     );
-    const title = queryAllByText(samplePropsInputFeilds.label)[0];
+    const title = queryAllByText(samplePropsInputFields.label)[0];
     expect(title).toBeInstanceOf(HTMLElement);
   });
 
@@ -34,7 +34,7 @@ describe('MaterialBooleanControl', () => {
     fireEvent.click(field);
 
     expect(mockCallback).toHaveBeenCalledWith(
-      samplePropsInputFeilds.path,
+      samplePropsInputFields.path,
       true
     );
   });
