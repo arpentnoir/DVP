@@ -158,6 +158,48 @@
           }
         }
       }
+    },
+    "/validate": {
+      "post": {
+        "summary": "Validates the credentialSubject and returns any errors in the response body.",
+        "tags": ["Credentials"],
+        "operationId": "validateCredential",
+        "description": "Validates the credentialSubject and returns any errors in the response body.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValidateCredentialRequest"
+              }
+            }
+          },
+          "description": "Parameters for validating a credentialSubject."
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully valdiated!",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidateCredentialResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "$ref": "#/components/responses/ValidationErrorResponse"
+          },
+          "400": {
+            "description": "Bad User Input",
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "$ref": "#/components/responses/InternalServerErrorResponse"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -478,6 +520,21 @@
           }
         }
       },
+      "ValidateCredentialRequest": {
+        "type": "object",
+        "required": ["schemaType", "verifiableCredential"],
+        "properties": {
+          "schemaType": {
+            "type": "string"
+          },
+          "verifiableCredential": {
+            "$ref": "#/components/schemas/VerifiableCredential"
+          }
+        }
+      },
+      "ValidateCredentialResponse": {
+        "type": "object"
+      },
       "VerificationResult": {
         "type": "object",
         "additionalProperties": false,
@@ -510,6 +567,9 @@
           "warnings": [],
           "errors": []
         }
+      },
+      "VerifyCredentialResponse": {
+        "$ref": "#/components/schemas/VerificationResult"
       },
       "VerifiableCredential": {
         "type": "object",
@@ -555,6 +615,22 @@
     },
     "responses": {
       "GenericErrorResponse": {
+        "description": "One or more error(s) were encountered processing the request.\n\nThis response contains a collection of errors encountered while processing the request.",
+        "headers": {},
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/ErrorsResponseSchema"
+            },
+            "examples": {
+              "systemTimeout": {
+                "$ref": "#/components/examples/ErrorResponseExample"
+              }
+            }
+          }
+        }
+      },
+      "ValidationErrorResponse": {
         "description": "One or more error(s) were encountered processing the request.\n\nThis response contains a collection of errors encountered while processing the request.",
         "headers": {},
         "content": {

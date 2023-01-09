@@ -1,12 +1,12 @@
 import {
+  AjvSchemaValidationError,
   ApiError,
   ApiErrors,
   ApplicationError,
   SystemError,
 } from '@dvp/server-common';
 import type { NextFunction, Request, Response } from 'express';
-import { HttpError } from 'express-openapi-validator/dist//framework/types';
-
+import { HttpError } from 'express-openapi-validator/dist/framework/types';
 export const errorHandler = (
   err: Error,
   req: Request,
@@ -20,11 +20,17 @@ export const errorHandler = (
     // this won't be set during tests
     req.logger.debug('[errorHandler] %o', err);
   }
+
   // handle application specific api errors
   if (err instanceof ApplicationError) {
     const error = err.toApiError();
     return res.status(err.httpStatusCode).send(error);
   }
+
+  if (err instanceof AjvSchemaValidationError) {
+    return res.status(err.httpStatusCode).send({ errors: err.errors });
+  }
+
   // handle openapi validation errors
   if (err instanceof HttpError && err.errors) {
     err.errors?.forEach((error) => {

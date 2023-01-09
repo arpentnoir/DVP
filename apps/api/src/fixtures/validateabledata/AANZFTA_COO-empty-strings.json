@@ -1,0 +1,145 @@
+{
+  "schemaType": "AANZFTA_COO",
+  "verifiableCredential":{
+    "credentialSubject": {
+      "iD": "123",
+      "issueDateTime": "2022-11-29T00:00:00+11:00",
+      "firstSignatoryAuthentication": {
+        "signature": "123123123123",
+        "actualDateTime": "2022-11-29T00:00:00+11:00"
+      },
+      "secondSignatoryAuthentication": {
+        "signature": "123123123123",
+        "actualDateTime": "2022-11-29T00:00:00+11:00"
+      },
+      "isPreferential": false,
+      "supplyChainConsignment": {
+        "iD": "1221",
+        "information": "",
+        "exportCountry": {
+          "name": "Australia"
+        },
+        "consignor": {
+          "iD": "123",
+          "name": "Bobs bobs",
+          "postalAddress": {
+            "line1": "222 address",
+            "cityName": "canberra",
+            "postcode": "2615",
+            "countrySubDivisionName": "ACT",
+            "countryCode": "AUD"
+          }
+        },
+        "importCountry": {
+          "name": "Singapore"
+        },
+        "consignee": {
+          "iD": "123321",
+          "name": "Singapore bobs",
+          "postalAddress": {
+            "line1": "222 address",
+            "cityName": "singapore",
+            "postcode": "3112",
+            "countryCode": "SNG"
+          }
+        },
+        "loadingBaseportLocation": {
+          "iD": "31213",
+          "name": "Bobs bobs"
+        },
+        "mainCarriageTransportMovement": {
+          "iD": "123321",
+          "information": "discriptions",
+          "usedTransportMeans": {
+            "iD": "312123",
+            "name": "asdndna"
+          },
+          "departureEvent": {
+            "departureDateTime": "2022-11-29T00:00:00+11:00"
+          },
+          "unloadingBaseportLocation": {
+            "iD": "",
+            "name": "andaisd"
+          }
+        },
+        "includedConsignmentItems": [
+          {
+            "iD": "knkn",
+            "information": "asv",
+            "crossBorderRegulatoryProcedure": {
+              "originCriteriaText": "bjbjb"
+            },
+            "manufacturer": {
+              "iD": "98765",
+              "name": "bob mango",
+              "postalAddress": {
+                "line1": "222 address",
+                "cityName": "singapore",
+                "postcode": "3112",
+                "countryCode": "SNG"
+              }
+            },
+            "tradeLineItems": [
+              {
+                "sequenceNumber": 987,
+                "invoiceReference": {
+                  "iD": "123321",
+                  "issueDateTime": "2022-11-29T00:00:00+11:00",
+                  "attachedBinaryFile": {
+                    "uRI": "wwwwwwww"
+                  }
+                },
+                "tradeProduct": {
+                  "iD": "98765",
+                  "description": "987654",
+                  "harmonisedTariffCode": {
+                    "classCode": "88",
+                    "className": "wo"
+                  },
+                  "originCountry": {
+                    "code": "aud"
+                  }
+                },
+                "transportPackages": [
+                  {
+                    "iD": "0987",
+                    "grossVolume": "",
+                    "grossWeight": "99kg"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    },
+    "@context":[],
+    "type": [],
+    "issuanceDate": "",
+    "issuer":{
+      "id": "https://example.com",
+      "type": "OpenAttestationIssuer",
+      "name": "DEMO"
+    },
+    "openAttestationMetadata": {
+        "template": {
+          "name": "not real data",
+          "type": "not real data",
+          "url": "https://localhost:3000/renderer"
+        },
+        "proof": {
+          "type": "not real data",
+          "method": "not real data",
+          "value": "not real data",
+          "revocation": {
+            "type": "not real data"
+          }
+        },
+        "identityProof": {
+          "type": "DID",
+          "identifier": "not data"
+        }
+      }
+
+}
+}

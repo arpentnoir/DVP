@@ -1,0 +1,42 @@
+{
+  "schemaType": "GENERIC",
+  "verifiableCredential":{
+    "credentialSubject": {
+      "iD": "Example Id",
+      "freeTradeAgreement": "AANZFTA",
+      "importingJurisdiction": "Australia",
+      "exporterOrManufacturerAbn": "1234556789",
+      "importerName": "Bobs mango factory",
+      "consignmentReferenceNumber": "987654567",
+      "originalDocument": "asdasdasd",
+      "documentDeclaration": true
+    },"@context":[],
+    "type": [],
+    "issuanceDate": "",
+    "issuer": {
+      "id": "https://example.com",
+      "type": "OpenAttestationIssuer",
+      "name": "DEMO"
+    },
+    "openAttestationMetadata": {
+        "template": {
+          "name": "not real data",
+          "type": "not real data",
+          "url": "https://localhost:3000/renderer"
+        },
+        "proof": {
+          "type": "not real data",
+          "method": "not real data",
+          "value": "not real data",
+          "revocation": {
+            "type": "not real data"
+          }
+        },
+        "identityProof": {
+          "type": "DID",
+          "identifier": "not data"
+        }
+      }
+   }
+}
+
