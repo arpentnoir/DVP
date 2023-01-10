@@ -65,6 +65,31 @@ exports[`BaseApp should render correctly 1`] = `
               tabindex="0"
             />
           </div>
+          <div
+            class="MuiBox-root css-lt80mk"
+          >
+            <button
+              class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-128y893-MuiButtonBase-root-MuiButton-root"
+              data-testid="button:Logout"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="css-doi3ij-MuiStack-root"
+              >
+                <p
+                  class="MuiTypography-root MuiTypography-body2 css-11vy9io-MuiTypography-root"
+                  data-testid="button:Logout:label"
+                  tabindex="0"
+                >
+                  Logout
+                </p>
+              </div>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+          </div>
         </div>
       </header>
       <div

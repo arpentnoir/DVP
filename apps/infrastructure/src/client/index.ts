@@ -41,6 +41,7 @@ pulumi
         authRegion: process.env.AWS_REGION,
         vcContextEndpoint: process.env.VC_CONTEXT_ENDPOINT,
         vcRendererEndpoint: process.env.VC_RENDERER_ENDPOINT,
+        disableSignup: false,
       });
 
       // DVP Internet Client App
@@ -86,6 +87,7 @@ pulumi
         authRegion: process.env.AWS_REGION,
         vcContextEndpoint: process.env.VC_CONTEXT_ENDPOINT,
         vcRendererEndpoint: process.env.VC_RENDERER_ENDPOINT,
+        disableSignup: true,
       });
 
       // DVP Internal Client App

@@ -1,8 +1,12 @@
+import { withAuthenticator } from '@aws-amplify/ui-react';
+import '@aws-amplify/ui-react/styles.css';
 import { CssBaseline, Stack, ThemeProvider } from '@mui/material';
+import { Amplify } from 'aws-amplify';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AppError, Footer, NavBar, NotFoundError } from '../../components';
+import { getAwsCognitoConfig, getEnvConfig } from '../../config';
 import {
   CreateFormPage,
   Documents,
@@ -18,11 +22,15 @@ import {
 } from '../../pages';
 import { theme } from '../../theme';
 
+const envConfig = getEnvConfig();
+
+Amplify.configure(getAwsCognitoConfig());
+
 interface IBaseApp {
   children?: React.ReactNode;
 }
 
-export const BaseApp: React.FC<IBaseApp> = ({ children }) => {
+export const BaseAppWithoutAuth: React.FC<IBaseApp> = ({ children }) => {
   return (
     <React.Fragment>
       <CssBaseline />
@@ -67,3 +75,8 @@ export const BaseApp: React.FC<IBaseApp> = ({ children }) => {
     </React.Fragment>
   );
 };
+
+export const BaseApp = withAuthenticator(BaseAppWithoutAuth, {
+  socialProviders: ['google'],
+  hideSignUp: envConfig.DISABLE_SIGNUP,
+});

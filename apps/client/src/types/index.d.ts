@@ -7,6 +7,7 @@ export interface AppConfig {
   AUTH_CLIENT: string;
   AUTH_USER_POOL: string;
   AUTH_OAUTH_SCOPE: string;
+  DISABLE_SIGNUP: boolean;
 
   // API Settings
   API_URL: string;

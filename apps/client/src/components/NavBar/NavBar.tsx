@@ -1,5 +1,7 @@
+import { Button } from '@dvp/vc-ui';
 import { AppBar, Box, Stack } from '@mui/material';
 import useTheme from '@mui/material/styles/useTheme';
+import { Auth } from 'aws-amplify';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { LOGO_ALT_TEXT, ROUTES } from '../../constants';
@@ -13,6 +15,13 @@ export const NavBar = () => {
 
   const menuBarRef = React.createRef<HTMLButtonElement>();
 
+  const signOut = (event: React.MouseEvent) => {
+    event.preventDefault();
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    setTimeout(async () => {
+      await Auth.signOut();
+    });
+  };
   return (
     <AppBar
       elevation={0}
@@ -61,6 +70,20 @@ export const NavBar = () => {
             onClick={() => navigate(ROUTES.HOME)}
           />
         </Stack>
+        <Box
+          sx={{
+            backgroundColor: theme.palette.common.backgroundDark,
+            height: '100%',
+            display: 'flex',
+          }}
+        >
+          <Button
+            sx={{ color: 'white' }}
+            variant="text"
+            label={'Logout'}
+            onClick={signOut}
+          />
+        </Box>
       </Stack>
     </AppBar>
   );

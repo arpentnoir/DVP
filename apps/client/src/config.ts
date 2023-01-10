@@ -1,4 +1,4 @@
-function getEnvConfig() {
+export function getEnvConfig() {
   if (!window._env_) {
     throw new Error('Unable to find environment config');
   }
@@ -21,8 +21,8 @@ export const getAwsCognitoConfig = () => {
       oauth: {
         domain: config.AUTH_DOMAIN,
         scope: config.AUTH_OAUTH_SCOPE.split(' '),
-        redirectSignIn: `${config.SITE_URL}/`,
-        redirectSignOut: `${config.SITE_URL}/logout`,
+        redirectSignIn: config.SITE_URL,
+        redirectSignOut: config.SITE_URL,
         responseType: 'code',
       },
     },

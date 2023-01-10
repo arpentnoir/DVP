@@ -14,6 +14,7 @@ export const {
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   region: process.env.AWS_REGION,
   website: process.env.DVP_INTERNAL_DOMAIN,
+  allowAdminCreateUserOnly: true,
 });
 
 export const {
@@ -30,4 +31,5 @@ export const {
   googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   region: process.env.AWS_REGION,
   website: process.env.DVP_DOMAIN,
+  allowAdminCreateUserOnly: false,
 });

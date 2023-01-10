@@ -2,8 +2,10 @@ import '@testing-library/jest-dom';
 import axios from 'axios';
 import { server } from './src/mocks/server';
 
-// Establish API mocking before all tests.
 beforeAll(() => {
+  global.window.URL.createObjectURL = jest.fn();
+
+  // Establish API mocking before all tests.
   axios.defaults.baseURL = 'http://localhost:4200/api';
   server.listen();
 });

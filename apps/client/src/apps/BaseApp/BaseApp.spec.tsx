@@ -1,8 +1,8 @@
 import { getByText, render } from '@testing-library/react';
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { BaseApp } from './BaseApp';
 import * as pages from '../../pages';
+import { BaseAppWithoutAuth as BaseApp } from './BaseApp';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-return
 jest.mock('../../pages', () => ({

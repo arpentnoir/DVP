@@ -8,6 +8,7 @@ export interface CognitoAuthArgs {
   googleClientId: string;
   googleClientSecret: string;
   region: string;
+  allowAdminCreateUserOnly: boolean;
 }
 
 export class CognitoAuth extends pulumi.ComponentResource {
@@ -32,6 +33,9 @@ export class CognitoAuth extends pulumi.ComponentResource {
 
     this.userPool = new aws.cognito.UserPool(`${name}-user-pool`, {
       autoVerifiedAttributes: ['email'],
+      adminCreateUserConfig: {
+        allowAdminCreateUserOnly: args.allowAdminCreateUserOnly,
+      },
     });
 
     this.userPoolDomain = new aws.cognito.UserPoolDomain(
@@ -49,9 +53,18 @@ export class CognitoAuth extends pulumi.ComponentResource {
         generateSecret: false,
         explicitAuthFlows: ['ADMIN_NO_SRP_AUTH'],
         supportedIdentityProviders: ['Google', 'COGNITO'],
-        allowedOauthFlows: ['implicit'],
-        callbackUrls: ['http://localhost:3000', `https://${args.website}`],
-        allowedOauthScopes: ['email', 'openid'],
+        allowedOauthFlows: ['code'],
+        logoutUrls: [
+          'http://localhost:4200',
+          'http://localhost:3000',
+          `https://${args.website}`,
+        ],
+        callbackUrls: [
+          'http://localhost:3000',
+          'http://localhost:4200',
+          `https://${args.website}`,
+        ],
+        allowedOauthScopes: ['email', 'openid', 'phone', 'profile'],
         allowedOauthFlowsUserPoolClient: true,
       }
     );
@@ -83,11 +96,12 @@ export const setupCognitoAuth = (name: string, config: CognitoAuthArgs) => {
     googleClientSecret: config.googleClientSecret,
     region: config.region,
     website: config.website,
+    allowAdminCreateUserOnly: config.allowAdminCreateUserOnly,
   });
 
   // User Pool
 
-  const userPoolDomainUrl = pulumi.interpolate`https://${cognitoAuth.userPoolDomain.domain}.auth.${config.region}.amazoncognito.com/oauth2/authorize`;
+  const userPoolDomainUrl = pulumi.interpolate`${cognitoAuth.userPoolDomain.domain}.auth.${config.region}.amazoncognito.com`;
   const userPoolId = pulumi.interpolate`${cognitoAuth.userPool.id}`;
   const userPoolClientId = pulumi.interpolate`${cognitoAuth.userPoolClient.id}`;
   const jwksUri = pulumi.interpolate`https://cognito-idp.${config.region}.amazonaws.com/${userPoolId}/.well-known/jwks.json`;

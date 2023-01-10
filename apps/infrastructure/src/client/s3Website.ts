@@ -27,6 +27,7 @@ export interface AppConfig {
   authClient: string;
   authUserPool: string;
   authOauthScope: string;
+  disableSignup: boolean;
 }
 
 export const injectConfigFile = (pathToArtifact: string, config: AppConfig) => {
@@ -48,6 +49,7 @@ export const injectConfigFile = (pathToArtifact: string, config: AppConfig) => {
     AUTH_CLIENT: config.authClient,
     AUTH_USER_POOL: config.authUserPool,
     AUTH_OAUTH_SCOPE: config.authOauthScope,
+    DISABLE_SIGNUP: config.disableSignup,
 
     VC_CONTEXT_ENDPOINT: config.vcContextEndpoint,
     VC_RENDERER_ENDPOINT: config.vcRendererEndpoint,
