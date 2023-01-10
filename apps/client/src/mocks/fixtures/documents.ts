@@ -78,3 +78,207 @@ export const CHAFTA_COO = {
       '0x1098f92c7d320a4c33e86417cb8a99b2beb6a2f965e7d944748d94f5c8263f3616b25e40c99f0016664807c52af24ca84853c0b7d25c87aeddc39ad0a7670f381b',
   },
 };
+
+export const SVIP_CHAFTA_COO = {
+  version: 'https://schema.openattestation.com/3.0/schema.json',
+  '@context': [
+    'https://www.w3.org/2018/credentials/v1',
+    'https://dev-dvp-context.s3.ap-southeast-2.amazonaws.com/AANZFTA-CoO.json',
+  ],
+  type: ['VerifiableCredential'],
+  issuanceDate: '2010-01-01T19:23:24Z',
+  issuer: {
+    id: 'did:key:z6MkvsJoJF1ucfDbqVsbmTnxypFYCLAKZSuCMjPv4a3yLG3u',
+  },
+  credentialSubject: {
+    isPreferential: true,
+    firstSignatoryAuthentication: {
+      signature: 'asd',
+      actualDateTime: '2022-11-07T19:20:00.000Z',
+    },
+    secondSignatoryAuthentication: {
+      signature: 'asd',
+      actualDateTime: '2022-11-07T18:51:00.000Z',
+    },
+    supplyChainConsignment: {
+      exportCountry: {
+        name: 'Australia',
+      },
+      consignor: {
+        postalAddress: {
+          line1: '161 Collins Street',
+          line2: '',
+          cityName: 'Melbourne',
+          postcode: '3000',
+          countrySubDivisionName: 'VIC',
+          countryCode: 'AU',
+        },
+        iD: 'abr.gov.au:abn:55004094599',
+        name: 'TREASURY WINE ESTATES VINTNERS LIMITED',
+      },
+      importCountry: {
+        name: 'Singapore',
+      },
+      consignee: {
+        postalAddress: {
+          line1: '9 Raffles Place, Republic Plaza',
+          line2: '',
+          cityName: 'Singapore',
+          postcode: '048619',
+          countryCode: 'SG',
+          countrySubDivisionName: '',
+        },
+        iD: 'emw-wines.com',
+        name: 'East meets west fine wines',
+      },
+      includedConsignmentItems: [
+        {
+          crossBorderRegulatoryProcedure: {
+            originCriteriaText: 'WP',
+          },
+          manufacturer: {
+            postalAddress: {
+              line1: 'Penfolds vineyard',
+              line2: '',
+              cityName: 'Bordertown',
+              postcode: '5268',
+              countrySubDivisionName: 'SA',
+              countryCode: 'AU',
+            },
+            iD: 'penfolds.com',
+            name: 'Penfolds wine',
+          },
+          tradeLineItems: [
+            {
+              invoiceReference: {
+                attachedBinaryFile: {
+                  uRI: 'https://docs.tweglobal.com/8c624a35-9497-41fb-a548-cb5cf43bac21.pdf',
+                },
+                iD: 'tweglobal.com:invoice:1122345',
+                issueDateTime: '2022-06-02T14:30:00Z',
+              },
+              tradeProduct: {
+                harmonisedTariffCode: {
+                  classCode: '2204.21',
+                  className: 'Wine of fresh grapes, including fortified wines',
+                },
+                originCountry: {
+                  code: 'AU',
+                },
+                iD: 'gs1.org:gtin:9325814006194',
+                description: 'Bin 23 Pinot Noir 2018',
+              },
+              transportPackages: [
+                {
+                  iD: 'gs1.org:sscc:59312345670002345',
+                  grossVolume: '0.55 m3',
+                  grossWeight: '450 Kg',
+                },
+                {
+                  iD: 'gs1.org:sscc:59312345670002346',
+                  grossVolume: '0.55 m3',
+                  grossWeight: '450 Kg',
+                },
+              ],
+              sequenceNumber: 1,
+            },
+          ],
+          iD: 'penfolds.com:shipment:4738291',
+          information:
+            '2 pallets (80 cases) Bin23 Pinot and 2 pallets (80 cases) Bin 28 Shiraz',
+        },
+        {
+          crossBorderRegulatoryProcedure: {
+            originCriteriaText: 'PSR',
+          },
+          manufacturer: {
+            postalAddress: {
+              line1: '44 Johns way',
+              line2: '',
+              cityName: 'Red Cliffs',
+              postcode: '3496',
+              countrySubDivisionName: 'VIC',
+              countryCode: 'AU',
+            },
+            iD: 'lindemans.com',
+            name: 'Lindemans wine',
+          },
+          tradeLineItems: [
+            {
+              invoiceReference: {
+                attachedBinaryFile: {
+                  uRI: 'https://docs.tweglobal.com/03e3754c-906d-4f6d-a592-67447c9119e9.pdf',
+                },
+                iD: 'tweglobal.com:invoice:8877654',
+                issueDateTime: '2022-06-05T11:30:00Z',
+              },
+              tradeProduct: {
+                harmonisedTariffCode: {
+                  classCode: '2204.21',
+                  className: 'Wine of fresh grapes, including fortified wines',
+                },
+                originCountry: {
+                  code: 'AU',
+                },
+                iD: 'gs1.org:gtin:4088700053621',
+                description:
+                  'Coonawarra Trio Limestone Ridge Shiraz Cabernet 2013',
+              },
+              transportPackages: [
+                {
+                  iD: 'gs1.org:sscc:59312345670002673',
+                  grossVolume: '0.58 m3',
+                  grossWeight: '465 Kg',
+                },
+                {
+                  iD: 'gs1.org:sscc:59312345670002674',
+                  grossVolume: '0.58 m3',
+                  grossWeight: '465 Kg',
+                },
+              ],
+              sequenceNumber: 2,
+            },
+          ],
+          iD: 'lindemans.com:shipment:228764',
+          information: '2 pallets (80 cases) Limestone Ridge Shiraz red wine',
+        },
+      ],
+      loadingBaseportLocation: {
+        iD: 'unece.un.org:locode:AUMEL',
+        name: 'Melbourne',
+      },
+      mainCarriageTransportMovement: {
+        usedTransportMeans: {
+          iD: 'id:B-2398',
+          name: 'airbus A350',
+        },
+        departureEvent: {
+          departureDateTime: '2022-11-07T19:06:00.000Z',
+        },
+        iD: 'iata.org:CX104',
+        information: 'Cathay Pacific Flight CX 104 Melbourne to Singapore',
+      },
+      unloadingBaseportLocation: {
+        iD: 'unece.un.org:locode:SIN',
+        name: 'Singapore Changi Airport',
+      },
+      iD: 'dbschenker.com:hawb:DBS626578',
+      information: '6 pallets of fine wine, please store below 20 DegC',
+    },
+    iD: '23343',
+    issueDateTime: '2022-11-07T18:51:00.000Z',
+    links: {
+      self: {
+        href: 'https://web.dev.dvp.ha.showthething.com/verify?q=%7B%22payload%22%3A%7B%22uri%22%3A%22https%3A%2F%2Fapi.dev.dvp.ha.showthething.com%2Fapi%2Fstorage%2Fdocuments%2Fa073cb77-b2dc-4c39-88ac-140ba67b3c24%22%2C%22key%22%3A%226cb83b66265f791e62900cc17bda21f290f8c5a374e641a9db7019fd77053c25%22%7D%7D',
+      },
+    },
+  },
+  proof: {
+    type: 'Ed25519Signature2018',
+    created: '2023-01-10T00:15:49Z',
+    verificationMethod:
+      'did:key:z6MkvsJoJF1ucfDbqVsbmTnxypFYCLAKZSuCMjPv4a3yLG3u#z6MkvsJoJF1ucfDbqVsbmTnxypFYCLAKZSuCMjPv4a3yLG3u',
+    proofPurpose: 'assertionMethod',
+    jws: 'eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..IbXF-WuYrNvM8Wc4pgGq1eDUKLGuzvZs1t2aaKnY14uAGo2blIL8OUb7jCVMNfbGyutLj2hKyzEzCZPDwM-PDA',
+  },
+};

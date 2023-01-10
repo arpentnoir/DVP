@@ -25,19 +25,26 @@ export const GENERIC_SVIP_META_DATA = {
     'https://www.w3.org/2018/credentials/v1',
     `${contextUrl}/AANZFTA-CoO.json`,
     `${contextUrl}/AANZFTA-CoO-Context-Partial.json`,
-    'https://schemata.openattestation.com/com/openattestation/1.0/OpenAttestation.v3.json',
   ],
   type: ['VerifiableCredential'],
+  issuer: {
+    id: 'did:ethr:0x4Bf4190a27A37d1677c8ADE25b53F1e22885531f#controller',
+  },
+};
+
+export const GENERIC_OA_META_DATA = {
+  '@context': [
+    'https://www.w3.org/2018/credentials/v1',
+    `${contextUrl}/AANZFTA-CoO.json`,
+    `${contextUrl}/AANZFTA-CoO-Context-Partial.json`,
+    'https://schemata.openattestation.com/com/openattestation/1.0/OpenAttestation.v3.json',
+  ],
+  type: ['VerifiableCredential', 'OpenAttestationCredential'],
   issuer: {
     id: 'did:ethr:0x4Bf4190a27A37d1677c8ADE25b53F1e22885531f#controller',
     name: 'GoSource Pty Ltd',
     type: 'OpenAttestationIssuer',
   },
-};
-
-export const GENERIC_OA_META_DATA = {
-  ...GENERIC_SVIP_META_DATA,
-  type: ['VerifiableCredential', 'OpenAttestationCredential'],
   openAttestationMetadata: {
     template: {
       type: 'EMBEDDED_RENDERER',

@@ -1,5 +1,4 @@
 import type { ComponentMeta, ComponentStory } from '@storybook/react';
-import { IStatusCheck } from '..';
 import { CHAFTA_COO } from '../fixtures';
 import { VerifyViewer } from './VerifyViewer';
 
@@ -8,24 +7,6 @@ const Story: ComponentMeta<typeof VerifyViewer> = {
   title: 'VerifyViewer',
 };
 export default Story;
-
-const validChecks: IStatusCheck[] = [
-  {
-    type: 'INTEGRITY',
-    text: 'Document has not been tampered with',
-    valid: true,
-  },
-  {
-    type: 'STATUS',
-    text: 'Document has not been revoked',
-    valid: true,
-  },
-  {
-    type: 'ISSUER',
-    text: 'Document issuer has been identified',
-    valid: true,
-  },
-];
 
 const Template: ComponentStory<typeof VerifyViewer> = (args) => (
   <VerifyViewer {...args} />
@@ -36,9 +17,21 @@ export const Primary = Template.bind({});
 Primary.args = {
   document: CHAFTA_COO,
   results: {
+    issuer: { id: 'did:key:123' },
+    checks: ['proof', 'status'],
     errors: [],
-    issuer: { id: '123', name: 'Demo Issuer' },
-    checks: validChecks,
+    warnings: [],
+  },
+};
+
+export const Invalid = Template.bind({});
+
+Invalid.args = {
+  document: CHAFTA_COO,
+  results: {
+    issuer: { id: 'did:key:123' },
+    checks: ['proof'],
+    errors: ['proof'],
     warnings: [],
   },
 };

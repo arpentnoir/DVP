@@ -2,6 +2,7 @@ import {
   CredentialStatus,
   OpenAttestationDocument,
   WrappedDocument,
+  OpenAttestationMetadata,
 } from '@govtechsg/open-attestation/dist/types/3.0/types';
 
 import { VerifiableCredential as ApiVerifiableCredential } from '@dvp/api-client';
@@ -29,6 +30,7 @@ export interface Issuer {
 export interface VerifiableCredential extends ApiVerifiableCredential {
   credentialSubject: CredentialSubject;
   credentialStatus?: CredentialStatus;
+  openAttestationMetadata?: OpenAttestationMetadata;
 }
 
 export interface OAVerifiableCredential

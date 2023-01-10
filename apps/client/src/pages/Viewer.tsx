@@ -1,17 +1,11 @@
-import {
-  IStatusCheck,
-  PdfViewer,
-  VALID_CHECKS,
-  VerifyViewer,
-} from '@dvp/vc-ui';
+import { PdfViewer, VerifyViewer } from '@dvp/vc-ui';
 import { Box } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants';
 import { BaseLayout } from '../layouts';
 
 export const Viewer = () => {
-  const [checks, setChecks] = useState<IStatusCheck[]>([]);
   const location = useLocation();
   const navigate = useNavigate();
   const { state } = location;
@@ -20,10 +14,6 @@ export const Viewer = () => {
     // Redirect to home page if state is not available
     if (!state) {
       navigate(ROUTES.HOME);
-    } else {
-      if (!state.results.errors.length) {
-        setChecks(VALID_CHECKS);
-      }
     }
   }, []);
 
@@ -36,7 +26,7 @@ export const Viewer = () => {
           <>
             <VerifyViewer
               document={state.document}
-              results={{ ...state.results, checks }}
+              results={{ ...state.results }}
               hideVerifyResults={state.hideVerifyResults}
             />
           </>

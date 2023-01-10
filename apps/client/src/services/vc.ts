@@ -1,14 +1,15 @@
 import { VerifiableCredential, VerificationResult } from '@dvp/api-interfaces';
+import { isOpenAttestationType } from '@dvp/vc-ui';
 import axios, { AxiosError } from 'axios';
 import { API_ENDPOINTS } from '../constants';
 
-export const _getIssuer = (document: VerifiableCredential) =>
-  typeof document?.issuer !== 'string'
-    ? {
-        id: document?.issuer?.id ?? '',
-        name: document?.issuer?.name ?? '',
-      }
-    : '';
+export const _getIssuer = (document: VerifiableCredential) => ({
+  id: isOpenAttestationType(document)
+    ? document.openAttestationMetadata?.identityProof.identifier
+    : typeof document.issuer === 'object'
+    ? document.issuer.id
+    : document.issuer,
+});
 
 // TODO: Refactor and write tests once verify endpoint response format is confirmed
 export const verify = async (document: VerifiableCredential) => {
