@@ -85,10 +85,6 @@ stages:
 
           - script: npx nx run-many --target=build --parallel=3
             displayName: 'Run build'
-            env:
-              NX_API_URL: https://api.${{ variables.TARGET_ENV }}.$(TARGET_DOMAIN)/api
-              VC_CONTEXT_ENDPOINT: https://dev-dvp-context.s3.ap-southeast-2.amazonaws.com
-              VC_RENDERER_ENDPOINT: https://dev.renderer.dvp.ha.showthething.com
 
           - task: PublishPipelineArtifact@1
             condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
@@ -98,8 +94,6 @@ stages:
 
           - script: npx nx build client --configuration=production-internal --skip-nx-cache
             displayName: 'Run build internal client app'
-            env:
-              NX_API_URL: https://api.${{ variables.TARGET_ENV }}.$(TARGET_DOMAIN)/api
 
           - task: PublishPipelineArtifact@1
             condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))

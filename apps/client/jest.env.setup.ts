@@ -11,6 +11,6 @@ global.window['_env_'] = {
   AUTH_OAUTH_SCOPE: 'email',
   VC_CONTEXT_ENDPOINT:
     'https://dev-dvp-context.s3.ap-southeast-2.amazonaws.com',
-  VC_RENDERER_ENDPOINT: 'https://dev.renderer.dvp.ha.showthething.com',
+  VC_RENDERER_ENDPOINT: 'https://renderer.dev.dvp.ha.showthething.com',
   DISABLE_SIGNUP: false,
 };
