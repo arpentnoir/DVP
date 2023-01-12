@@ -4,7 +4,7 @@ import {
   invalidUrlQRParams,
   validQRParams,
 } from '../mocks/fixtures/responses';
-import { fetchAndDecryptVC } from './storage';
+import { fetchAndDecryptVC } from './storage.service';
 
 describe('fetchAndDecryptVC', () => {
   it('should fetch and decrypt VC successfully', async () => {

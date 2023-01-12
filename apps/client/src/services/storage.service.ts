@@ -1,10 +1,11 @@
 import { EncryptedDocument, VerifiableCredential } from '@dvp/api-interfaces';
 import { decryptString } from '@govtechsg/oa-encryption';
-import axios from 'axios';
+import { axiosInstance } from './api.service';
+
 import { FAIL_VC_FETCH_DECRYPT_ERR_MSG } from '../constants';
 
 export const getVC = async (storageUrl: string) => {
-  return axios.get<{ document: EncryptedDocument }>(storageUrl);
+  return axiosInstance.get<{ document: EncryptedDocument }>(storageUrl);
 };
 
 /**

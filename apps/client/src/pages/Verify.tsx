@@ -8,8 +8,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants';
 import { BaseLayout } from '../layouts';
-import { fetchAndDecryptVC } from '../services/storage';
-import { verify } from '../services/vc';
+import { fetchAndDecryptVC, verify } from '../services';
 
 const ACCEPT_MESSAGE = 'Only JSON files with max size of 3 MB';
 const MAX_FILE_SIZE = 3 * 1000 * 1000; // 3 Megabytes

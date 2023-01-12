@@ -1,10 +1,11 @@
+import { CredentialSubject } from '@dvp/api-interfaces';
 import { GenericJsonForm } from '@dvp/vc-ui';
 import { Paper } from '@mui/material';
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 import { BaseLayout } from '../../layouts';
-import { IssueVC } from '../../services/issueVC';
+import { issue } from '../../services';
 
 export interface CreateFormPageProps {
   readonly title: string;
@@ -27,11 +28,11 @@ export const CreateFormPage = ({ title, subTitle }: CreateFormPageProps) => {
 
   const submitForm = (formValues: any) => {
     setSubmitting(true);
-    const credentialSubject = {
+    const credentialSubject: CredentialSubject = {
       ...formValues,
     };
 
-    IssueVC(credentialSubject, state?.credentialType as string)
+    issue(credentialSubject, state?.credentialType as string)
       .then((response) => {
         setServerError(undefined);
         navigate(ROUTES.VIEWER, {

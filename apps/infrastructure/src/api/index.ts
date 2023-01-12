@@ -2,7 +2,7 @@
 import * as aws from '@pulumi/aws';
 import * as awsx from '@pulumi/awsx';
 import * as pulumi from '@pulumi/pulumi';
-import { kms } from '../common';
+import { auth, kms } from '../common';
 
 import * as documentDB from '../common/documentDb';
 import * as vpc from '../common/vpc';
@@ -126,20 +126,34 @@ const lambdaApiHandler = new aws.lambda.Function(`${stack}-api-handler`, {
 
 ////////////////////////////////////////////////////////////////////////////////
 // ApiGateway for api
+
+const authorizer = awsx.apigateway.getCognitoAuthorizer({
+  authorizerName: `${stack}-api-cognito-authorizer`,
+  providerARNs: [auth.dvpInternetUserPool, auth.dvpInternalUserPool],
+  authorizerResultTtlInSeconds: 0,
+});
+const routes: awsx.apigateway.Route[] = [
+  'GET',
+  'POST',
+  'PUT',
+  'PATCH',
+  'DELETE',
+  'OPTIONS',
+].map((method) => ({
+  path: '/{proxy+}',
+  method: method as awsx.apigateway.Method,
+  eventHandler: lambdaApiHandler,
+  authorizers: method !== 'OPTIONS' ? [authorizer] : [],
+}));
+
 const apiGateway = new awsx.apigateway.API(`${stack}-api`, {
+  routes,
+  stageName: `${stack}-api`,
   restApiArgs: {
     endpointConfiguration: {
       types: 'EDGE',
     },
   },
-  routes: [
-    {
-      path: '/{proxy+}',
-      method: 'ANY',
-      eventHandler: lambdaApiHandler,
-    },
-  ],
-  stageName: `${stack}-api`,
   stageArgs: {
     xrayTracingEnabled: true,
     accessLogSettings: {
@@ -157,6 +171,20 @@ const apiGateway = new awsx.apigateway.API(`${stack}-api`, {
       }),
     },
   },
+});
+
+new aws.apigateway.RestApiPolicy(`${stack}-api-authorizers-policy`, {
+  restApiId: apiGateway.restAPI.id,
+  policy: pulumi.interpolate`{
+    "Effect": "Allow",
+    "Action": ["apigateway:*"],
+    "Resource": "${apiGateway.restAPI.executionArn}/authorizers",
+    "Condition": {
+      "ArnLike": {
+        "apigateway:CognitoUserPoolProviderArn": ["${auth.dvpInternalUserPool.arn}","${auth.dvpInternetUserPool.arn}"]
+      }
+    }
+  }`,
 });
 
 new aws.apigateway.MethodSettings('all', {

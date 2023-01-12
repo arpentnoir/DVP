@@ -37,7 +37,7 @@ pulumi
         authUserPool: dvpInternetUserPoolId,
         authClient: dvpInternetUserPoolClientId,
         authDomain: dvpInternetUserPoolDomainUrl,
-        authOauthScope: 'email openid',
+        authOauthScope: 'email openid profile',
         authRegion: process.env.AWS_REGION,
         vcContextEndpoint: process.env.VC_CONTEXT_ENDPOINT,
         vcRendererEndpoint: process.env.VC_RENDERER_ENDPOINT,

@@ -1,11 +1,7 @@
-import axios from 'axios';
 import { StrictMode } from 'react';
 import * as ReactDOM from 'react-dom/client';
 import './app.css';
 import { InternetApp } from './apps';
-import { getApiBaseUrl } from './config';
-
-axios.defaults.baseURL = getApiBaseUrl();
 
 // Start the mocking conditionally.
 if (

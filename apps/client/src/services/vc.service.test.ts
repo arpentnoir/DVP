@@ -1,6 +1,6 @@
 import { VerifiableCredential } from '@dvp/api-interfaces';
 import { CHAFTA_COO, SVIP_CHAFTA_COO } from '../mocks/fixtures/documents';
-import { _getIssuer } from './vc';
+import { _getIssuer } from './vc.service';
 
 describe('_getIssuer', () => {
   describe('OA', () => {
