@@ -55,10 +55,10 @@ stages:
           - script: npx nx workspace-lint
             displayName: 'Run nx workspace linting'
 
-          - script: npx nx run-many --target=lint --parallel=3
+          - script: npx nx run-many --target=lint --parallel=2
             displayName: 'Run linting'
 
-          - script: npx nx run-many --target=test --skip-nx-cache --parallel=3 --coverage --reporters=default --reporters=jest-junit --coverageReporters=cobertura
+          - script: npx nx run-many --target=test --skip-nx-cache --parallel=2 --coverage --reporters=default --reporters=jest-junit --coverageReporters=cobertura
             displayName: 'Run tests'
 
           - task: PublishTestResults@2
@@ -83,7 +83,7 @@ stages:
               failTaskOnFailedTests: true
             displayName: Publish code coverage results to AzDo
 
-          - script: npx nx run-many --target=build --parallel=3
+          - script: npx nx run-many --target=build --parallel=2
             displayName: 'Run build'
 
           - task: PublishPipelineArtifact@1
