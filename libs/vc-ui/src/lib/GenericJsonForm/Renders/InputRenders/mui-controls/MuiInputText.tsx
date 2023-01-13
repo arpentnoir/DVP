@@ -48,7 +48,7 @@ export const MuiInputText = React.memo(
     }
 
     inputProps = merge(inputProps, muiInputProps, {
-      'data-testid': 'test-input',
+      'data-testid': `test-input:${props['label']}`,
     });
 
     if (appliedUiSchemaOptions.trim && maxLength !== undefined) {

@@ -20,7 +20,7 @@ describe('AbnWidgetContol', () => {
       <AbnWidgetControl handleChange={mockCallback} {...sampleProps} />
     );
 
-    expect(queryByTestId('test-input')).toBeTruthy();
+    expect(queryByTestId('test-input:sample')).toBeTruthy();
   });
 
   it('should update the value and call the callback function when a user types', async () => {
@@ -29,7 +29,7 @@ describe('AbnWidgetContol', () => {
       <AbnWidgetControl handleChange={mockCallback} {...sampleProps} />
     );
 
-    const textBox = queryByTestId('test-input') as HTMLInputElement;
+    const textBox = queryByTestId('test-input:sample') as HTMLInputElement;
     fireEvent.change(textBox, { target: { value: 'test123' } });
 
     await waitFor(() => {

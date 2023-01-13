@@ -43,6 +43,16 @@ export const testRootSchemaRequired = {
   },
   required: ['sample'],
 };
+export const testSchemaRestrictedLength = {
+  type: 'object',
+  properties: {
+    sample: {
+      type: 'string',
+      title: 'sample',
+      maxLength: 5,
+    },
+  },
+};
 
 export const samplePropsInputFields = {
   uischema: testUISchema,
@@ -72,6 +82,31 @@ export const samplePropsInputFieldsRequired = {
   ...samplePropsInputFields,
   required: true,
   errors: 'required',
+};
+
+export const samplePropsInputFieldsRestrictedLength = {
+  uischema: testUISchema,
+  schema: {
+    type: 'string',
+    title: 'sample',
+    maxLength: 5,
+  },
+  path: 'sample',
+  data: '',
+  enabled: true,
+  id: '#/properties/sample',
+  errors: '',
+  label: 'sample',
+  visible: true,
+  required: false,
+  isValid: true,
+  config: {
+    restrict: true,
+    trim: true,
+    showUnfocusedDescription: false,
+    hideRequiredAsterisk: false,
+  },
+  rootSchema: testSchemaRestrictedLength,
 };
 
 export const initCore = (required = false, data?: any) => {
