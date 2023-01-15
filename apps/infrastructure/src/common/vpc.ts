@@ -1,14 +1,14 @@
-import * as pulumi from "@pulumi/pulumi";
-import { Components } from "gs-pulumi-library";
+import * as pulumi from '@pulumi/pulumi';
+import { Components } from 'gs-pulumi-library';
 
-import { auditLogBucket } from "../common/auditLogBucket";
+import { auditLogBucket } from '../common/auditLogBucket';
 
 const stack = pulumi.getStack();
 
 //
 // Create `dvpVpc` and S3 Bucket for VPC Flowlogs
 const flowlogBucket = new Components.aws.S3Bucket(`${stack}-dvp-vpc-flowlogs`, {
-  description: "S3 Bucket for `dvpWebsite` static website contents.",
+  description: 'S3 Bucket for `dvpWebsite` static website contents.',
   bucketName: `${stack}-dvp-vpc-flowlogs`,
   logBucket: auditLogBucket.bucket,
   logBucketPrefix: `s3/dvp-vpc-flowlogs/`,
@@ -17,7 +17,7 @@ const flowlogBucket = new Components.aws.S3Bucket(`${stack}-dvp-vpc-flowlogs`, {
 
 const dvpVpc = new Components.aws.Vpc(`${stack}-dvp-vpc`, {
   vpcName: `${stack}-dvp-vpc`,
-  description: "VPC for the dvp W3C API / UI",
+  description: 'VPC for the dvp W3C API / UI',
   flowlogBucket: flowlogBucket.bucket,
 });
 

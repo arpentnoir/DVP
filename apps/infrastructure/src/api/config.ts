@@ -18,7 +18,6 @@ export const config = {
   dvpApiDomain: process.env.DVP_API_DOMAIN,
   apiUrl: `https://${process.env.DVP_API_DOMAIN}/api`,
   clientUrl: `https://${process.env.DVP_DOMAIN}`,
-  databaseCollectionName: process.env.CONFIGFILE_DATABASE_COLLECTION_NAME,
   databaseServerSelectionTimeout: process.env.DATABASE_SERVER_SELECTION_TIMEOUT,
   databaseOptions: {
     tls: 'true',

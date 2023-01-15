@@ -3,8 +3,8 @@ import * as aws from '@pulumi/aws';
 import * as awsx from '@pulumi/awsx';
 import * as pulumi from '@pulumi/pulumi';
 import { auth, kms } from '../common';
+import { dynamodbDocumentsTable } from '../common/dynamodb';
 
-import * as documentDB from '../common/documentDb';
 import * as vpc from '../common/vpc';
 import { config } from './config';
 import { bucketPolicy } from './policies/s3Policies';
@@ -35,30 +35,12 @@ new aws.s3.BucketPolicy('documentStoreBucketPolicy', {
 ////////////////////////////////////////////////////////////////////////////////
 // Enviroment variables for Lambda functions
 
-const databaseUrl = pulumi
-  .all([
-    documentDB.schemaRegistryDocumentDbMasterPassword.result,
-    documentDB.schemaRegistryDocumentDbCluster.masterUsername,
-    documentDB.schemaRegistryDocumentDbCluster.endpoint,
-    documentDB.schemaRegistryDocumentDbCluster.port,
-  ])
-  .apply(([password, username, endpoint, port]) => {
-    const urlParams = new URLSearchParams(config.databaseOptions).toString();
-    return `mongodb://${username}:${encodeURIComponent(
-      password
-    )}@${endpoint}:${port}/?${urlParams}`;
-  });
-
 const enviromentVariables = {
   variables: {
     DOCUMENT_STORAGE_BUCKET_NAME: documentStoreBucket.bucket,
-    S3_REGION: documentStoreBucket.region,
-    DATABASE_URL: databaseUrl,
-    CONFIGFILE_DATABASE_COLLECTION_NAME: config.databaseCollectionName,
-    DATABASE_SERVER_SELECTION_TIMEOUT: config.databaseServerSelectionTimeout,
-    KMS_MASTER_KEY_ID: kms.kmsCmkAlias.targetKeyArn,
     API_URL: config.apiUrl,
     CLIENT_URL: config.clientUrl,
+    DYNAMODB_DOCUMENTS_TABLE: dynamodbDocumentsTable.name,
   },
 };
 
@@ -73,12 +55,41 @@ new aws.iam.RolePolicyAttachment(
 );
 
 new aws.iam.RolePolicyAttachment(
-  `${stack}-api--handler-lambda-xray-attachment`,
+  `${stack}-api-handler-lambda-xray-attachment`,
   {
     role: lambdaRole.name,
     policyArn: aws.iam.ManagedPolicy.AWSXrayWriteOnlyAccess,
   }
 );
+
+const dynamodbLambdaPolicy = new aws.iam.Policy(
+  `${stack}-dynamodb-Lambda-Policy`,
+  {
+    policy: {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Effect: 'Allow',
+          Action: [
+            'dynamodb:BatchGetItem',
+            'dynamodb:GetItem',
+            'dynamodb:Query',
+            'dynamodb:Scan',
+            'dynamodb:BatchWriteItem',
+            'dynamodb:PutItem',
+            'dynamodb:UpdateItem',
+          ],
+          Resource: dynamodbDocumentsTable.arn,
+        },
+      ],
+    },
+  }
+);
+
+new aws.iam.RolePolicyAttachment(`${stack}-api-handler-lambda-dynamodb`, {
+  role: lambdaRole.name,
+  policyArn: dynamodbLambdaPolicy.arn,
+});
 
 new aws.iam.RolePolicyAttachment(
   `${stack}-api-handler-lambda-vpc-execution-attachment`,
