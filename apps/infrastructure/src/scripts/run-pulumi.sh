@@ -17,9 +17,9 @@ pulumi stack select ${APP_NAME}-${ENV} --create -C ./;
 
 # Run pulumi command
 if [ $1 = "preview" ]; then
-    pulumi preview -s ${APP_NAME}-${ENV} --non-interactive -C ./;
+    pulumi preview -s ${APP_NAME}-${ENV} --policy-pack ./policypack --non-interactive -C ./;
 elif [ $1 = "up" ]; then
-    pulumi up -s ${APP_NAME}-${ENV} --yes --non-interactive -C ./;
+    pulumi up -s ${APP_NAME}-${ENV} --policy-pack ./policypack --yes --non-interactive -C ./;
 elif [ $1 = "destroy" ]; then
     pulumi destroy -s ${APP_NAME}-${ENV} --yes --non-interactive -C ./;
 else
