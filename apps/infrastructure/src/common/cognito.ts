@@ -5,8 +5,6 @@ const stack = pulumi.getStack();
 
 export interface CognitoAuthArgs {
   website: string;
-  googleClientId: string;
-  googleClientSecret: string;
   region: string;
   allowAdminCreateUserOnly: boolean;
 }
@@ -15,7 +13,6 @@ export class CognitoAuth extends pulumi.ComponentResource {
   readonly userPool: aws.cognito.UserPool;
   readonly userPoolDomain: aws.cognito.UserPoolDomain;
   readonly userPoolClient: aws.cognito.UserPoolClient;
-  readonly googleProvider: aws.cognito.IdentityProvider;
 
   /**
    * Creates a new user pool, domain amd identity provider.
@@ -52,7 +49,7 @@ export class CognitoAuth extends pulumi.ComponentResource {
         userPoolId: this.userPool.id.apply((val) => val),
         generateSecret: false,
         explicitAuthFlows: ['ADMIN_NO_SRP_AUTH'],
-        supportedIdentityProviders: ['Google', 'COGNITO'],
+        supportedIdentityProviders: ['COGNITO'],
         allowedOauthFlows: ['code'],
         logoutUrls: [
           'http://localhost:4200',
@@ -68,32 +65,11 @@ export class CognitoAuth extends pulumi.ComponentResource {
         allowedOauthFlowsUserPoolClient: true,
       }
     );
-
-    // Google OAUTH Setup
-    this.googleProvider = new aws.cognito.IdentityProvider(
-      `${name}-google-oauth`,
-      {
-        userPoolId: this.userPool.id.apply((val) => val),
-        providerName: 'Google',
-        providerType: 'Google',
-        providerDetails: {
-          authorize_scopes: 'email',
-          client_id: args.googleClientId,
-          client_secret: args.googleClientSecret,
-        },
-        attributeMapping: {
-          email: 'email',
-          username: 'sub',
-        },
-      }
-    );
   }
 }
 
 export const setupCognitoAuth = (name: string, config: CognitoAuthArgs) => {
   const cognitoAuth = new CognitoAuth(`${stack}-${name}`, {
-    googleClientId: config.googleClientId,
-    googleClientSecret: config.googleClientSecret,
     region: config.region,
     website: config.website,
     allowAdminCreateUserOnly: config.allowAdminCreateUserOnly,

@@ -10,8 +10,6 @@ export const {
   userPoolDomainUrl: dvpInternalUserPoolDomainUrl,
   userPoolId: dvpInternalUserPoolId,
 } = setupCognitoAuth('auth-internal', {
-  googleClientId: process.env.GOOGLE_CLIENT_ID,
-  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   region: process.env.AWS_REGION,
   website: process.env.DVP_INTERNAL_DOMAIN,
   allowAdminCreateUserOnly: true,
@@ -27,8 +25,6 @@ export const {
   userPoolDomainUrl: dvpInternetUserPoolDomainUrl,
   userPoolId: dvpInternetUserPoolId,
 } = setupCognitoAuth('auth-internet', {
-  googleClientId: process.env.GOOGLE_CLIENT_ID,
-  googleClientSecret: process.env.GOOGLE_CLIENT_SECRET,
   region: process.env.AWS_REGION,
   website: process.env.DVP_DOMAIN,
   allowAdminCreateUserOnly: false,

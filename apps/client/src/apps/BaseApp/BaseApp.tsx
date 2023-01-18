@@ -77,6 +77,5 @@ export const BaseAppWithoutAuth: React.FC<IBaseApp> = ({ children }) => {
 };
 
 export const BaseApp = withAuthenticator(BaseAppWithoutAuth, {
-  socialProviders: ['google'],
   hideSignUp: envConfig.DISABLE_SIGNUP,
 });
