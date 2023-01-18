@@ -19,6 +19,7 @@ export interface Form {
 export interface FormOption {
   id: string;
   name: string;
+  displayName: string;
   fullForm?: Form;
   partialForm?: Form;
   credentialType?: string;
@@ -105,9 +106,9 @@ export const VCOptions: FunctionComponent<VCOptionsProps> = ({
           data-testid={'form-select-document-type'}
           inputProps={{ id: 'select-input-label-id' }}
         >
-          {availableForms.map(({ id, name }, index: number) => (
+          {availableForms.map(({ id, displayName }, index: number) => (
             <MenuItem key={`menu-item-${index}`} value={id}>
-              {name}
+              {displayName}
             </MenuItem>
           ))}
         </Select>

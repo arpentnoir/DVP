@@ -16,7 +16,8 @@ export const Issue = () => {
   const forms = [
     {
       id: '001',
-      name: 'AANZFTA-COO',
+      name: 'AANZFTACoO',
+      displayName: 'AANZFTA-COO',
       fullForm: { schema: fullCooSchema, uiSchema: fullCooSchemaUi },
       partialForm: { schema: partialCooSchema, uiSchema: partialCooSchemaUi },
     },
@@ -24,22 +25,32 @@ export const Issue = () => {
 
   const navigate = useNavigate();
 
-  const goToForm = (form: Form, credentialType: any) => {
+  const goToForm = (
+    form: Form,
+    credentialType: any,
+    name: string,
+    formType?: string
+  ) => {
     navigate('/form', {
       state: {
         form,
         credentialType,
+        formName: name,
+        formType,
       },
     });
   };
 
   const handleFormSelected = (selectedForm: FormOption) => {
-    const { partialForm, fullForm, formType, credentialType } = selectedForm;
+    const { partialForm, fullForm, formType, credentialType, name } =
+      selectedForm;
 
     goToForm(
       // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
       formType === 'partial' ? (partialForm as Form) : (fullForm as Form),
-      credentialType
+      credentialType,
+      name,
+      formType
     );
   };
 

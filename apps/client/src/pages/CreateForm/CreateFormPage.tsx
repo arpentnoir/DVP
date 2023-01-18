@@ -32,7 +32,12 @@ export const CreateFormPage = ({ title, subTitle }: CreateFormPageProps) => {
       ...formValues,
     };
 
-    issue(credentialSubject, state?.credentialType as string)
+    issue(
+      credentialSubject,
+      state?.credentialType as string,
+      state?.formName as string,
+      state?.formType as string
+    )
       .then((response) => {
         setServerError(undefined);
         navigate(ROUTES.VIEWER, {

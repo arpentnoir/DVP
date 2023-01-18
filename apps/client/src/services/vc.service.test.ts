@@ -1,6 +1,6 @@
 import { VerifiableCredential } from '@dvp/api-interfaces';
 import { CHAFTA_COO, SVIP_CHAFTA_COO } from '../mocks/fixtures/documents';
-import { _getIssuer } from './vc.service';
+import { getOAMetaData, _getIssuer } from './vc.service';
 
 describe('_getIssuer', () => {
   describe('OA', () => {
@@ -36,5 +36,20 @@ describe('_getIssuer', () => {
 
       expect(iss).toStrictEqual({ id: undefined });
     });
+  });
+});
+
+describe('getOAMetaData', () => {
+  it('should return oa meta data with partial template name', () => {
+    const response = getOAMetaData('AANZFTACoO', 'partial');
+    expect(response.openAttestationMetadata.template.name).toEqual(
+      'AANZFTACoOPartial'
+    );
+  });
+  it('should return oa meta data with default template name', () => {
+    const response = getOAMetaData('AANZFTACoO', 'full');
+    expect(response.openAttestationMetadata.template.name).toEqual(
+      'AANZFTACoO'
+    );
   });
 });

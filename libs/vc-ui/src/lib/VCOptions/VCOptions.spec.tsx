@@ -17,7 +17,13 @@ const formMock = {
 };
 
 const formsMock = [
-  { id: '001', name: 'testForm', fullForm: formMock, partialForm: formMock },
+  {
+    id: '001',
+    name: 'testForm',
+    displayName: 'testForm',
+    fullForm: formMock,
+    partialForm: formMock,
+  },
 ];
 
 describe('VCOptions', () => {

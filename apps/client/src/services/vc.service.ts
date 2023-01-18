@@ -52,13 +52,15 @@ export const verify = async (document: VerifiableCredential) => {
 
 export const issue = async (
   credentialSubject: CredentialSubject,
-  credentialType: string
+  credentialType: string,
+  formName: string,
+  formType: string
 ) => {
   try {
     const response = await axiosInstance.post(API_ENDPOINTS.ISSUE, {
       credential: {
         ...(credentialType === 'oa'
-          ? GENERIC_OA_META_DATA
+          ? getOAMetaData(formName, formType)
           : GENERIC_SVIP_META_DATA),
         issuanceDate: new Date().toISOString(),
         credentialSubject: credentialSubject,
@@ -73,4 +75,22 @@ export const issue = async (
   } catch (err: unknown | AxiosError) {
     throw new Error(FAIL_CREATE_VC);
   }
+};
+
+/**
+ * Takes the form type and returns GENERIC_OA_META_DATA with the appropriate template name
+ * @param formName name of the form (corresponding to its template render)
+ * @param formType the type of form full or partial
+ * @returns returns GENERIC_OA_META_DATA with changed template
+ */
+export const getOAMetaData = (formName: string, formType: string) => {
+  let TemplateName = formName;
+  if (formType === 'partial') {
+    TemplateName = formName + 'Partial';
+  }
+
+  const metaData = GENERIC_OA_META_DATA;
+  metaData.openAttestationMetadata.template.name = TemplateName;
+
+  return metaData;
 };
