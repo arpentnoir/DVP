@@ -15,6 +15,7 @@ export interface DIDConfig {
 export interface ApiConfig {
   awsRegion: string;
   s3Config: S3Config;
+  revocationListS3Config: S3Config;
   apiURL: string;
   clientURL: string;
   didConfig: DIDConfig;
@@ -34,6 +35,12 @@ export const config: ApiConfig = {
     documentsTableName: process.env.DYNAMODB_DOCUMENTS_TABLE,
   },
   awsRegion: process.env.AWS_REGION,
+  revocationListS3Config: {
+    bucketName: process.env.REVOCATION_LIST_BUCKET_NAME,
+    clientConfig: {
+      region: process.env.AWS_REGION,
+    },
+  } as S3Config,
   apiURL: process.env.API_URL,
   clientURL: process.env.CLIENT_URL,
   didConfig: {

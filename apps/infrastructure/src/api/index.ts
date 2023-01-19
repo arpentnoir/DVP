@@ -24,11 +24,25 @@ const documentStoreBucket = new aws.s3.Bucket(`${stack}-document-store`, {
   bucket: `${stack}-document-store`,
 });
 
-// Set the access policy for the bucket
+// Set the access policy for the document store bucket
 new aws.s3.BucketPolicy('documentStoreBucketPolicy', {
   bucket: documentStoreBucket.bucket,
   policy: pulumi
     .all([documentStoreBucket.bucket, lambdaRole.arn])
+    .apply(([bucket, arn]) => bucketPolicy(bucket, arn)),
+});
+
+////////////////////////////////////////////////////////////////////////////////
+// S3 bucket for revocation list
+const revocationListBucket = new aws.s3.Bucket(`${stack}-revocation-list`, {
+  bucket: `${stack}-revocation-list`,
+});
+
+// Set the access policy for the revocation list bucket
+new aws.s3.BucketPolicy('revocationListBucket', {
+  bucket: revocationListBucket.bucket,
+  policy: pulumi
+    .all([revocationListBucket.bucket, lambdaRole.arn])
     .apply(([bucket, arn]) => bucketPolicy(bucket, arn)),
 });
 
@@ -38,6 +52,7 @@ new aws.s3.BucketPolicy('documentStoreBucketPolicy', {
 const enviromentVariables = {
   variables: {
     DOCUMENT_STORAGE_BUCKET_NAME: documentStoreBucket.bucket,
+    REVOCATION_LIST_BUCKET_NAME: revocationListBucket.bucket,
     API_URL: config.apiUrl,
     CLIENT_URL: config.clientUrl,
     DYNAMODB_DOCUMENTS_TABLE: dynamodbDocumentsTable.name,

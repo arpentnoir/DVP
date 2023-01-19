@@ -22,6 +22,12 @@ export const DynamoSchema = {
       gs1pk: { type: String, value: 'document' },
       gs1sk: { type: String, value: 'document#${id}' },
     },
+    RevocationCounter: {
+      pk: { type: String, value: 'RevocationCounter' },
+      sk: { type: String, value: 'RevocationCounter' },
+      path: { type: String, required: true },
+      counter: { type: Number, required: true },
+    },
   } as const,
   params: {
     isoDates: true,
@@ -30,3 +36,6 @@ export const DynamoSchema = {
 };
 
 export type DocumentType = Entity<typeof DynamoSchema.models.Document>;
+export type RevocationType = Entity<
+  typeof DynamoSchema.models.RevocationCounter
+>;
