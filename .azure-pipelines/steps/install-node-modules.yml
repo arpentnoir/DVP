@@ -12,6 +12,11 @@ steps:
       cacheHitVar: NODE_MODULES_CACHE_RESTORED
 
   - bash: |
+      npm install --global yarn
+
+    displayName: Install yarn
+
+  - bash: |
       yarn install --ignore-engines --frozen-lockfile
     condition: ne(variables.NODE_MODULES_CACHE_RESTORED, 'true')
     displayName: Install dependencies only if there is no cache available
