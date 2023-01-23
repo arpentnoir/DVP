@@ -49,7 +49,7 @@ new aws.s3.BucketPolicy('revocationListBucket', {
 ////////////////////////////////////////////////////////////////////////////////
 // Enviroment variables for Lambda functions
 
-const enviromentVariables = {
+const environmentVariables = {
   variables: {
     DOCUMENT_STORAGE_BUCKET_NAME: documentStoreBucket.bucket,
     REVOCATION_LIST_BUCKET_NAME: revocationListBucket.bucket,
@@ -89,10 +89,10 @@ const dynamodbLambdaPolicy = new aws.iam.Policy(
             'dynamodb:BatchGetItem',
             'dynamodb:GetItem',
             'dynamodb:Query',
-            'dynamodb:Scan',
             'dynamodb:BatchWriteItem',
             'dynamodb:PutItem',
             'dynamodb:UpdateItem',
+            'dynamodb:DeleteItem',
           ],
           Resource: dynamodbDocumentsTable.arn,
         },
@@ -139,7 +139,7 @@ const lambdaApiHandler = new aws.lambda.Function(`${stack}-api-handler`, {
   code: new pulumi.asset.FileArchive(apiDir),
   handler: 'index.handler',
   runtime: 'nodejs16.x',
-  environment: { ...enviromentVariables },
+  environment: { ...environmentVariables },
   tracingConfig: {
     mode: 'Active',
   },

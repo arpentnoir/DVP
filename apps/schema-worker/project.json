@@ -1,0 +1,56 @@
+{
+  "name": "schema-worker",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/schema-worker/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "compiler": "babel",
+        "generatePackageJson": true,
+        "outputFileName": "index.js",
+        "externalDependencies": "none",
+        "outputPath": "dist/apps/schema-worker",
+        "main": "apps/schema-worker/src/index.ts",
+        "tsConfig": "apps/schema-worker/tsconfig.app.json"
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "inspect": false,
+          "sourceMap": false,
+          "extractLicenses": false
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "schema-worker:build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "schema-worker:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/schema-worker/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/schema-worker/jest.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

@@ -11,22 +11,30 @@ export const DynamoSchema = {
   },
   models: {
     Document: {
-      pk: { type: String, value: 'abn#{abn}' },
-      sk: { type: String, value: 'document#${id}' },
-      id: { type: String, generate: 'uuid' },
+      pk: { type: String, value: 'Abn#${abn}' },
+      sk: { type: String, value: 'Document#${id}' },
+      id: { type: String },
       userId: { type: String, required: true },
       abn: { type: String, required: true },
       s3Path: { type: String },
 
       // add document fields
-      gs1pk: { type: String, value: 'document' },
-      gs1sk: { type: String, value: 'document#${id}' },
+      gs1pk: { type: String, value: 'Document' },
+      gs1sk: { type: String, value: 'Document#${id}' },
     },
     RevocationCounter: {
       pk: { type: String, value: 'RevocationCounter' },
       sk: { type: String, value: 'RevocationCounter' },
       path: { type: String, required: true },
       counter: { type: Number, required: true },
+    },
+    DocumentSchema: {
+      pk: { type: String, value: 'DocumentSchema' },
+      sk: { type: String, value: 'DocumentSchema#${name}#${type}' },
+      name: { type: String, required: true },
+      type: { type: String, required: true, enum: ['full', 'partial'] },
+      schemaPath: { type: String },
+      uiSchemaPath: { type: String },
     },
   } as const,
   params: {
@@ -38,4 +46,7 @@ export const DynamoSchema = {
 export type DocumentType = Entity<typeof DynamoSchema.models.Document>;
 export type RevocationType = Entity<
   typeof DynamoSchema.models.RevocationCounter
+>;
+export type DocumentSchemaType = Entity<
+  typeof DynamoSchema.models.DocumentSchema
 >;

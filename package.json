@@ -9,7 +9,7 @@
     "start:internal:worker": "NX_SERVICE_WORKER=true nx run-many --target=serve --all --configuration=development-internal",
     "build": "nx run-many --target=build --all --skip-nx-cache",
     "build:internal": "nx run-many --target=build --all --configuration=production-internal --skip-nx-cache ",
-    "test": "nx run-many --target=test --all",
+    "test": "nx run-many --target=test --all --coverage",
     "ci:test": "nx run-many --target=test --all --coverage --reporters=default --reporters=jest-junit --coverageReporters=cobertura",
     "lint": "nx run-many --target=lint --all",
     "storybook": "nx storybook vc-ui",
@@ -20,6 +20,7 @@
   "dependencies": {
     "@aws-amplify/ui-react": "^4.3.2",
     "@aws-sdk/client-s3": "^3.211.0",
+    "@aws-sdk/client-sqs": "^3.254.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@govtechsg/decentralized-renderer-react-components": "^3.8.0",
@@ -75,6 +76,7 @@
     "shortid": "^2.2.16",
     "styled-components": "5.3.5",
     "supertest": "^6.3.1",
+    "tslib": "^2.3.0",
     "uuid": "^9.0.0"
   },
   "devDependencies": {
@@ -111,7 +113,7 @@
     "@types/hdkey": "^2.0.1",
     "@types/jest": "28.1.1",
     "@types/lodash": "^4.14.191",
-    "@types/node": "18.7.18",
+    "@types/node": "18.7.1",
     "@types/qrcode": "^1.5.0",
     "@types/react": "18.0.20",
     "@types/react-dom": "18.0.6",

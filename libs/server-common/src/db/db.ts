@@ -21,5 +21,6 @@ export const initializeDynamoDataTable = (
   return {
     Document: table.getModel('Document'),
     RevocationCounter: table.getModel('RevocationCounter'),
+    DocumentSchema: table.getModel('DocumentSchema'),
   };
 };

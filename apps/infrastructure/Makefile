@@ -15,9 +15,6 @@ DVP_DOMAIN ?= web.${ENV}.${TARGET_DOMAIN}
 DVP_INTERNAL_DOMAIN ?= web.${ENV}.internal.${TARGET_DOMAIN}
 VC_CONTEXT_ENDPOINT ?=  https://${ENV}-dvp-context.s3.${AWS_REGION}.amazonaws.com
 VC_RENDERER_ENDPOINT ?= https://renderer.${ENV}.${TARGET_DOMAIN}
-SEED_CONFIG_FILE_ID ?= 62df6b09f2e363392e196aac
-CONFIGFILE_DATABASE_COLLECTION_NAME ?= configFile
-DATABASE_SERVER_SELECTION_TIMEOUT ?= 3000
 
 .EXPORT_ALL_VARIABLES: ; # send all vars to shell
 
@@ -27,6 +24,7 @@ create-artifacts-locally:
 	cp -r ../../dist/apps/client-internal/. ../../artifacts/client-internal/
 	cp -r ../../dist/apps/client-internet/. ../../artifacts/client-internet/
 	cp -r ../../dist/apps/api/. ../../artifacts/api-build/
+	cp -r ../../dist/apps/schema-worker/. ../../artifacts/schema-worker-build/
 
 ### Deployment
 pulumi-preview:

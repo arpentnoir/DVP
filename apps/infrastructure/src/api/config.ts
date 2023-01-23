@@ -1,15 +1,8 @@
 import { RunError } from '@pulumi/pulumi';
 
-if (
-  !(
-    process.env.CONFIGFILE_DATABASE_COLLECTION_NAME &&
-    process.env.DATABASE_SERVER_SELECTION_TIMEOUT &&
-    process.env.TARGET_DOMAIN &&
-    process.env.DVP_API_DOMAIN
-  )
-) {
+if (!(process.env.TARGET_DOMAIN && process.env.DVP_API_DOMAIN)) {
   throw new RunError(
-    `Missing one or more of the required environment variables: CONFIGFILE_DATABASE_COLLECTION_NAME, DATABASE_SERVER_SELECTION_TIMEOUT, TARGET_DOMAIN, DVP_API_DOMAIN"}`
+    `Missing one or more of the required environment variables: TARGET_DOMAIN, DVP_API_DOMAIN"}`
   );
 }
 
@@ -18,11 +11,4 @@ export const config = {
   dvpApiDomain: process.env.DVP_API_DOMAIN,
   apiUrl: `https://${process.env.DVP_API_DOMAIN}/api`,
   clientUrl: `https://${process.env.DVP_DOMAIN}`,
-  databaseServerSelectionTimeout: process.env.DATABASE_SERVER_SELECTION_TIMEOUT,
-  databaseOptions: {
-    tls: 'true',
-    replicaSet: 'rs0',
-    readPreference: 'secondaryPreferred',
-    retryWrites: 'false',
-  },
 };
