@@ -61,6 +61,7 @@
     "hdkey": "^2.0.1",
     "lodash": "^4.17.21",
     "msw": "^0.47.4",
+    "node-global-proxy": "^1.0.1",
     "openapi-types": "^12.1.0",
     "path": "^0.12.7",
     "pino": "^8.7.0",

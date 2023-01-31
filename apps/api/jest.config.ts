@@ -11,7 +11,7 @@ export default {
   transform: {
     '^.+\\.[tj]s$': 'ts-jest',
   },
-  setupFilesAfterEnv: ['./jest.setup.ts'],
+  setupFilesAfterEnv: ['../../jest.proxy.setup.ts', './jest.setup.ts'],
   moduleFileExtensions: ['ts', 'js', 'html'],
   coverageDirectory: '../../coverage/apps/api',
   testMatch: ['**/**/*.spec.{ts, js}', '**/**/*.test.{ts, js}'],

@@ -1,5 +1,6 @@
 import cors from 'cors';
 import express from 'express';
+import nodeProxy from 'node-global-proxy';
 import apiSpec from '../openapi/openapi.json';
 import {
   contextMiddleware,
@@ -9,6 +10,15 @@ import {
   openApiValidatorMiddleware,
 } from './middlewares';
 import { router } from './routes';
+
+if (
+  process.env.HTTP_PROXY &&
+  process.env.NODE_TLS_REJECT_UNAUTHORIZED === '0' &&
+  process.env.NODE_ENV === 'development'
+) {
+  nodeProxy.setConfig(process.env.HTTP_PROXY);
+  nodeProxy.start();
+}
 
 const app = express();
 app.use(cors());
