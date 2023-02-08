@@ -7,17 +7,21 @@ import oa_doc from '../../fixtures/oav3/did.json';
 
 const mockGetDocument = jest.fn();
 const mockUploadDocument = jest.fn();
+const mockDeleteDocument = jest.fn();
 
 const mockStorageClient = {
+  getDocumentStorePath: jest.fn(() => 'documents/'),
   getDocument: mockGetDocument,
   uploadDocument: mockUploadDocument,
   isDocumentExists: jest.fn(),
+  deleteDocument: mockDeleteDocument,
 };
 
 describe('Storage Service', () => {
   afterEach(() => {
     mockUploadDocument.mockRestore();
     mockGetDocument.mockRestore();
+    mockDeleteDocument.mockRestore();
   });
   const invocationContext = getMockInvocationContext(
     'GET',
@@ -61,6 +65,17 @@ describe('Storage Service', () => {
       expect(mockUploadDocument).toHaveBeenCalledTimes(1);
       expect(res.encryptionKey).toBeDefined();
       expect(res.documentId).toBeDefined();
+    });
+  });
+
+  describe('deleteDocument', () => {
+    it('should call storageClient.deleteDocument method', async () => {
+      mockDeleteDocument.mockResolvedValueOnce({});
+      const storageService = new StorageService(invocationContext);
+
+      await storageService.deleteDocument(mockStorageClient, 'valid_uuid');
+      expect(mockDeleteDocument).toHaveBeenCalledTimes(1);
+      expect(mockDeleteDocument).toHaveBeenCalledWith('valid_uuid');
     });
   });
 

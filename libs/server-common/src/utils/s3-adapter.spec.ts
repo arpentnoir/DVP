@@ -1,6 +1,7 @@
 import {
   GetObjectCommand,
   HeadObjectCommand,
+  DeleteObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
 import { mockClient } from 'aws-sdk-client-mock';
@@ -85,6 +86,16 @@ describe('S3Adapter', () => {
       );
 
       expect(isDocumentExists).toBe(true);
+    });
+  });
+
+  describe('deleteDocument', () => {
+    it('should return error if error is thrown', async () => {
+      s3Mock.on(DeleteObjectCommand).rejectsOnce({});
+
+      await expect(
+        s3StorageClient.deleteDocument(testDocumentId)
+      ).rejects.toThrowError();
     });
   });
 });

@@ -18,10 +18,24 @@ export const storageClient: StorageClient = new S3Adapter(config.s3Config);
 export class StorageService {
   logger: Logger;
   invocationContext: RequestInvocationContext;
+  documentStorePath: string;
 
   constructor(invocationContext: RequestInvocationContext) {
     this.invocationContext = invocationContext;
     this.logger = Logger.from(invocationContext);
+    this.documentStorePath = storageClient.getDocumentStorePath();
+  }
+
+  async deleteDocument(storageClient: StorageClient, documentId: string) {
+    try {
+      await storageClient.deleteDocument(documentId);
+    } catch (err: unknown) {
+      this.logger.debug(
+        '[StorageService.deleteDocument] Failed to delete the verifiable credential, %o',
+        err
+      );
+      throw new Error('Failed to delete the verifiable credential');
+    }
   }
 
   async getDocument(storageClient: StorageClient, documentId: string) {

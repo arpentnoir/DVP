@@ -11,6 +11,16 @@ export interface Message {
   message: string;
 }
 
+export interface DocumentMetadata {
+  documentNumber?: string;
+  freeTradeAgreement?: string;
+  importingJurisdiction?: string;
+  exporterOrManufacturerAbn?: string;
+  importerName?: string;
+  consignmentReferenceNumber?: string;
+  documentDeclaration?: boolean;
+}
+
 export interface CredentialSubject {
   [string: string]: any;
   links?: {

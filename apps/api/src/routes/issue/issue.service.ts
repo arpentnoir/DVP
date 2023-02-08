@@ -1,14 +1,23 @@
+import { omitBy, isUndefined } from 'lodash';
 import { IssueCredentialRequestSigningMethodEnum } from '@dvp/api-client';
-import { IssuerFunction, VerifiableCredential } from '@dvp/api-interfaces';
+import {
+  DocumentMetadata,
+  IssuerFunction,
+  IssuedDocument,
+  VerifiableCredential,
+} from '@dvp/api-interfaces';
 import {
   ApplicationError,
+  isGenericDocument,
   Logger,
   openAttestation,
   RequestInvocationContext,
   transmute,
   ValidationError,
 } from '@dvp/server-common';
+import { models } from '../../db';
 import { config } from '../../config';
+import { storageClient, StorageService } from '../storage/storage.service';
 
 export class IssueService {
   logger: Logger;
@@ -43,12 +52,85 @@ export class IssueService {
     }
   }
 
+  async storeMetadata(
+    credential: VerifiableCredential,
+    documentId: string,
+    decryptionKey: string,
+    documentStorePath: string
+  ): Promise<void> {
+    try {
+      const { userId, userAbn } = this.invocationContext;
+
+      const {
+        iD,
+        freeTradeAgreement,
+        importingJurisdiction,
+        exporterOrManufacturerAbn,
+        importerName,
+        consignmentReferenceNumber,
+        documentDeclaration,
+        supplyChainConsignment,
+      } = credential.credentialSubject;
+
+      const documentMetadata: DocumentMetadata = isGenericDocument(credential)
+        ? {
+            documentNumber: iD,
+            freeTradeAgreement,
+            importingJurisdiction,
+            exporterOrManufacturerAbn,
+            importerName,
+            consignmentReferenceNumber,
+            documentDeclaration,
+          }
+        : {
+            documentNumber: iD,
+            importingJurisdiction: supplyChainConsignment?.importCountry?.name,
+            exporterOrManufacturerAbn: supplyChainConsignment?.consignor?.iD,
+            importerName: supplyChainConsignment?.consignee?.name,
+            consignmentReferenceNumber: supplyChainConsignment?.iD,
+          };
+
+      const filteredDocumentMetadata: DocumentMetadata = omitBy(
+        documentMetadata,
+        isUndefined
+      );
+
+      await models.Document.create({
+        id: documentId,
+        createdBy: userId,
+        abn: userAbn,
+        s3Path: `${documentStorePath}${documentId}`,
+        decryptionKey,
+        ...filteredDocumentMetadata,
+      });
+    } catch (err: unknown) {
+      this.logger.debug(
+        '[IssueService.storeMetadata] Failed to store the verifiable credentials metadata, %o',
+        err
+      );
+      const storageService = new StorageService(this.invocationContext);
+      await storageService.deleteDocument(storageClient, documentId);
+
+      throw new ApplicationError(
+        'Failed to store the verifiable credentials metadata'
+      );
+    }
+  }
+
   async issue(
     signingMethod: IssueCredentialRequestSigningMethodEnum,
     credential: VerifiableCredential
-  ): Promise<VerifiableCredential> {
+  ): Promise<IssuedDocument> {
     try {
-      const issuer = this.getIssuer(signingMethod, credential);
+      // Generate a storage url with the id and key and attach to credential
+      const storageService = new StorageService(this.invocationContext);
+
+      const { documentStorePath } = storageService;
+      const { credentialWithQrUrl, documentId, encryptionKey } =
+        storageService.embedQrUrl(credential);
+
+      // Issue the verifiable credential
+      const issuer = this.getIssuer(signingMethod, credentialWithQrUrl);
 
       // Temporarily hardcoding verificationMethod and key
       const issuerKeyId =
@@ -56,9 +138,33 @@ export class IssueService {
       const privateKey =
         '0x17036c69d211cb39dea5fa0ab71aa2b55797ae4506062ff878a82e52575b97c0';
 
-      const signedDocument = await issuer(credential, issuerKeyId, privateKey);
+      const verifiableCredential = await issuer(
+        credentialWithQrUrl,
+        issuerKeyId,
+        privateKey
+      );
 
-      return signedDocument;
+      // Store the issued verifiable credential
+      await storageService.uploadDocument(
+        storageClient,
+        JSON.stringify(verifiableCredential),
+        documentId,
+        encryptionKey
+      );
+
+      // Store the metadata of the issued verifiable credential
+      await this.storeMetadata(
+        verifiableCredential,
+        documentId,
+        encryptionKey,
+        documentStorePath
+      );
+
+      return {
+        verifiableCredential,
+        documentId,
+        encryptionKey,
+      };
     } catch (err: unknown) {
       this.logger.debug(
         '[IssueService.issue] Failed to issue verifiable credential, %o',
@@ -67,7 +173,7 @@ export class IssueService {
       if (err instanceof ApplicationError) {
         throw err;
       }
-      throw new Error(`Failed to issue verifiable credential`);
+      throw new ApplicationError(`Failed to issue verifiable credential`);
     }
   }
 }

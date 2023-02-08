@@ -6,11 +6,13 @@ export interface S3Config {
 }
 
 export interface StorageClient {
+  getDocumentStorePath(): string;
   getDocument(
     documentId: string
   ): Promise<{ document: EncryptedDocument } | null>;
   isDocumentExists(documentId: string): Promise<boolean>;
   uploadDocument(document: string, documentId: string): Promise<string>;
+  deleteDocument(documentId: string): Promise<void>;
 }
 
 export interface EncryptedDocument {

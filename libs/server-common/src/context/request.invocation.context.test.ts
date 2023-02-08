@@ -68,7 +68,6 @@ describe('Request invocation context implementation', (): void => {
         key2: 55,
       },
     });
-
     mockRequest.route = { path: '/log' };
     const invocationContext1 = new RequestInvocationContext(mockRequest);
     expect(invocationContext1.correlationId).toBe('abc123');
@@ -76,5 +75,44 @@ describe('Request invocation context implementation', (): void => {
     mockRequest.headers['Correlation-ID'] = undefined;
     const invocationContext2 = new RequestInvocationContext(mockRequest);
     expect(invocationContext2.correlationId).toBeDefined();
+  });
+
+  it('should extract the userId from the access token and add the userId and default userAbn to the invocation context', (): void => {
+    const mockRequest = getMockReq({
+      method: 'GET',
+      header: (() =>
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U') as any,
+    });
+
+    const invocationContext = new RequestInvocationContext(mockRequest);
+
+    expect(invocationContext.userId).toBe('1234567890');
+    expect(invocationContext.userAbn).toBe('41161080146');
+  });
+
+  it('should extract the userId and userAbn from the access token and add them to the invocation context', (): void => {
+    const mockRequest = getMockReq({
+      method: 'GET',
+      header: (() =>
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiYWJuIjoiMDAwMDAwMDAwIn0.TyNWetCHZ35Vy6Y-ERQNLo1_Wx1LBNeDDqYbz2bYvZU') as any,
+    });
+
+    const invocationContext = new RequestInvocationContext(mockRequest);
+
+    expect(invocationContext.userId).toBe('1234567890');
+    expect(invocationContext.userAbn).toBe('000000000');
+  });
+
+  it('should assign null to the userId and userAbn if it was unable to extract the sub and abn properties from the access token', (): void => {
+    const mockRequest = getMockReq({
+      method: 'GET',
+      header: (() =>
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.e30.Et9HFtf9R3GEMA0IICOfFMVXY7kkTX1wr4qCyhIf58U') as any,
+    });
+
+    const invocationContext = new RequestInvocationContext(mockRequest);
+
+    expect(invocationContext.userId).toBe(null);
+    expect(invocationContext.userAbn).toBe(null);
   });
 });

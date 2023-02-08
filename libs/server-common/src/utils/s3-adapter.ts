@@ -1,4 +1,6 @@
 import {
+  DeleteObjectCommand,
+  DeleteObjectCommandInput,
   GetObjectCommand,
   HeadObjectCommand,
   PutObjectCommand,
@@ -15,14 +17,23 @@ import { logger } from './logger';
 export class S3Adapter implements StorageClient {
   private s3Client: S3Client;
   private bucket: string;
+  private documentStorePath: string;
 
   constructor(providerConfig: S3Config) {
     this.bucket = providerConfig.bucketName;
     this.s3Client = new S3Client(providerConfig.clientConfig);
+    this.documentStorePath = 'documents/';
+  }
+
+  getDocumentStorePath() {
+    return this.documentStorePath;
   }
 
   async isDocumentExists(documentId: string) {
-    const params = { Bucket: this.bucket, Key: `documents/${documentId}` };
+    const params = {
+      Bucket: this.bucket,
+      Key: `${this.documentStorePath}${documentId}`,
+    };
     try {
       await this.s3Client.send(new HeadObjectCommand(params));
       return true;
@@ -37,7 +48,10 @@ export class S3Adapter implements StorageClient {
   }
 
   async getDocument(documentId: string) {
-    const params = { Bucket: this.bucket, Key: `documents/${documentId}` };
+    const params = {
+      Bucket: this.bucket,
+      Key: `${this.documentStorePath}${documentId}`,
+    };
     try {
       const encryptedDocument = await this.s3Client.send(
         new GetObjectCommand(params)
@@ -63,10 +77,18 @@ export class S3Adapter implements StorageClient {
   async uploadDocument(document: string, documentId: string) {
     const params: PutObjectCommandInput = {
       Bucket: this.bucket,
-      Key: `documents/${documentId}`,
+      Key: `${this.documentStorePath}${documentId}`,
       Body: document,
     };
     await this.s3Client.send(new PutObjectCommand(params));
     return documentId;
+  }
+
+  async deleteDocument(documentId: string) {
+    const params: DeleteObjectCommandInput = {
+      Bucket: this.bucket,
+      Key: `${this.documentStorePath}${documentId}`,
+    };
+    await this.s3Client.send(new DeleteObjectCommand(params));
   }
 }

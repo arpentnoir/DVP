@@ -24,6 +24,9 @@ export const thatIsRetrievedDocument = {
 
 const storagePath = '/api/storage/documents';
 
+const authTokenWithSubAndAbn =
+  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiYWJuIjoiMDAwMDAwMDAwMDAifQ.mYt_zdD9hjCC0267io5tyeTx0r6Xrh4B6JRVLqHkY5A';
+
 const handleResponse = async (res: request.Response) =>
   Promise.resolve(JSON.parse(res.text) as VerificationResult);
 
@@ -81,6 +84,7 @@ describe('storage api', () => {
 
       await request(app)
         .post(storagePath)
+        .set({ Authorization: authTokenWithSubAndAbn })
         .send({
           document: 'document contents',
           encryptionKey: generateEncryptionKey(),
@@ -100,6 +104,7 @@ describe('storage api', () => {
       const encryptionKey = generateEncryptionKey();
       await request(app)
         .post(storagePath)
+        .set({ Authorization: authTokenWithSubAndAbn })
         .send({
           document: 'document contents',
           encryptionKey,
@@ -116,12 +121,26 @@ describe('storage api', () => {
 
       await request(app)
         .post(storagePath)
+        .set({ Authorization: authTokenWithSubAndAbn })
         .send({
           document: 'document contents',
           encryptionKey,
           documentId: getUuId(),
         })
         .expect(500);
+    });
+
+    it('should return auth error if missing auth header', async () => {
+      await request(app)
+        .post(storagePath)
+        .send({
+          document: 'document contents',
+        })
+        .expect('Content-Type', /json/)
+        .expect(500)
+        .expect((res) => {
+          expect(res.body.errors[0].id).toContain('DVPAPI-003');
+        });
     });
   });
 });

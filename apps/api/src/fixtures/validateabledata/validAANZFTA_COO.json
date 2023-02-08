@@ -1,144 +1,150 @@
 {
-    "schemaType": "AANZFTA_COO",
-    "verifiableCredential":{
-    "credentialSubject": {
-        "iD": "123",
-        "issueDateTime": "2022-11-29T00:00:00+11:00",
-        "firstSignatoryAuthentication": {
-            "signature": "123123123123",
-            "actualDateTime": "2022-11-29T00:00:00+11:00"
-        },
-        "secondSignatoryAuthentication": {
-            "signature": "123123123123",
-            "actualDateTime": "2022-11-29T00:00:00+11:00"
-        },
-        "isPreferential": false,
-        "supplyChainConsignment": {
-            "iD": "1221",
-            "information": "box of mangos",
-            "exportCountry": {
-                "name": "Australia"
-            },
-            "consignor": {
-                "iD": "123",
-                "name": "Bobs bobs",
-                "postalAddress": {
-                    "line1": "222 address",
-                    "cityName": "canberra",
-                    "postcode": "2615",
-                    "countrySubDivisionName": "ACT",
-                    "countryCode": "AUD"
-                }
-            },
-            "importCountry": {
-                "name": "Singapore"
-            },
-            "consignee": {
-                "iD": "123321",
-                "name": "Singapore bobs",
-                "postalAddress": {
-                    "line1": "222 address",
-                    "cityName": "singapore",
-                    "postcode": "3112",
-                    "countryCode": "SNG"
-                }
-            },
-            "loadingBaseportLocation": {
-                "iD": "31213",
-                "name": "Bobs bobs"
-            },
-            "mainCarriageTransportMovement": {
-                "iD": "123321",
-                "information": "discriptions",
-                "usedTransportMeans": {
-                    "iD": "312123",
-                    "name": "asdndna"
-                },
-                "departureEvent": {
-                    "departureDateTime": "2022-11-29T00:00:00+11:00"
-                },
-                "unloadingBaseportLocation": {
-                    "iD": "123321",
-                    "name": "andaisd"
-                }
-            },
-            "includedConsignmentItems": [
-                {
-                    "iD": "knkn",
-                    "information": "asv",
-                    "crossBorderRegulatoryProcedure": {
-                        "originCriteriaText": "bjbjb"
-                    },
-                    "manufacturer": {
-                        "iD": "98765",
-                        "name": "bob mango",
-                        "postalAddress": {
-                            "line1": "222 address",
-                            "cityName": "singapore",
-                            "postcode": "3112",
-                            "countryCode": "SNG"
-                        }
-                    },
-                    "tradeLineItems": [
-                        {
-                            "sequenceNumber": 987,
-                            "invoiceReference": {
-                                "iD": "123321",
-                                "issueDateTime": "2022-11-29T00:00:00+11:00",
-                                "attachedBinaryFile": {
-                                    "uRI": "wwwwwwww"
-                                }
-                            },
-                            "tradeProduct": {
-                                "iD": "98765",
-                                "description": "987654",
-                                "harmonisedTariffCode": {
-                                    "classCode": "88",
-                                    "className": "wo"
-                                },
-                                "originCountry": {
-                                    "code": "aud"
-                                }
-                            },
-                            "transportPackages": [
-                                {
-                                    "iD": "0987",
-                                    "grossVolume": "90",
-                                    "grossWeight": "99kg"
-                                }
-                            ]
-                        }
-                    ]
-                }
-            ]
-        }
+  "schemaType": "AANZFTA_COO",
+  "verifiableCredential": {
+    "version": "https://schema.openattestation.com/3.0/schema.json",
+    "@context": [
+      "https://www.w3.org/2018/credentials/v1",
+      "https://dev-dvp-context.s3.ap-southeast-2.amazonaws.com/AANZFTA-CoO.json",
+      "https://dev-dvp-context.s3.ap-southeast-2.amazonaws.com/AANZFTA-CoO-Context-Partial.json",
+      "https://schemata.openattestation.com/com/openattestation/1.0/OpenAttestation.v3.json"
+    ],
+    "type": ["VerifiableCredential", "OpenAttestationCredential"],
+    "issuer": {
+      "id": "did:ethr:0x4Bf4190a27A37d1677c8ADE25b53F1e22885531f#controller",
+      "name": "GoSource Pty Ltd",
+      "type": "OpenAttestationIssuer"
     },
-    "@context":[],
-    "type": [],
-    "issuanceDate": "",
-    "issuer":  {
-        "id": "https://example.com",
-        "type": "OpenAttestationIssuer",
-        "name": "DEMO"
-      },
     "openAttestationMetadata": {
-        "template": {
-          "name": "not real data",
-          "type": "not real data",
-          "url": "https://localhost:3000/renderer"
+      "template": {
+        "type": "EMBEDDED_RENDERER",
+        "name": "AANZFTACoO",
+        "url": "https://renderer.dev.dvp.ha.showthething.com"
+      },
+      "proof": {
+        "type": "OpenAttestationProofMethod",
+        "method": "DID",
+        "value": "did:ethr:0x4Bf4190a27A37d1677c8ADE25b53F1e22885531f",
+        "revocation": {
+          "type": "NONE"
+        }
+      },
+      "identityProof": {
+        "type": "DNS-DID",
+        "identifier": "dvp.ha.showthething.com"
+      }
+    },
+    "issuanceDate": "2023-01-12T07:26:22.578Z",
+    "credentialSubject": {
+      "iD": "123",
+      "issueDateTime": "2022-11-29T00:00:00+11:00",
+      "firstSignatoryAuthentication": {
+        "signature": "123123123123",
+        "actualDateTime": "2022-11-29T00:00:00+11:00"
+      },
+      "secondSignatoryAuthentication": {
+        "signature": "123123123123",
+        "actualDateTime": "2022-11-29T00:00:00+11:00"
+      },
+      "isPreferential": false,
+      "supplyChainConsignment": {
+        "iD": "1221",
+        "information": "box of mangos",
+        "exportCountry": {
+          "name": "Australia"
         },
-        "proof": {
-          "type": "not real data",
-          "method": "not real data",
-          "value": "not real data",
-          "revocation": {
-            "type": "not real data"
+        "consignor": {
+          "iD": "123",
+          "name": "Bobs bobs",
+          "postalAddress": {
+            "line1": "222 address",
+            "cityName": "canberra",
+            "postcode": "2615",
+            "countrySubDivisionName": "ACT",
+            "countryCode": "AUD"
           }
         },
-        "identityProof": {
-          "type": "DID",
-          "identifier": "not data"
-        }
+        "importCountry": {
+          "name": "Singapore"
+        },
+        "consignee": {
+          "iD": "123321",
+          "name": "Singapore bobs",
+          "postalAddress": {
+            "line1": "222 address",
+            "cityName": "singapore",
+            "postcode": "3112",
+            "countryCode": "SNG"
+          }
+        },
+        "loadingBaseportLocation": {
+          "iD": "31213",
+          "name": "Bobs bobs"
+        },
+        "mainCarriageTransportMovement": {
+          "iD": "123321",
+          "information": "discriptions",
+          "usedTransportMeans": {
+            "iD": "312123",
+            "name": "asdndna"
+          },
+          "departureEvent": {
+            "departureDateTime": "2022-11-29T00:00:00+11:00"
+          },
+          "unloadingBaseportLocation": {
+            "iD": "123321",
+            "name": "andaisd"
+          }
+        },
+        "includedConsignmentItems": [
+          {
+            "iD": "knkn",
+            "information": "asv",
+            "crossBorderRegulatoryProcedure": {
+              "originCriteriaText": "bjbjb"
+            },
+            "manufacturer": {
+              "iD": "98765",
+              "name": "bob mango",
+              "postalAddress": {
+                "line1": "222 address",
+                "cityName": "singapore",
+                "postcode": "3112",
+                "countryCode": "SNG"
+              }
+            },
+            "tradeLineItems": [
+              {
+                "sequenceNumber": 987,
+                "invoiceReference": {
+                  "iD": "123321",
+                  "issueDateTime": "2022-11-29T00:00:00+11:00",
+                  "attachedBinaryFile": {
+                    "uRI": "wwwwwwww"
+                  }
+                },
+                "tradeProduct": {
+                  "iD": "98765",
+                  "description": "987654",
+                  "harmonisedTariffCode": {
+                    "classCode": "88",
+                    "className": "wo"
+                  },
+                  "originCountry": {
+                    "code": "aud"
+                  }
+                },
+                "transportPackages": [
+                  {
+                    "iD": "0987",
+                    "grossVolume": "90",
+                    "grossWeight": "99kg"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
       }
-   }
+    }
+  }
 }

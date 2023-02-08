@@ -92,4 +92,3 @@ stages:
             inputs:
               targetPath: $(System.DefaultWorkingDirectory)/dist/apps/api
               artifactName: 'api-build'
-  

@@ -1,6 +1,13 @@
-import { WrappedVerifiableCredential } from '@dvp/api-interfaces';
+import {
+  VerifiableCredential,
+  WrappedVerifiableCredential,
+} from '@dvp/api-interfaces';
 import { NON_OA_CREDENTIAL, OA_CREDENTIAL, OA_SIGNED } from '../fixtures';
-import { isOpenAttestationType, isVerifiableCredential } from './vc';
+import {
+  isOpenAttestationType,
+  isVerifiableCredential,
+  isGenericDocument,
+} from './vc';
 
 describe('isOpenAttestationType', () => {
   it('should return true for document that contains OpenAttestation type', () => {
@@ -31,5 +38,28 @@ describe('isVerifiableCredential', () => {
       );
       expect(result).toBe(false);
     });
+  });
+});
+
+describe('isGenericDocument', () => {
+  it('should return true if the document contains the originalDocument property (generic)', () => {
+    const documentWithOriginalDocumentProperty = {
+      ...NON_OA_CREDENTIAL,
+      credentialSubject: {
+        ...NON_OA_CREDENTIAL.credentialSubject,
+        originalDocument: 'test123',
+      },
+    };
+    expect(
+      isGenericDocument(
+        documentWithOriginalDocumentProperty as VerifiableCredential
+      )
+    ).toBe(true);
+  });
+
+  it('should return false if the document does not contain the originalDocument property', () => {
+    expect(isGenericDocument(NON_OA_CREDENTIAL as VerifiableCredential)).toBe(
+      false
+    );
   });
 });

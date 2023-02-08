@@ -13,14 +13,22 @@ export const DynamoSchema = {
     Document: {
       pk: { type: String, value: 'Abn#${abn}' },
       sk: { type: String, value: 'Document#${id}' },
-      id: { type: String },
-      userId: { type: String, required: true },
+      id: { type: String, required: true },
+      createdBy: { type: String, required: true },
       abn: { type: String, required: true },
-      s3Path: { type: String },
+      s3Path: { type: String, required: true },
+      decryptionKey: { type: String, required: true },
 
-      // add document fields
       gs1pk: { type: String, value: 'Document' },
       gs1sk: { type: String, value: 'Document#${id}' },
+
+      documentNumber: { type: String },
+      freeTradeAgreement: { type: String },
+      importingJurisdiction: { type: String },
+      exporterOrManufacturerAbn: { type: String },
+      importerName: { type: String },
+      consignmentReferenceNumber: { type: String },
+      documentDeclaration: { type: Boolean },
     },
     RevocationCounter: {
       pk: { type: String, value: 'RevocationCounter' },

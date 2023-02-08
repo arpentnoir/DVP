@@ -1,5 +1,7 @@
 import { Request } from 'express';
 import { generate } from 'shortid';
+import { decode } from 'jsonwebtoken';
+import { UserProfile } from '@dvp/api-interfaces';
 
 /**
  * An interface for a context that can be used to provide contextual information about the current
@@ -38,8 +40,13 @@ export interface InvocationContext {
    *  chaining invocations through multiple services. */
   requestId?: string;
 
-  /** The user ID for log messages that use this context. */
-  userId?: string;
+  /** The users ID for this context. This is not directly used for logging, but may be used
+   *  for chaining invocations through multiple services. */
+  userId: string | null;
+
+  /** The ABN for this context. This is not directly used for logging, but may be used
+   *  for chaining invocations through multiple services. */
+  userAbn: string | null;
 
   /** The IP address for log messages that use this context. */
   ipAddress?: string;
@@ -58,6 +65,12 @@ export interface InvocationContext {
 
 export class RequestInvocationContext implements InvocationContext {
   public readonly accessToken?: string;
+
+  /** The ID of the user making the request. */
+  public readonly userId: string | null;
+
+  /** The ABN associated with the user making the request. */
+  public readonly userAbn: string | null;
 
   /** The correlation ID. */
   public readonly correlationId?: string;
@@ -87,7 +100,11 @@ export class RequestInvocationContext implements InvocationContext {
    */
   public constructor(request: Request, generateTransactionId?: boolean) {
     const authHeader = request.header('Authorization');
+
     this.accessToken = authHeader?.split(' ')?.[1];
+
+    this.userId = null;
+    this.userAbn = null;
 
     this.correlationId =
       (request.headers['Correlation-ID'] as string) || generate();
@@ -105,6 +122,24 @@ export class RequestInvocationContext implements InvocationContext {
     }
 
     this.requestId = request.header('Request-ID');
+
+    try {
+      if (this.accessToken) {
+        const accessTokenPayload = {
+          abn: '41161080146', // TODO: Remove hard coded abn.
+          ...(decode(this.accessToken) as UserProfile),
+        };
+
+        const { sub, abn } = accessTokenPayload;
+
+        if (sub && abn) {
+          this.userId = sub;
+          this.userAbn = abn;
+        }
+      }
+    } catch {
+      return;
+    }
   }
 
   /**

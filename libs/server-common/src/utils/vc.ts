@@ -29,3 +29,7 @@ export const isVerifiableCredential = (
     return false;
   }
 };
+
+export const isGenericDocument = (document: VerifiableCredential) => {
+  return 'originalDocument' in document.credentialSubject;
+};

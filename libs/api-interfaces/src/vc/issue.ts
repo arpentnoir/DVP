@@ -5,3 +5,9 @@ export type IssuerFunction = (
   verificationMethod: string,
   signingKey: string
 ) => Promise<VerifiableCredential>;
+
+export interface IssuedDocument {
+  verifiableCredential: VerifiableCredential;
+  documentId: string;
+  encryptionKey: string;
+}
