@@ -12,7 +12,8 @@ pool:
 variables:
   CI: 'true'
   isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
-  isDevelop: $[eq(variables['Build.SourceBranch'], 'refs/heads/develop')]
+  //isDevelop: $[eq(variables['Build.SourceBranch'], 'refs/heads/develop')]
+  isDevelop: true
   isPR: $[eq(variables['Build.Reason'], 'PullRequest')]
   ${{ if eq(variables.isMain, 'true') }}:
     TARGET_ENV: e4 # deploy master to test environment
