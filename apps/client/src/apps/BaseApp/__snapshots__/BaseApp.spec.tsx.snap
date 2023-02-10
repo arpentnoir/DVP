@@ -14,47 +14,7 @@ exports[`BaseApp should render correctly 1`] = `
         >
           <div
             class="MuiBox-root css-hybe8"
-          >
-            <div
-              class="css-cw77wi-MuiStack-root"
-            >
-              <button
-                aria-expanded="false"
-                aria-label="Menu"
-                class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium css-11lb5zj-MuiButtonBase-root-MuiButton-root"
-                data-testid="menu-button"
-                tabindex="0"
-                type="button"
-              >
-                <div
-                  class="css-doi3ij-MuiStack-root"
-                >
-                  <svg
-                    aria-hidden="true"
-                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-4fyam7-MuiSvgIcon-root"
-                    data-testid="MenuIcon"
-                    focusable="false"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      d="M3 18h18v-2H3v2zm0-5h18v-2H3v2zm0-7v2h18V6H3z"
-                    />
-                  </svg>
-                  <p
-                    class="MuiTypography-root MuiTypography-body2 css-1ki1pfd-MuiTypography-root"
-                    data-testid="button:Menu:label"
-                    style="margin-left: 8px;"
-                    tabindex="0"
-                  >
-                    Menu
-                  </p>
-                </div>
-                <span
-                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-                />
-              </button>
-            </div>
-          </div>
+          />
           <div
             class="css-uljwwc-MuiStack-root"
           >
@@ -70,7 +30,7 @@ exports[`BaseApp should render correctly 1`] = `
           >
             <button
               class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-128y893-MuiButtonBase-root-MuiButton-root"
-              data-testid="button:Logout"
+              data-testid="button:Login"
               tabindex="0"
               type="button"
             >
@@ -79,10 +39,10 @@ exports[`BaseApp should render correctly 1`] = `
               >
                 <p
                   class="MuiTypography-root MuiTypography-body2 css-11vy9io-MuiTypography-root"
-                  data-testid="button:Logout:label"
+                  data-testid="button:Login:label"
                   tabindex="0"
                 >
-                  Logout
+                  Login
                 </p>
               </div>
               <span

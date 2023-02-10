@@ -1,19 +1,52 @@
+import { Authenticator } from '@aws-amplify/ui-react';
 import { Button } from '@dvp/vc-ui';
 import { AppBar, Box, Stack } from '@mui/material';
 import useTheme from '@mui/material/styles/useTheme';
-import { Auth } from 'aws-amplify';
-import React from 'react';
+import { Auth, Hub } from 'aws-amplify';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getEnvConfig } from '../../config';
 import { LOGO_ALT_TEXT, ROUTES } from '../../constants';
 import { MenuBar } from '../Menu/Menu';
-
 const LOGO_PATH = 'assets/logo.svg';
 
+const envConfig = getEnvConfig();
+
 export const NavBar = () => {
+  const [isAuthed, setIsAuthed] = useState(false);
+  const [showLoginScreen, setShowLoginScreen] = useState(false);
   const navigate = useNavigate();
   const theme = useTheme();
-
   const menuBarRef = React.createRef<HTMLButtonElement>();
+
+  useEffect(() => {
+    //Listen for changes to auth
+    const authChangeListener = Hub.listen(
+      'auth',
+      (data: { payload: { event: any } }) => {
+        switch (data.payload.event) {
+          case 'signIn':
+            setIsAuthed(true);
+            setShowLoginScreen(false);
+            break;
+          case 'signOut':
+            setIsAuthed(false);
+            break;
+        }
+      }
+    );
+
+    //check auth status on load
+    Auth.currentAuthenticatedUser()
+      .then((user) => {
+        if (user) setIsAuthed(true);
+      })
+      .catch(() => setIsAuthed(false));
+
+    return () => {
+      authChangeListener();
+    };
+  }, []);
 
   const signOut = (event: React.MouseEvent) => {
     event.preventDefault();
@@ -21,6 +54,11 @@ export const NavBar = () => {
     setTimeout(async () => {
       await Auth.signOut();
     });
+  };
+
+  const login = (event: React.MouseEvent) => {
+    event.preventDefault();
+    setShowLoginScreen(true);
   };
   return (
     <AppBar
@@ -34,6 +72,12 @@ export const NavBar = () => {
         '@media print': { display: 'none' },
       }}
     >
+      {showLoginScreen && (
+        <Authenticator
+          variation="modal"
+          hideSignUp={envConfig.DISABLE_SIGNUP}
+        />
+      )}
       <Stack
         direction="row"
         sx={{
@@ -43,7 +87,7 @@ export const NavBar = () => {
         }}
       >
         <Box sx={{ position: 'absolute', height: { xs: '60px', sm: '80px' } }}>
-          <MenuBar ref={menuBarRef} />
+          {isAuthed && <MenuBar ref={menuBarRef} />}
         </Box>
 
         <Stack
@@ -77,12 +121,21 @@ export const NavBar = () => {
             display: 'flex',
           }}
         >
-          <Button
-            sx={{ color: 'white' }}
-            variant="text"
-            label={'Logout'}
-            onClick={signOut}
-          />
+          {isAuthed ? (
+            <Button
+              sx={{ color: 'white' }}
+              variant="text"
+              label={'Logout'}
+              onClick={signOut}
+            />
+          ) : (
+            <Button
+              sx={{ color: 'white' }}
+              variant="text"
+              label={'Login'}
+              onClick={login}
+            />
+          )}
         </Box>
       </Stack>
     </AppBar>
