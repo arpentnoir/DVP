@@ -5,18 +5,9 @@ pr:
   - main
   - develop
 
+
 pool:
   name: Cloud-bcz-pub
-
-parameters:
-  - name: ENV
-    displayName: Deployment environment
-    default: default
-    values:
-      - default
-      - dev
-      - test
-      - preprod
 
 variables:
   CI: 'true'
@@ -24,13 +15,11 @@ variables:
   isDevelop: $[eq(variables['Build.SourceBranch'], 'refs/heads/develop')]
   isPR: $[eq(variables['Build.Reason'], 'PullRequest')]
   ${{ if eq(variables.isMain, 'true') }}:
-    TARGET_ENV: test # deploy master to test environment
+    TARGET_ENV: e4 # deploy master to test environment
   ${{ elseif eq(variables.isDevelop, 'true') }}:
-    TARGET_ENV: dev # deploy develop to dev environment
-  ${{ elseif ne(parameters.ENV, 'default')}}:
-    TARGET_ENV: ${{ parameters.ENV }} # ENV parameter overrides TARGET_ENV if set
+    TARGET_ENV: e1 # deploy develop to e1 environment
   ${{ else }}:
-    TARGET_ENV: dev # set default TARGET_ENV to dev
+    TARGET_ENV: e1 # set default TARGET_ENV to e1
   ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
     NX_BRANCH: $(System.PullRequest.PullRequestNumber)
     TARGET_BRANCH: $[replace(variables['System.PullRequest.TargetBranch'],'refs/heads/','origin/')]
@@ -41,11 +30,9 @@ variables:
   HEAD_SHA: $(git rev-parse HEAD)
 
 stages:
-  - stage: build_test
-    variables:
-      disable.coverage.autogenerate: true
+  - stage: build
     jobs:
-      - job: build_test
+      - job: Build
         steps:
           - checkout: self
             fetchDepth: 2
@@ -59,7 +46,7 @@ stages:
           - script: npx nx run-many --target=lint --parallel=2
             displayName: 'Run linting'
 
-          - script: npx nx run-many --target=test --skip-nx-cache --parallel=2 --coverage --reporters=default --reporters=jest-junit --coverageReporters=cobertura
+          - script: npx nx run-many --target=test --skip-nx-cache --parallel=1 --coverage --reporters=default --reporters=jest-junit --coverageReporters=cobertura
             displayName: 'Run tests'
 
           - task: PublishTestResults@2
@@ -68,6 +55,21 @@ stages:
               testResultsFiles: '**/junit.xml'
               failTaskOnFailedTests: true
             displayName: Publish test results to AzDo
+
+#          - task: reportgenerator@5
+#            inputs:
+#              reports: '**/cobertura-coverage.xml'
+#              reporttypes: 'HtmlInline_AzurePipelines;Cobertura'
+#              targetdir: '$(System.DefaultWorkingDirector#y)/Coverage'
+#            displayName: 'Generate code coverage results'
+
+#          - task: PublishCodeCoverageResults@1
+#            inputs:
+#              codeCoverageTool: 'Cobertura'
+#              summaryFileLocation: '$(System.DefaultWorkingDirectory)/Coverage/Cobertura.xml'
+#              reportDirectory: '$(System.DefaultWorkingDirectory)/Coverage'
+#              failTaskOnFailedTests: true
+#            displayName: Publish code coverage results to AzDo
 
           - script: npx nx run-many --target=build --parallel=2
             displayName: 'Run build'
@@ -92,4 +94,59 @@ stages:
             inputs:
               targetPath: $(System.DefaultWorkingDirectory)/dist/apps/api
               artifactName: 'api-build'
-  
+
+          - task: PublishPipelineArtifact@1
+            condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
+            inputs:
+              targetPath: $(System.DefaultWorkingDirectory)/dist/apps/schema-worker
+              artifactName: 'schema-worker-build'
+  - stage: deploy
+    dependsOn: build
+    condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
+    jobs:
+    - deployment: DeplyDVP
+      displayName: deploy DVP
+      environment: ${{ variables.TARGET_ENV }}
+      strategy:
+        runOnce:
+          deploy:
+            steps:
+            - script: df -h
+              displayName: 'Check disk size'
+
+            - task: DownloadPipelineArtifact@2
+              inputs:
+                source: 'current' # Options: current, specific
+                path: $(System.DefaultWorkingDirectory)/artifacts
+
+            - template: .azure-pipelines/steps/install-node-modules.yml
+
+            - task: AWSShellScript@1
+              env:
+                ENV: ${{ variables.TARGET_ENV }}
+              inputs:
+                awsCredentials: 'aws-dvp-nonprod'
+                regionName: 'ap-southeast-2'
+                scriptType: 'inline'
+                inlineScript: |
+                  sudo rm -rf $HOME/.pulumi
+                  sudo rm -rf /usr/local/bin/pulumi*
+                  curl -fsSL https://get.pulumi.com | sh
+                  sudo /bin/cp -rf $HOME/.pulumi/bin/* /usr/local/bin
+                  ls -ld ./artifacts
+                  chmod 777 ./artifacts
+
+                  cd apps/infrastructure/policypack && yarn install
+              displayName: Install pulumi
+
+            - task: AWSShellScript@1
+              env:
+                ENV: ${{ variables.TARGET_ENV }}
+              inputs:
+                awsCredentials: 'aws-dvp-nonprod'
+                regionName: 'ap-southeast-2'
+                scriptType: 'inline'
+                inlineScript: |
+                  npx nx run infrastructure:up --verbose
+              displayName: Pulumi up
+                          

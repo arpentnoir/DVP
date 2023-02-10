@@ -105,6 +105,7 @@ new aws.iam.RolePolicyAttachment(
     policyArn: kmsLambdaPolicy.arn,
   }
 );
+
 ////////////////////////////////////////////////////////////////////////////////
 // Lambda functions for apis
 export const lambdaSchemaWorkerHandler = new aws.lambda.Function(

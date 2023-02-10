@@ -4,6 +4,7 @@ import { ComponentResourceOptions } from '@pulumi/pulumi';
 import fs from 'fs-extra';
 import { Components } from 'gs-pulumi-library';
 import path from 'path';
+import * as aws from '@pulumi/aws';
 
 export interface S3HostedWebsiteConfig {
   bucketName: string;
@@ -87,6 +88,76 @@ export const createS3HostedWebsite = (
     options
   );
 
+  const provider = new aws.Provider(`${config.bucketName}-provider-us-east-1`, {
+    region: 'us-east-1',
+  });
+
+  const wafipSet = new aws.waf.IpSet(`${config.bucketName}-ipset`, {ipSetDescriptors: [
+    {type: "IPV4", value: "164.97.246.192/28"},
+    {type: "IPV4", value: "20.36.64.0/19"},
+    {type: "IPV4", value: "20.36.112.0/20"},
+    {type: "IPV4", value: "20.39.72.0/21"},
+    {type: "IPV4", value: "20.39.96.0/19"},
+    {type: "IPV4", value: "40.82.12.0/22"},
+    {type: "IPV4", value: "40.82.244.0/22"},
+    {type: "IPV4", value: "40.90.130.32/28"},
+    {type: "IPV4", value: "40.90.142.64/27"},
+    {type: "IPV4", value: "40.90.149.32/27"},
+    {type: "IPV4", value: "40.126.128.0/18"},
+    {type: "IPV4", value: "52.143.218.0/24"},
+    {type: "IPV4", value: "52.239.218.0/23"},
+    {type: "IPV4", value: "20.36.32.0/19"},
+    {type: "IPV4", value: "20.36.104.0/21"},
+    {type: "IPV4", value: "20.37.0.0/16"},
+    {type: "IPV4", value: "20.38.184.0/22"},
+    {type: "IPV4", value: "20.39.64.0/21"},
+    {type: "IPV4", value: "40.82.8.0/22"},
+    {type: "IPV4", value: "40.82.240.0/22"},
+    {type: "IPV4", value: "40.90.130.48/28"},
+    {type: "IPV4", value: "40.90.142.96/27"},
+    {type: "IPV4", value: "40.90.149.64/27"},
+    {type: "IPV4", value: "52.143.219.0/24"},
+    {type: "IPV4", value: "52.239.216.0/23"},
+    {type: "IPV4", value: "101.167.226.80/28"},
+    {type: "IPV4", value: "101.167.229.80/28"},
+    {type: "IPV4", value: "164.97.245.84/32"},
+    {type: "IPV4", value: "162.145.253.0/24"},
+    {type: "IPV4", value: "20.37.10.126/32"},
+    {type: "IPV4", value: "52.63.239.67/32"},
+    {type: "IPV4", value: "13.237.226.46/32"}
+  ]}, { provider: provider });
+
+  const wafRule = new aws.waf.Rule(`${config.bucketName}-rule`, {
+    metricName: "RuleMetric",
+    predicates: [{
+      dataId: wafipSet.id,
+      negated: false,
+      type: "IPMatch",
+    }],
+    }, {
+      dependsOn: [wafipSet],
+  });
+
+  const wafAcl = new aws.waf.WebAcl(`${config.bucketName}-wafAcl`, {
+    metricName: "webACLMetric",
+    defaultAction: {
+      type: "BLOCK",
+    },
+    rules: [{
+      action: {
+        type: "ALLOW",
+      },
+      priority: 1,
+      ruleId: wafRule.id,
+      type: "REGULAR",
+    }], 
+    }, {
+    dependsOn: [
+      wafipSet,
+      wafRule,
+    ],
+  });
+
   const website = new Components.aws.CloudfrontWebsite(config.bucketName, {
     description: `Static website for ${config.bucketName} SPA. Stored on S3. Served via Cloudfront`,
 
@@ -97,6 +168,7 @@ export const createS3HostedWebsite = (
     logBucket: config.auditLogBucket.bucket,
     logBucketPrefix: `cloudfront/${config.domain}/`,
     originAccessIdentity: config.originAccessIdentity,
+    webAclId: wafAcl.id
   });
 
   return {

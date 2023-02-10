@@ -2,14 +2,15 @@ SHELL := /bin/bash
 
 # Default env variables
 APP_NAME = dvp
-ENV ?= dev
+ENV ?= e1
 
 AWS_REGION ?= ap-southeast-2
-AWS_ACCOUNT_ID ?= 580315648792
-AWS_ROLENAME ?= codeontap-automation
+AWS_ACCOUNT_ID ?= 636729270584
+PULUMI_STATE ?= ${AWS_ACCOUNT_ID}-${APP_NAME}-${ENV}-pulumi-state
 PULUMI_STATE_URL ?= s3://${AWS_ACCOUNT_ID}-${APP_NAME}-${ENV}-pulumi-state
 PULUMI_CONFIG_PASSPHRASE ?=
-TARGET_DOMAIN ?= dvp.ha.showthething.com
+TARGET_DOMAIN ?= nonprod-dvp.cp4.homeaffairs.gov.au
+WILDCARD_SSL ?= *.${ENV}.${TARGET_DOMAIN}
 DVP_API_DOMAIN ?= api.${ENV}.${TARGET_DOMAIN}
 DVP_DOMAIN ?= web.${ENV}.${TARGET_DOMAIN}
 DVP_INTERNAL_DOMAIN ?= web.${ENV}.internal.${TARGET_DOMAIN}

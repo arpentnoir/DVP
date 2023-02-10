@@ -16716,10 +16716,10 @@ grid-index@^1.1.0:
   resolved "https://registry.yarnpkg.com/grid-index/-/grid-index-1.1.0.tgz#97f8221edec1026c8377b86446a7c71e79522ea7"
   integrity sha512-HZRwumpOGUrHyxO5bqKZL0B0GlUpwtCAzZ42sgxUPniu33R1LSFH5yrIcBCHjkctCAh3mtWKcKd9J4vDDdeVHA==
 
-gs-pulumi-library@^0.2.3:
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/gs-pulumi-library/-/gs-pulumi-library-0.2.3.tgz#abc8a63e7f8550830ffcff8b8a263009a57f2162"
-  integrity sha512-87slE4CuEVm8bEgBTXLVS8e7eveLCPXryy6XMN78nZRqTAE0Mnco3alCTuxyajbt978xktXCynA/NnRK5663Ig==
+gs-pulumi-library@^0.2.4:
+  version "0.2.4"
+  resolved "https://registry.yarnpkg.com/gs-pulumi-library/-/gs-pulumi-library-0.2.4.tgz#0460f7dfcda26242d41981fc9d977c409f76fc46"
+  integrity sha512-ud+Y59tKvcpuNTc+8KeuxxSUNOF4ufeIp0pNTuLomI+LgN2eejDOXJwIODOuWBbPR/EKV4xJbIFuA83lsPoK+w==
   dependencies:
     "@pulumi/aws" "^5.0.0"
     "@pulumi/awsguard" "^0.3.1"

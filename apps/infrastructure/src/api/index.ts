@@ -9,10 +9,15 @@ import * as vpc from '../common/vpc';
 import { config } from './config';
 import { bucketPolicy } from './policies/s3Policies';
 import { lambdaRole } from './roles/lambdaRole';
+import { cloudWatchRole } from './roles/cloudWatchRole';
 
 const stack = pulumi.getStack();
 
 const apiDir = '../../artifacts/api-build'; // directory for content files
+
+////////////////////////////////////////////////////////////////////////////////
+// Cloudwatch related role and policy
+const cloudwatchRoleAndPolicy = cloudWatchRole;
 
 ////////////////////////////////////////////////////////////////////////////////
 // Log group for api
@@ -230,6 +235,31 @@ const provider = new aws.Provider(`${stack}-provider-us-east-1`, {
   region: 'us-east-1',
 });
 
+// Get hosted zone
+const hostedZoneId = aws.route53
+  .getZone({ name: config.targetDomain }, {})
+  .then((zone) => zone.zoneId);
+
+// Create new certificate
+const sslNewCertificate = new aws.acm.Certificate(config.dvpApiDomain, {
+  domainName: config.dvpApiDomain,
+  validationMethod: "DNS",
+});
+
+const sslNewCertificateUSEast = new aws.acm.Certificate(`${config.dvpApiDomain}-us-east`, {
+  domainName: config.dvpApiDomain,
+  validationMethod: "DNS",
+}, { provider: provider });
+
+// Add to route53 DNS.  Required for validation
+const sslCertificateValidation = new aws.route53.Record(`${config.dvpApiDomain}-validation`, {
+  name: sslNewCertificate.domainValidationOptions[0].resourceRecordName,
+  records: [sslNewCertificate.domainValidationOptions[0].resourceRecordValue],
+  ttl: 60,
+  type: sslNewCertificate.domainValidationOptions[0].resourceRecordType,
+  zoneId: hostedZoneId,
+});
+
 // Get ssl certificate
 const sslCertificate = pulumi.output(
   aws.acm.getCertificate(
@@ -240,11 +270,6 @@ const sslCertificate = pulumi.output(
     { provider: provider }
   )
 );
-
-// Get hosted zone
-const hostedZoneId = aws.route53
-  .getZone({ name: config.targetDomain }, {})
-  .then((zone) => zone.zoneId);
 
 // Register custom domain name with ApiGateway
 const apiDomainName = new aws.apigateway.DomainName(
