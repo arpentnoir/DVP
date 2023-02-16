@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { authMiddleware } from '../../middlewares';
+import { authMiddleware } from '../../../middlewares';
 import { handleIssue } from './issue.controller';
 
 export const issueRoutes = Router();

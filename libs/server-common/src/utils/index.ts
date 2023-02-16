@@ -1,3 +1,4 @@
+export * from './base64';
 export * from './environment';
 export * from './logger';
 export * from './s3-adapter';

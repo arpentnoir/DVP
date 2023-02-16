@@ -19,6 +19,7 @@
     "/storage/documents": {
       "post": {
         "summary": "encrypt and upload document",
+        "operationId": "uploadDocument",
         "requestBody": {
           "content": {
             "application/json": {
@@ -52,6 +53,7 @@
     "/storage/documents/{documentId}": {
       "get": {
         "summary": "Get encrypted document by Id",
+        "operationId": "getDocument",
         "parameters": [
           {
             "name": "documentId",
@@ -87,7 +89,78 @@
         }
       }
     },
-    "/issue": {
+    "/credentials": {
+      "get": {
+        "summary": "List all the issued credentials",
+        "description": "List all the issued credentials",
+        "tags": ["Credentials"],
+        "operationId": "getCredentials",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "nextCursor",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Starting key for the next result set. If you don't pass a nextCursor parameter, but do pass a limit parameter, the default value retrieves the first portion (or \"page\") of results."
+          },
+          {
+            "in": "query",
+            "name": "prevCursor",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Starting key for the previous result set. If you pass prevCursor and nextCursor together, nextCursor takes precedence"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "maximum": 100
+            },
+            "description": "The numbers of items to return"
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Searches for the query string in the searchable fields"
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"]
+            },
+            "description": "The supported sort directions are either `asc` for ascending or `desc` for descending. If a sort direction is not specified, then order will default to `asc`",
+            "example": "desc"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of issued crdentials.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CredentialsResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerErrorResponse"
+          }
+        }
+      }
+    },
+    "/credentials/issue": {
       "post": {
         "summary": "Issues a credential and returns it in the response body.",
         "tags": ["Credentials"],
@@ -123,7 +196,7 @@
         }
       }
     },
-    "/verify": {
+    "/credentials/verify": {
       "post": {
         "summary": "Verifies a verifiableCredential and returns a verificationResult in the response body.",
         "tags": ["Credentials"],
@@ -159,7 +232,7 @@
         }
       }
     },
-    "/validate": {
+    "/credentials/validate": {
       "post": {
         "summary": "Validates the credentialSubject and returns any errors in the response body.",
         "tags": ["Credentials"],
@@ -186,13 +259,13 @@
               }
             }
           },
-          "422": {
-            "description": "Validation Error",
-            "$ref": "#/components/responses/ValidationErrorResponse"
-          },
           "400": {
             "description": "Bad User Input",
             "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "422": {
+            "description": "Validation Error",
+            "$ref": "#/components/responses/ValidationErrorResponse"
           },
           "500": {
             "description": "Internal Server Error",
@@ -351,6 +424,59 @@
                 "description": "Encryption algorithm identifier (OA)"
               }
             }
+          }
+        }
+      },
+      "CredentialsResponseItem": {
+        "type": "object",
+        "description": "issued credential metadata",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "documentNumber": {
+            "type": "string"
+          },
+          "freeTradeAgreement": {
+            "type": "string"
+          },
+          "importingJurisdiction": {
+            "type": "string"
+          },
+          "exporterOrManufacturerAbn": {
+            "type": "string"
+          },
+          "importerName": {
+            "type": "string"
+          },
+          "consignmentReferenceNumber": {
+            "type": "string"
+          },
+          "documentDeclaration": {
+            "type": "boolean"
+          },
+          "issueDate": {
+            "type": "string",
+            "description": "The issue date"
+          },
+          "expiryDate": {
+            "type": "string",
+            "description": "The expiry date"
+          }
+        }
+      },
+      "CredentialsResponse": {
+        "type": "object",
+        "description": "List of issued credentials",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CredentialsResponseItem"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
           }
         }
       },
@@ -609,6 +735,21 @@
             "verificationMethod": "did:example:1234#z6MksHh7qHWvybLg5QTPPdG2DgEjjduBDArV9EF9mRiRzMBN",
             "proofPurpose": "assertionMethod",
             "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..YtqjEYnFENT7fNW-COD0HAACxeuQxPKAmp4nIl8jYAu__6IH2FpSxv81w-l5PvE1og50tS9tH8WyXMlXyo45CA"
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "description": "Pagination data object",
+        "properties": {
+          "nextCursor": {
+            "type": "string"
+          },
+          "prevCursor": {
+            "type": "string"
+          },
+          "limit": {
+            "type": "number"
           }
         }
       }

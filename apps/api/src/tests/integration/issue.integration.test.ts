@@ -23,17 +23,15 @@ import { app } from '../../app';
 import unsignedSvip from '../../fixtures/genericvc/degree_unsigned.json';
 import oa_doc_base from '../../fixtures/oav3/did.json';
 import validAANZFTA_COO from '../../fixtures/validateabledata/validAANZFTA_COO.json';
+import {
+  authTokenWithoutAbn,
+  authTokenWithoutSub,
+  authTokenWithSubAndAbn,
+} from './utils';
 
 let oa_doc;
 
 const s3Mock = mockClient(S3Client);
-
-const authTokenWithSubAndAbn =
-  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiYWJuIjoiMDAwMDAwMDAwMDAifQ.mYt_zdD9hjCC0267io5tyeTx0r6Xrh4B6JRVLqHkY5A';
-const authTokenWithoutAbn =
-  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0.dozjgNryP4J3jVmNHl0w5N_XgL0n3I9PlFUP0THsR8U';
-const authTokenWithoutSub =
-  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhYm4iOiI0MTE2MTA4MDE0NiJ9.xH8xNWpezPBknplKCi_xt7xFipXpcYkY3Sv0ID1PQzk';
 
 const partialCoo = {
   ...validAANZFTA_COO.verifiableCredential,
@@ -63,14 +61,14 @@ const fullCoo = {
 
 describe('issue api', () => {
   jest.setTimeout(20000);
-  const endpoint = '/api/issue';
+  const endpoint = '/api/credentials/issue';
 
   beforeEach(() => {
     s3Mock.reset();
     MockDbCreateRecord.mockReset();
   });
 
-  describe('POST /api/issue', () => {
+  describe('POST /api/credentials/issue', () => {
     beforeEach(() => {
       oa_doc = JSON.parse(JSON.stringify(oa_doc_base));
     });
@@ -214,6 +212,7 @@ describe('issue api', () => {
               importerName: 'ABC Imports',
               consignmentReferenceNumber: '15688545563',
               documentDeclaration: true,
+              issueDate: partialCoo.issuanceDate,
             });
             expect(
               res.body.verifiableCredential.credentialSubject.links.self.href
@@ -249,6 +248,7 @@ describe('issue api', () => {
               exporterOrManufacturerAbn: '95307094535',
               importerName: 'East meets west fine wines',
               consignmentReferenceNumber: 'dbschenker.com:hawb:DBS626578',
+              issueDate: fullCoo.issuanceDate,
             });
             expect(
               res.body.verifiableCredential.credentialSubject.links.self.href
@@ -279,6 +279,7 @@ describe('issue api', () => {
               abn: '00000000000',
               s3Path: `documents/${res.body.documentId as string}`,
               decryptionKey: `${res.body.encryptionKey as string}`,
+              issueDate: oa_doc.issuanceDate,
             });
             expect(
               res.body.verifiableCredential.credentialSubject.links.self.href
@@ -309,6 +310,7 @@ describe('issue api', () => {
               abn: '41161080146',
               s3Path: `documents/${res.body.documentId as string}`,
               decryptionKey: `${res.body.encryptionKey as string}`,
+              issueDate: oa_doc.issuanceDate,
             });
             expect(
               res.body.verifiableCredential.credentialSubject.links.self.href

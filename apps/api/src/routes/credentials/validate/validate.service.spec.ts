@@ -1,21 +1,21 @@
 import {
+  CredentialSchemaType,
+  VerifiableCredential,
+} from '@dvp/api-interfaces';
+import {
   AjvSchemaValidationError,
   RequestInvocationContext,
   ValidationError,
 } from '@dvp/server-common';
 import { getMockReq } from '@jest-mock/express';
-import { ValidationService } from './validation.service';
-import validGenericData from '../../fixtures/validateabledata/validGeneric.json';
-import validAANZFTA_COO from '../../fixtures/validateabledata/validAANZFTA_COO.json';
-import missingRequiredAANZFTA_COO from '../../fixtures/validateabledata/AANZFTA_COO-missing-required-fields.json';
-import badDateTimeFormatAANZFTA_COO from '../../fixtures/validateabledata/AANZFTA-COO-bad-date-time.json';
-import emptyStringAANZFTA_COO from '../../fixtures/validateabledata/AANZFTA_COO-empty-strings.json';
-import emptyStringGeneric from '../../fixtures/validateabledata/Generic-empty-string.json';
-import missingRequiredGeneric from '../../fixtures/validateabledata/generic-missing-required-fields.json';
-import {
-  CredentialSchemaType,
-  VerifiableCredential,
-} from '@dvp/api-interfaces';
+import badDateTimeFormatAANZFTA_COO from '../../../fixtures/validateabledata/AANZFTA-COO-bad-date-time.json';
+import emptyStringAANZFTA_COO from '../../../fixtures/validateabledata/AANZFTA_COO-empty-strings.json';
+import missingRequiredAANZFTA_COO from '../../../fixtures/validateabledata/AANZFTA_COO-missing-required-fields.json';
+import emptyStringGeneric from '../../../fixtures/validateabledata/Generic-empty-string.json';
+import missingRequiredGeneric from '../../../fixtures/validateabledata/generic-missing-required-fields.json';
+import validAANZFTA_COO from '../../../fixtures/validateabledata/validAANZFTA_COO.json';
+import validGenericData from '../../../fixtures/validateabledata/validGeneric.json';
+import { ValidationService } from './validate.service';
 
 const wrongSchemaType = {
   schemaType: 'abbbaa',

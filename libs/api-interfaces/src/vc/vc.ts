@@ -1,8 +1,8 @@
 import {
   CredentialStatus,
   OpenAttestationDocument,
-  WrappedDocument,
   OpenAttestationMetadata,
+  WrappedDocument,
 } from '@govtechsg/open-attestation/dist/types/3.0/types';
 
 import { VerifiableCredential as ApiVerifiableCredential } from '@dvp/api-client';
@@ -19,6 +19,8 @@ export interface DocumentMetadata {
   importerName?: string;
   consignmentReferenceNumber?: string;
   documentDeclaration?: boolean;
+  issueDate?: string;
+  expiryDate?: string;
 }
 
 export interface CredentialSubject {

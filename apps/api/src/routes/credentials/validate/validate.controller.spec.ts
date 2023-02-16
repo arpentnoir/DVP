@@ -1,6 +1,6 @@
-import { validate } from './validation.controller';
 import { getMockReq, getMockRes } from '@jest-mock/express';
-import validGenericData from '../../fixtures/validateabledata/validGeneric.json';
+import validGenericData from '../../../fixtures/validateabledata/validGeneric.json';
+import { validate } from './validate.controller';
 
 const { res: responseMock, next: nextMock } = getMockRes({ send: jest.fn() });
 

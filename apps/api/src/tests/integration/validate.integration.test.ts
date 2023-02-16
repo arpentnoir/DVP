@@ -1,19 +1,17 @@
 import request from 'supertest';
 import { app } from '../../app';
-import validGenericData from '../../fixtures/validateabledata/validGeneric.json';
-import validAANZFTA_COO from '../../fixtures/validateabledata/validAANZFTA_COO.json';
-import missingRequiredAANZFTA_COO from '../../fixtures/validateabledata/AANZFTA_COO-missing-required-fields.json';
 import emptyStringGeneric from '../../fixtures/validateabledata/AANZFTA_COO-empty-strings.json';
+import missingRequiredAANZFTA_COO from '../../fixtures/validateabledata/AANZFTA_COO-missing-required-fields.json';
 import missingRequiredGeneric from '../../fixtures/validateabledata/generic-missing-required-fields.json';
-import { ExpectedBody } from '../../routes/validation/validation.controller';
-
-const authTokenWithSubAndAbn =
-  'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiYWJuIjoiMDAwMDAwMDAwMDAifQ.mYt_zdD9hjCC0267io5tyeTx0r6Xrh4B6JRVLqHkY5A';
+import validAANZFTA_COO from '../../fixtures/validateabledata/validAANZFTA_COO.json';
+import validGenericData from '../../fixtures/validateabledata/validGeneric.json';
+import { ExpectedBody } from '../../routes/credentials/validate/validate.controller';
+import { authTokenWithSubAndAbn } from './utils';
 
 describe('validate api', () => {
-  const endpoint = '/api/validate';
+  const endpoint = '/api/credentials/validate';
 
-  describe('POST /api/validate', () => {
+  describe('POST /api/credentials/validate', () => {
     it('should pass validation if a valid generic vc is submited', async () => {
       await request(app)
         .post(endpoint)

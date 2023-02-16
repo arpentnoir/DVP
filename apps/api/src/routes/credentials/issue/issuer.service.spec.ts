@@ -13,13 +13,15 @@ import { IssueCredentialRequestSigningMethodEnum } from '@dvp/api-client';
 import { VerifiableCredential } from '@dvp/api-interfaces';
 import { RequestInvocationContext } from '@dvp/server-common';
 import { getMockReq } from '@jest-mock/express';
-import unsignedSvip from '../../fixtures/genericvc/degree_unsigned.json';
-import unsignedOAV3 from '../../fixtures/oav3/did.json';
-import validAANZFTA_COO from '../../fixtures/validateabledata/validAANZFTA_COO.json';
-import validGeneric from '../../fixtures/validateabledata/validAANZFTA_COO.json';
+import unsignedSvip from '../../../fixtures/genericvc/degree_unsigned.json';
+import unsignedOAV3 from '../../../fixtures/oav3/did.json';
+import {
+  default as validAANZFTA_COO,
+  default as validGeneric,
+} from '../../../fixtures/validateabledata/validAANZFTA_COO.json';
 
+import { storageClient } from '../../storage/storage.service';
 import { IssueService } from './issue.service';
-import { storageClient } from '../storage/storage.service';
 
 const deleteDocumentMock = jest.spyOn(storageClient, 'deleteDocument');
 const uploadDocumentMock = jest.spyOn(storageClient, 'uploadDocument');
@@ -135,6 +137,7 @@ describe('issue.service', () => {
       importerName: 'ABC Imports',
       consignmentReferenceNumber: '15688545563',
       documentDeclaration: true,
+      issueDate: validGeneric.verifiableCredential.issuanceDate,
     });
   });
 
@@ -176,6 +179,7 @@ describe('issue.service', () => {
       exporterOrManufacturerAbn: '95307094535',
       importerName: 'East meets west fine wines',
       consignmentReferenceNumber: 'dbschenker.com:hawb:DBS626578',
+      issueDate: validAANZFTA_COO.verifiableCredential.issuanceDate,
     });
   });
 
@@ -202,6 +206,7 @@ describe('issue.service', () => {
       createdBy: userId,
       decryptionKey: decryptKey,
       s3Path: docStorePath + storageId,
+      issueDate: validGeneric.verifiableCredential.issuanceDate,
     });
   });
 

@@ -1,9 +1,8 @@
-import { omitBy, isUndefined } from 'lodash';
 import { IssueCredentialRequestSigningMethodEnum } from '@dvp/api-client';
 import {
   DocumentMetadata,
-  IssuerFunction,
   IssuedDocument,
+  IssuerFunction,
   VerifiableCredential,
 } from '@dvp/api-interfaces';
 import {
@@ -15,9 +14,10 @@ import {
   transmute,
   ValidationError,
 } from '@dvp/server-common';
-import { models } from '../../db';
-import { config } from '../../config';
-import { storageClient, StorageService } from '../storage/storage.service';
+import { isUndefined, omitBy } from 'lodash';
+import { config } from '../../../config';
+import { models } from '../../../db';
+import { storageClient, StorageService } from '../../storage/storage.service';
 
 export class IssueService {
   logger: Logger;
@@ -61,6 +61,7 @@ export class IssueService {
     try {
       const { userId, userAbn } = this.invocationContext;
 
+      const { issuanceDate, expirationDate } = credential;
       const {
         iD,
         freeTradeAgreement,
@@ -81,6 +82,8 @@ export class IssueService {
             importerName,
             consignmentReferenceNumber,
             documentDeclaration,
+            issueDate: issuanceDate,
+            expiryDate: expirationDate,
           }
         : {
             documentNumber: iD,
@@ -88,6 +91,8 @@ export class IssueService {
             exporterOrManufacturerAbn: supplyChainConsignment?.consignor?.iD,
             importerName: supplyChainConsignment?.consignee?.name,
             consignmentReferenceNumber: supplyChainConsignment?.iD,
+            issueDate: issuanceDate,
+            expiryDate: expirationDate,
           };
 
       const filteredDocumentMetadata: DocumentMetadata = omitBy(

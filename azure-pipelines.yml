@@ -5,7 +5,6 @@ pr:
   - main
   - develop
 
-
 pool:
   name: Cloud-bcz-pub
 
@@ -56,20 +55,20 @@ stages:
               failTaskOnFailedTests: true
             displayName: Publish test results to AzDo
 
-#          - task: reportgenerator@5
-#            inputs:
-#              reports: '**/cobertura-coverage.xml'
-#              reporttypes: 'HtmlInline_AzurePipelines;Cobertura'
-#              targetdir: '$(System.DefaultWorkingDirector#y)/Coverage'
-#            displayName: 'Generate code coverage results'
+          #          - task: reportgenerator@5
+          #            inputs:
+          #              reports: '**/cobertura-coverage.xml'
+          #              reporttypes: 'HtmlInline_AzurePipelines;Cobertura'
+          #              targetdir: '$(System.DefaultWorkingDirector#y)/Coverage'
+          #            displayName: 'Generate code coverage results'
 
-#          - task: PublishCodeCoverageResults@1
-#            inputs:
-#              codeCoverageTool: 'Cobertura'
-#              summaryFileLocation: '$(System.DefaultWorkingDirectory)/Coverage/Cobertura.xml'
-#              reportDirectory: '$(System.DefaultWorkingDirectory)/Coverage'
-#              failTaskOnFailedTests: true
-#            displayName: Publish code coverage results to AzDo
+          #          - task: PublishCodeCoverageResults@1
+          #            inputs:
+          #              codeCoverageTool: 'Cobertura'
+          #              summaryFileLocation: '$(System.DefaultWorkingDirectory)/Coverage/Cobertura.xml'
+          #              reportDirectory: '$(System.DefaultWorkingDirectory)/Coverage'
+          #              failTaskOnFailedTests: true
+          #            displayName: Publish code coverage results to AzDo
 
           - script: npx nx run-many --target=build --parallel=2
             displayName: 'Run build'
@@ -104,49 +103,48 @@ stages:
     dependsOn: build
     condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
     jobs:
-    - deployment: DeplyDVP
-      displayName: deploy DVP
-      environment: ${{ variables.TARGET_ENV }}
-      strategy:
-        runOnce:
-          deploy:
-            steps:
-            - script: df -h
-              displayName: 'Check disk size'
+      - deployment: DeplyDVP
+        displayName: deploy DVP
+        environment: ${{ variables.TARGET_ENV }}
+        strategy:
+          runOnce:
+            deploy:
+              steps:
+                - script: df -h
+                  displayName: 'Check disk size'
 
-            - task: DownloadPipelineArtifact@2
-              inputs:
-                source: 'current' # Options: current, specific
-                path: $(System.DefaultWorkingDirectory)/artifacts
+                - task: DownloadPipelineArtifact@2
+                  inputs:
+                    source: 'current' # Options: current, specific
+                    path: $(System.DefaultWorkingDirectory)/artifacts
 
-            - template: .azure-pipelines/steps/install-node-modules.yml
+                - template: .azure-pipelines/steps/install-node-modules.yml
 
-            - task: AWSShellScript@1
-              env:
-                ENV: ${{ variables.TARGET_ENV }}
-              inputs:
-                awsCredentials: 'aws-dvp-nonprod'
-                regionName: 'ap-southeast-2'
-                scriptType: 'inline'
-                inlineScript: |
-                  sudo rm -rf $HOME/.pulumi
-                  sudo rm -rf /usr/local/bin/pulumi*
-                  curl -fsSL https://get.pulumi.com | sh
-                  sudo /bin/cp -rf $HOME/.pulumi/bin/* /usr/local/bin
-                  ls -ld ./artifacts
-                  chmod 777 ./artifacts
+                - task: AWSShellScript@1
+                  env:
+                    ENV: ${{ variables.TARGET_ENV }}
+                  inputs:
+                    awsCredentials: 'aws-dvp-nonprod'
+                    regionName: 'ap-southeast-2'
+                    scriptType: 'inline'
+                    inlineScript: |
+                      sudo rm -rf $HOME/.pulumi
+                      sudo rm -rf /usr/local/bin/pulumi*
+                      curl -fsSL https://get.pulumi.com | sh
+                      sudo /bin/cp -rf $HOME/.pulumi/bin/* /usr/local/bin
+                      ls -ld ./artifacts
+                      chmod 777 ./artifacts
 
-                  cd apps/infrastructure/policypack && yarn install
-              displayName: Install pulumi
+                      cd apps/infrastructure/policypack && yarn install
+                  displayName: Install pulumi
 
-            - task: AWSShellScript@1
-              env:
-                ENV: ${{ variables.TARGET_ENV }}
-              inputs:
-                awsCredentials: 'aws-dvp-nonprod'
-                regionName: 'ap-southeast-2'
-                scriptType: 'inline'
-                inlineScript: |
-                  npx nx run infrastructure:up --verbose
-              displayName: Pulumi up
-                          
+                - task: AWSShellScript@1
+                  env:
+                    ENV: ${{ variables.TARGET_ENV }}
+                  inputs:
+                    awsCredentials: 'aws-dvp-nonprod'
+                    regionName: 'ap-southeast-2'
+                    scriptType: 'inline'
+                    inlineScript: |
+                      npx nx run infrastructure:up --verbose
+                  displayName: Pulumi up

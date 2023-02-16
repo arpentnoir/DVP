@@ -83,6 +83,92 @@ export interface Credential {
   issuer: Issuer;
 }
 /**
+ * List of issued credentials
+ * @export
+ * @interface CredentialsResponse
+ */
+export interface CredentialsResponse {
+  /**
+   *
+   * @type {Array<CredentialsResponseItem>}
+   * @memberof CredentialsResponse
+   */
+  results?: Array<CredentialsResponseItem>;
+  /**
+   *
+   * @type {Pagination}
+   * @memberof CredentialsResponse
+   */
+  pagination?: Pagination;
+}
+/**
+ * issued credential metadata
+ * @export
+ * @interface CredentialsResponseItem
+ */
+export interface CredentialsResponseItem {
+  /**
+   *
+   * @type {string}
+   * @memberof CredentialsResponseItem
+   */
+  id?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CredentialsResponseItem
+   */
+  documentNumber?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CredentialsResponseItem
+   */
+  freeTradeAgreement?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CredentialsResponseItem
+   */
+  importingJurisdiction?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CredentialsResponseItem
+   */
+  exporterOrManufacturerAbn?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CredentialsResponseItem
+   */
+  importerName?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof CredentialsResponseItem
+   */
+  consignmentReferenceNumber?: string;
+  /**
+   *
+   * @type {boolean}
+   * @memberof CredentialsResponseItem
+   */
+  documentDeclaration?: boolean;
+  /**
+   * The issue date
+   * @type {string}
+   * @memberof CredentialsResponseItem
+   */
+  issueDate?: string;
+  /**
+   * The expiry date
+   * @type {string}
+   * @memberof CredentialsResponseItem
+   */
+  expiryDate?: string;
+}
+/**
  *
  * @export
  * @interface DocumentUploadRequest
@@ -403,6 +489,50 @@ export interface ModelError {
   helpText?: string;
 }
 /**
+ * Pagination data object
+ * @export
+ * @interface Pagination
+ */
+export interface Pagination {
+  /**
+   *
+   * @type {string}
+   * @memberof Pagination
+   */
+  nextCursor?: string;
+  /**
+   *
+   * @type {string}
+   * @memberof Pagination
+   */
+  prevCursor?: string;
+  /**
+   *
+   * @type {number}
+   * @memberof Pagination
+   */
+  limit?: number;
+}
+/**
+ *
+ * @export
+ * @interface ValidateCredentialRequest
+ */
+export interface ValidateCredentialRequest {
+  /**
+   *
+   * @type {string}
+   * @memberof ValidateCredentialRequest
+   */
+  schemaType: string;
+  /**
+   *
+   * @type {VerifiableCredential}
+   * @memberof ValidateCredentialRequest
+   */
+  verifiableCredential: VerifiableCredential;
+}
+/**
  * A JSON-LD Verifiable Credential with a proof.
  * @export
  * @interface VerifiableCredential
@@ -518,6 +648,75 @@ export const CredentialsApiAxiosParamCreator = function (
 ) {
   return {
     /**
+     * List all the issued credentials
+     * @summary List all the issued credentials
+     * @param {string} [nextCursor] Starting key for the next result set. If you don\&#39;t pass a nextCursor parameter, but do pass a limit parameter, the default value retrieves the first portion (or \&quot;page\&quot;) of results.
+     * @param {string} [prevCursor] Starting key for the previous result set. If you pass prevCursor and nextCursor together, nextCursor takes precedence
+     * @param {number} [limit] The numbers of items to return
+     * @param {string} [q] Searches for the query string in the searchable fields
+     * @param {'asc' | 'desc'} [sort] The supported sort directions are either &#x60;asc&#x60; for ascending or &#x60;desc&#x60; for descending. If a sort direction is not specified, then order will default to &#x60;asc&#x60;
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getCredentials: async (
+      nextCursor?: string,
+      prevCursor?: string,
+      limit?: number,
+      q?: string,
+      sort?: 'asc' | 'desc',
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/credentials`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      if (nextCursor !== undefined) {
+        localVarQueryParameter['nextCursor'] = nextCursor;
+      }
+
+      if (prevCursor !== undefined) {
+        localVarQueryParameter['prevCursor'] = prevCursor;
+      }
+
+      if (limit !== undefined) {
+        localVarQueryParameter['limit'] = limit;
+      }
+
+      if (q !== undefined) {
+        localVarQueryParameter['q'] = q;
+      }
+
+      if (sort !== undefined) {
+        localVarQueryParameter['sort'] = sort;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * Issues a credential and returns it in the response body.
      * @summary Issues a credential and returns it in the response body.
      * @param {IssueCredentialRequest} [issueCredentialRequest] Parameters for issuing the credential.
@@ -528,7 +727,7 @@ export const CredentialsApiAxiosParamCreator = function (
       issueCredentialRequest?: IssueCredentialRequest,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
-      const localVarPath = `/issue`;
+      const localVarPath = `/credentials/issue`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -566,6 +765,54 @@ export const CredentialsApiAxiosParamCreator = function (
       };
     },
     /**
+     * Validates the credentialSubject and returns any errors in the response body.
+     * @summary Validates the credentialSubject and returns any errors in the response body.
+     * @param {ValidateCredentialRequest} [validateCredentialRequest] Parameters for validating a credentialSubject.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    validateCredential: async (
+      validateCredentialRequest?: ValidateCredentialRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/credentials/validate`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      localVarHeaderParameter['Content-Type'] = 'application/json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        validateCredentialRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
      * Verifies a verifiableCredential and returns a verificationResult in the response body.
      * @summary Verifies a verifiableCredential and returns a verificationResult in the response body.
      * @param {VerifyCredentialRequest} [verifyCredentialRequest] Parameters for verifying a verifiableCredential.
@@ -576,7 +823,7 @@ export const CredentialsApiAxiosParamCreator = function (
       verifyCredentialRequest?: VerifyCredentialRequest,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
-      const localVarPath = `/verify`;
+      const localVarPath = `/credentials/verify`;
       // use dummy base URL string because the URL constructor only accepts absolute URLs.
       const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
       let baseOptions;
@@ -625,6 +872,45 @@ export const CredentialsApiFp = function (configuration?: Configuration) {
     CredentialsApiAxiosParamCreator(configuration);
   return {
     /**
+     * List all the issued credentials
+     * @summary List all the issued credentials
+     * @param {string} [nextCursor] Starting key for the next result set. If you don\&#39;t pass a nextCursor parameter, but do pass a limit parameter, the default value retrieves the first portion (or \&quot;page\&quot;) of results.
+     * @param {string} [prevCursor] Starting key for the previous result set. If you pass prevCursor and nextCursor together, nextCursor takes precedence
+     * @param {number} [limit] The numbers of items to return
+     * @param {string} [q] Searches for the query string in the searchable fields
+     * @param {'asc' | 'desc'} [sort] The supported sort directions are either &#x60;asc&#x60; for ascending or &#x60;desc&#x60; for descending. If a sort direction is not specified, then order will default to &#x60;asc&#x60;
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getCredentials(
+      nextCursor?: string,
+      prevCursor?: string,
+      limit?: number,
+      q?: string,
+      sort?: 'asc' | 'desc',
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<CredentialsResponse>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getCredentials(
+        nextCursor,
+        prevCursor,
+        limit,
+        q,
+        sort,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
      * Issues a credential and returns it in the response body.
      * @summary Issues a credential and returns it in the response body.
      * @param {IssueCredentialRequest} [issueCredentialRequest] Parameters for issuing the credential.
@@ -644,6 +930,31 @@ export const CredentialsApiFp = function (configuration?: Configuration) {
         issueCredentialRequest,
         options
       );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     * Validates the credentialSubject and returns any errors in the response body.
+     * @summary Validates the credentialSubject and returns any errors in the response body.
+     * @param {ValidateCredentialRequest} [validateCredentialRequest] Parameters for validating a credentialSubject.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async validateCredential(
+      validateCredentialRequest?: ValidateCredentialRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<object>
+    > {
+      const localVarAxiosArgs =
+        await localVarAxiosParamCreator.validateCredential(
+          validateCredentialRequest,
+          options
+        );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -694,6 +1005,29 @@ export const CredentialsApiFactory = function (
   const localVarFp = CredentialsApiFp(configuration);
   return {
     /**
+     * List all the issued credentials
+     * @summary List all the issued credentials
+     * @param {string} [nextCursor] Starting key for the next result set. If you don\&#39;t pass a nextCursor parameter, but do pass a limit parameter, the default value retrieves the first portion (or \&quot;page\&quot;) of results.
+     * @param {string} [prevCursor] Starting key for the previous result set. If you pass prevCursor and nextCursor together, nextCursor takes precedence
+     * @param {number} [limit] The numbers of items to return
+     * @param {string} [q] Searches for the query string in the searchable fields
+     * @param {'asc' | 'desc'} [sort] The supported sort directions are either &#x60;asc&#x60; for ascending or &#x60;desc&#x60; for descending. If a sort direction is not specified, then order will default to &#x60;asc&#x60;
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getCredentials(
+      nextCursor?: string,
+      prevCursor?: string,
+      limit?: number,
+      q?: string,
+      sort?: 'asc' | 'desc',
+      options?: any
+    ): AxiosPromise<CredentialsResponse> {
+      return localVarFp
+        .getCredentials(nextCursor, prevCursor, limit, q, sort, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
      * Issues a credential and returns it in the response body.
      * @summary Issues a credential and returns it in the response body.
      * @param {IssueCredentialRequest} [issueCredentialRequest] Parameters for issuing the credential.
@@ -706,6 +1040,21 @@ export const CredentialsApiFactory = function (
     ): AxiosPromise<IssueCredentialResponse> {
       return localVarFp
         .issueCredential(issueCredentialRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     * Validates the credentialSubject and returns any errors in the response body.
+     * @summary Validates the credentialSubject and returns any errors in the response body.
+     * @param {ValidateCredentialRequest} [validateCredentialRequest] Parameters for validating a credentialSubject.
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    validateCredential(
+      validateCredentialRequest?: ValidateCredentialRequest,
+      options?: any
+    ): AxiosPromise<object> {
+      return localVarFp
+        .validateCredential(validateCredentialRequest, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -733,6 +1082,27 @@ export const CredentialsApiFactory = function (
  */
 export interface CredentialsApiInterface {
   /**
+   * List all the issued credentials
+   * @summary List all the issued credentials
+   * @param {string} [nextCursor] Starting key for the next result set. If you don\&#39;t pass a nextCursor parameter, but do pass a limit parameter, the default value retrieves the first portion (or \&quot;page\&quot;) of results.
+   * @param {string} [prevCursor] Starting key for the previous result set. If you pass prevCursor and nextCursor together, nextCursor takes precedence
+   * @param {number} [limit] The numbers of items to return
+   * @param {string} [q] Searches for the query string in the searchable fields
+   * @param {'asc' | 'desc'} [sort] The supported sort directions are either &#x60;asc&#x60; for ascending or &#x60;desc&#x60; for descending. If a sort direction is not specified, then order will default to &#x60;asc&#x60;
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof CredentialsApiInterface
+   */
+  getCredentials(
+    nextCursor?: string,
+    prevCursor?: string,
+    limit?: number,
+    q?: string,
+    sort?: 'asc' | 'desc',
+    options?: AxiosRequestConfig
+  ): AxiosPromise<CredentialsResponse>;
+
+  /**
    * Issues a credential and returns it in the response body.
    * @summary Issues a credential and returns it in the response body.
    * @param {IssueCredentialRequest} [issueCredentialRequest] Parameters for issuing the credential.
@@ -744,6 +1114,19 @@ export interface CredentialsApiInterface {
     issueCredentialRequest?: IssueCredentialRequest,
     options?: AxiosRequestConfig
   ): AxiosPromise<IssueCredentialResponse>;
+
+  /**
+   * Validates the credentialSubject and returns any errors in the response body.
+   * @summary Validates the credentialSubject and returns any errors in the response body.
+   * @param {ValidateCredentialRequest} [validateCredentialRequest] Parameters for validating a credentialSubject.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof CredentialsApiInterface
+   */
+  validateCredential(
+    validateCredentialRequest?: ValidateCredentialRequest,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<object>;
 
   /**
    * Verifies a verifiableCredential and returns a verificationResult in the response body.
@@ -767,6 +1150,31 @@ export interface CredentialsApiInterface {
  */
 export class CredentialsApi extends BaseAPI implements CredentialsApiInterface {
   /**
+   * List all the issued credentials
+   * @summary List all the issued credentials
+   * @param {string} [nextCursor] Starting key for the next result set. If you don\&#39;t pass a nextCursor parameter, but do pass a limit parameter, the default value retrieves the first portion (or \&quot;page\&quot;) of results.
+   * @param {string} [prevCursor] Starting key for the previous result set. If you pass prevCursor and nextCursor together, nextCursor takes precedence
+   * @param {number} [limit] The numbers of items to return
+   * @param {string} [q] Searches for the query string in the searchable fields
+   * @param {'asc' | 'desc'} [sort] The supported sort directions are either &#x60;asc&#x60; for ascending or &#x60;desc&#x60; for descending. If a sort direction is not specified, then order will default to &#x60;asc&#x60;
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof CredentialsApi
+   */
+  public getCredentials(
+    nextCursor?: string,
+    prevCursor?: string,
+    limit?: number,
+    q?: string,
+    sort?: 'asc' | 'desc',
+    options?: AxiosRequestConfig
+  ) {
+    return CredentialsApiFp(this.configuration)
+      .getCredentials(nextCursor, prevCursor, limit, q, sort, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
    * Issues a credential and returns it in the response body.
    * @summary Issues a credential and returns it in the response body.
    * @param {IssueCredentialRequest} [issueCredentialRequest] Parameters for issuing the credential.
@@ -780,6 +1188,23 @@ export class CredentialsApi extends BaseAPI implements CredentialsApiInterface {
   ) {
     return CredentialsApiFp(this.configuration)
       .issueCredential(issueCredentialRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   * Validates the credentialSubject and returns any errors in the response body.
+   * @summary Validates the credentialSubject and returns any errors in the response body.
+   * @param {ValidateCredentialRequest} [validateCredentialRequest] Parameters for validating a credentialSubject.
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof CredentialsApi
+   */
+  public validateCredential(
+    validateCredentialRequest?: ValidateCredentialRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return CredentialsApiFp(this.configuration)
+      .validateCredential(validateCredentialRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -816,16 +1241,12 @@ export const DefaultApiAxiosParamCreator = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    storageDocumentsDocumentIdGet: async (
+    getDocument: async (
       documentId: string,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
       // verify required parameter 'documentId' is not null or undefined
-      assertParamExists(
-        'storageDocumentsDocumentIdGet',
-        'documentId',
-        documentId
-      );
+      assertParamExists('getDocument', 'documentId', documentId);
       const localVarPath = `/storage/documents/{documentId}`.replace(
         `{${'documentId'}}`,
         encodeURIComponent(String(documentId))
@@ -866,7 +1287,7 @@ export const DefaultApiAxiosParamCreator = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    storageDocumentsPost: async (
+    uploadDocument: async (
       documentUploadRequest?: DocumentUploadRequest,
       options: AxiosRequestConfig = {}
     ): Promise<RequestArgs> => {
@@ -924,7 +1345,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async storageDocumentsDocumentIdGet(
+    async getDocument(
       documentId: string,
       options?: AxiosRequestConfig
     ): Promise<
@@ -933,11 +1354,10 @@ export const DefaultApiFp = function (configuration?: Configuration) {
         basePath?: string
       ) => AxiosPromise<EncryptedDocumentObject>
     > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.storageDocumentsDocumentIdGet(
-          documentId,
-          options
-        );
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getDocument(
+        documentId,
+        options
+      );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -952,7 +1372,7 @@ export const DefaultApiFp = function (configuration?: Configuration) {
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    async storageDocumentsPost(
+    async uploadDocument(
       documentUploadRequest?: DocumentUploadRequest,
       options?: AxiosRequestConfig
     ): Promise<
@@ -961,11 +1381,10 @@ export const DefaultApiFp = function (configuration?: Configuration) {
         basePath?: string
       ) => AxiosPromise<DocumentUploadResponse>
     > {
-      const localVarAxiosArgs =
-        await localVarAxiosParamCreator.storageDocumentsPost(
-          documentUploadRequest,
-          options
-        );
+      const localVarAxiosArgs = await localVarAxiosParamCreator.uploadDocument(
+        documentUploadRequest,
+        options
+      );
       return createRequestFunction(
         localVarAxiosArgs,
         globalAxios,
@@ -994,12 +1413,12 @@ export const DefaultApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    storageDocumentsDocumentIdGet(
+    getDocument(
       documentId: string,
       options?: any
     ): AxiosPromise<EncryptedDocumentObject> {
       return localVarFp
-        .storageDocumentsDocumentIdGet(documentId, options)
+        .getDocument(documentId, options)
         .then((request) => request(axios, basePath));
     },
     /**
@@ -1009,12 +1428,12 @@ export const DefaultApiFactory = function (
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      */
-    storageDocumentsPost(
+    uploadDocument(
       documentUploadRequest?: DocumentUploadRequest,
       options?: any
     ): AxiosPromise<DocumentUploadResponse> {
       return localVarFp
-        .storageDocumentsPost(documentUploadRequest, options)
+        .uploadDocument(documentUploadRequest, options)
         .then((request) => request(axios, basePath));
     },
   };
@@ -1034,7 +1453,7 @@ export interface DefaultApiInterface {
    * @throws {RequiredError}
    * @memberof DefaultApiInterface
    */
-  storageDocumentsDocumentIdGet(
+  getDocument(
     documentId: string,
     options?: AxiosRequestConfig
   ): AxiosPromise<EncryptedDocumentObject>;
@@ -1047,7 +1466,7 @@ export interface DefaultApiInterface {
    * @throws {RequiredError}
    * @memberof DefaultApiInterface
    */
-  storageDocumentsPost(
+  uploadDocument(
     documentUploadRequest?: DocumentUploadRequest,
     options?: AxiosRequestConfig
   ): AxiosPromise<DocumentUploadResponse>;
@@ -1068,12 +1487,9 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public storageDocumentsDocumentIdGet(
-    documentId: string,
-    options?: AxiosRequestConfig
-  ) {
+  public getDocument(documentId: string, options?: AxiosRequestConfig) {
     return DefaultApiFp(this.configuration)
-      .storageDocumentsDocumentIdGet(documentId, options)
+      .getDocument(documentId, options)
       .then((request) => request(this.axios, this.basePath));
   }
 
@@ -1085,12 +1501,12 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
    * @throws {RequiredError}
    * @memberof DefaultApi
    */
-  public storageDocumentsPost(
+  public uploadDocument(
     documentUploadRequest?: DocumentUploadRequest,
     options?: AxiosRequestConfig
   ) {
     return DefaultApiFp(this.configuration)
-      .storageDocumentsPost(documentUploadRequest, options)
+      .uploadDocument(documentUploadRequest, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }

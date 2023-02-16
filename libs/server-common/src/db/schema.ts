@@ -14,14 +14,12 @@ export const DynamoSchema = {
       pk: { type: String, value: 'Abn#${abn}' },
       sk: { type: String, value: 'Document#${id}' },
       id: { type: String, required: true },
-      createdBy: { type: String, required: true },
       abn: { type: String, required: true },
       s3Path: { type: String, required: true },
       decryptionKey: { type: String, required: true },
+      createdBy: { type: String, required: true },
 
-      gs1pk: { type: String, value: 'Document' },
-      gs1sk: { type: String, value: 'Document#${id}' },
-
+      // metadata
       documentNumber: { type: String },
       freeTradeAgreement: { type: String },
       importingJurisdiction: { type: String },
@@ -29,6 +27,12 @@ export const DynamoSchema = {
       importerName: { type: String },
       consignmentReferenceNumber: { type: String },
       documentDeclaration: { type: Boolean },
+      issueDate: { type: String },
+      expiryDate: { type: String },
+
+      // global secondary index
+      gs1pk: { type: String, value: 'Document' },
+      gs1sk: { type: String, value: 'Document#${id}' },
     },
     RevocationCounter: {
       pk: { type: String, value: 'RevocationCounter' },
@@ -39,6 +43,7 @@ export const DynamoSchema = {
     DocumentSchema: {
       pk: { type: String, value: 'DocumentSchema' },
       sk: { type: String, value: 'DocumentSchema#${name}#${type}' },
+
       name: { type: String, required: true },
       type: { type: String, required: true, enum: ['full', 'partial'] },
       schemaPath: { type: String },

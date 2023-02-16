@@ -1,10 +1,10 @@
 import { VerifiableCredential } from '@dvp/api-interfaces';
 import { RequestInvocationContext } from '@dvp/server-common';
 import { getMockReq } from '@jest-mock/express';
-import signedVC from '../../fixtures/genericvc/degree_signed.json';
+import signedVC from '../../../fixtures/genericvc/degree_signed.json';
 
-import signed_OA_V3 from '../../fixtures/oav3/did-signed.json';
-import unsigned_OA_V3 from '../../fixtures/oav3/did.json';
+import signed_OA_V3 from '../../../fixtures/oav3/did-signed.json';
+import unsigned_OA_V3 from '../../../fixtures/oav3/did.json';
 import { VerifyService } from './verify.service';
 
 describe('verify.service', () => {

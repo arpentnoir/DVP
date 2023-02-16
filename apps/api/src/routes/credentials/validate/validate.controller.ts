@@ -3,7 +3,7 @@ import {
   VerifiableCredential,
 } from '@dvp/api-interfaces';
 import { NextFunction, Request, Response } from 'express';
-import { ValidationService } from './validation.service';
+import { ValidationService } from './validate.service';
 
 export interface ExpectedBody {
   verifiableCredential: VerifiableCredential;
