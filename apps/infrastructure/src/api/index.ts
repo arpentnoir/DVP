@@ -58,6 +58,7 @@ const environmentVariables = {
   variables: {
     DOCUMENT_STORAGE_BUCKET_NAME: documentStoreBucket.bucket,
     REVOCATION_LIST_BUCKET_NAME: revocationListBucket.bucket,
+    REVOCATION_LIST_BIT_STRING_LENGTH: config.revocationListBitStringLength,
     API_URL: config.apiUrl,
     CLIENT_URL: config.clientUrl,
     DYNAMODB_DOCUMENTS_TABLE: dynamodbDocumentsTable.name,

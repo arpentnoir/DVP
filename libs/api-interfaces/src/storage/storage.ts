@@ -5,14 +5,16 @@ export interface S3Config {
   clientConfig: S3ClientConfig;
 }
 
+export interface StatusListS3Config extends S3Config {
+  bitStringLength: number;
+}
+
 export interface StorageClient {
-  getDocumentStorePath(): string;
-  getDocument(
-    documentId: string
-  ): Promise<{ document: EncryptedDocument } | null>;
-  isDocumentExists(documentId: string): Promise<boolean>;
-  uploadDocument(document: string, documentId: string): Promise<string>;
-  deleteDocument(documentId: string): Promise<void>;
+  getBasePath(): string;
+  getObject<ObjectType>(objectName: string): Promise<ObjectType | null>;
+  isObjectExists(objectName: string): Promise<boolean>;
+  uploadObject(objectPayload: string, objectName: string): Promise<string>;
+  deleteObject(documentId: string): Promise<void>;
 }
 
 export interface EncryptedDocument {
@@ -20,6 +22,10 @@ export interface EncryptedDocument {
   iv: string;
   tag: string;
   type: string;
+}
+
+export interface EncryptedDocumentObject {
+  document: EncryptedDocument;
 }
 
 export interface ErrorObject {

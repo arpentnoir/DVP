@@ -46,46 +46,46 @@ describe('S3Adapter', () => {
       } as any,
     });
 
-    const encryptedDocument = await s3StorageClient.getDocument(testDocumentId);
+    const encryptedDocument = await s3StorageClient.getObject(testDocumentId);
 
     expect(encryptedDocument).toStrictEqual(testEncryptedDocument);
   });
 
   it('should return null if body is empty', async () => {
     s3Mock.on(GetObjectCommand).resolves({});
-    expect(await s3StorageClient.getDocument(testDocumentId)).toBe(null);
+    expect(await s3StorageClient.getObject(testDocumentId)).toBe(null);
   });
 
   it('should return null if document does not exists', async () => {
     s3Mock
       .on(GetObjectCommand)
       .rejectsOnce(new Error('The specified key does not exist.'));
-    expect(await s3StorageClient.getDocument(testDocumentId)).toBe(null);
+    expect(await s3StorageClient.getObject(testDocumentId)).toBe(null);
   });
 
   it('should return an error if unexpected error is thrown', async () => {
     s3Mock.on(GetObjectCommand).rejects('test');
-    await expect(s3StorageClient.getDocument(testDocumentId)).rejects.toThrow();
+    await expect(s3StorageClient.getObject(testDocumentId)).rejects.toThrow();
   });
 
-  describe('isDocumentExists', () => {
+  describe('isObjectExists', () => {
     it("should return false if document doesn't exists", async () => {
       s3Mock.on(HeadObjectCommand).rejectsOnce(new Error('not found'));
 
-      const isDocumentExists = await s3StorageClient.isDocumentExists(
+      const isObjectExists = await s3StorageClient.isObjectExists(
         testDocumentId
       );
 
-      expect(isDocumentExists).toBe(false);
+      expect(isObjectExists).toBe(false);
     });
     it('should return true if document exists', async () => {
       s3Mock.on(HeadObjectCommand).resolves({});
 
-      const isDocumentExists = await s3StorageClient.isDocumentExists(
+      const isObjectExists = await s3StorageClient.isObjectExists(
         testDocumentId
       );
 
-      expect(isDocumentExists).toBe(true);
+      expect(isObjectExists).toBe(true);
     });
   });
 

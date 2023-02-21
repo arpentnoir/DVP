@@ -7,60 +7,56 @@ import {
   PutObjectCommandInput,
   S3Client,
 } from '@aws-sdk/client-s3';
-import {
-  EncryptedDocument,
-  S3Config,
-  StorageClient,
-} from '@dvp/api-interfaces';
+import { S3Config, StorageClient } from '@dvp/api-interfaces';
 import { logger } from './logger';
 
 export class S3Adapter implements StorageClient {
   private s3Client: S3Client;
   private bucket: string;
-  private documentStorePath: string;
+  private basePath: string;
 
-  constructor(providerConfig: S3Config) {
+  constructor(providerConfig: S3Config, basePath = '') {
     this.bucket = providerConfig.bucketName;
     this.s3Client = new S3Client(providerConfig.clientConfig);
-    this.documentStorePath = 'documents/';
+    this.basePath = basePath;
   }
 
-  getDocumentStorePath() {
-    return this.documentStorePath;
+  getBasePath() {
+    return this.basePath;
   }
 
-  async isDocumentExists(documentId: string) {
+  async isObjectExists(objectName: string) {
     const params = {
       Bucket: this.bucket,
-      Key: `${this.documentStorePath}${documentId}`,
+      Key: `${this.basePath}${objectName}`,
     };
+
     try {
       await this.s3Client.send(new HeadObjectCommand(params));
       return true;
     } catch (err) {
       logger.debug(
-        "[S3Adapter.isDocumentExists] document doesn't exist for %s: %s",
-        documentId,
+        "[S3Adapter.isObjectExists] object doesn't exist for %s: %s",
+        objectName,
         err
       );
       return false;
     }
   }
 
-  async getDocument(documentId: string) {
+  async getObject<ObjectType>(objectName: string) {
     const params = {
       Bucket: this.bucket,
-      Key: `${this.documentStorePath}${documentId}`,
+      Key: `${this.basePath}${objectName}`,
     };
-    try {
-      const encryptedDocument = await this.s3Client.send(
-        new GetObjectCommand(params)
-      );
 
-      if (encryptedDocument?.Body) {
-        return JSON.parse(await encryptedDocument.Body.transformToString()) as {
-          document: EncryptedDocument;
-        };
+    try {
+      const s3Object = await this.s3Client.send(new GetObjectCommand(params));
+
+      if (s3Object?.Body) {
+        return JSON.parse(
+          await s3Object.Body.transformToString()
+        ) as ObjectType;
       }
       return null;
     } catch (err: unknown) {
@@ -74,20 +70,28 @@ export class S3Adapter implements StorageClient {
     }
   }
 
-  async uploadDocument(document: string, documentId: string) {
+  async uploadObject(objectPayload: string, objectName: string) {
     const params: PutObjectCommandInput = {
       Bucket: this.bucket,
-      Key: `${this.documentStorePath}${documentId}`,
-      Body: document,
+      Key: `${this.basePath}${objectName}`,
+      Body: objectPayload,
     };
     await this.s3Client.send(new PutObjectCommand(params));
-    return documentId;
+    return objectName;
+  }
+
+  async deleteObject(objectName: string) {
+    const params: DeleteObjectCommandInput = {
+      Bucket: this.bucket,
+      Key: `${this.basePath}${objectName}`,
+    };
+    await this.s3Client.send(new DeleteObjectCommand(params));
   }
 
   async deleteDocument(documentId: string) {
     const params: DeleteObjectCommandInput = {
       Bucket: this.bucket,
-      Key: `${this.documentStorePath}${documentId}`,
+      Key: `${this.basePath}${documentId}`,
     };
     await this.s3Client.send(new DeleteObjectCommand(params));
   }

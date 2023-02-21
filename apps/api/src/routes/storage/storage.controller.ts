@@ -19,7 +19,7 @@ export const getDocumentById = async (
     if (!document) {
       return next(new NotFoundError(req.originalUrl));
     }
-    return res.json({ document });
+    return res.json(document);
   } catch (err) {
     return next(new SystemError(err as Error));
   }
@@ -34,12 +34,12 @@ export const uploadDocument = async (
 
   try {
     const storageService = new StorageService(req.invocationContext);
-    const result = await storageService.uploadDocument(
+    const result = await storageService.uploadDocument({
       storageClient,
-      document as string,
-      documentId as string,
-      encryptionKey as string
-    );
+      document,
+      documentId,
+      encryptionKey,
+    });
     return res.json(result);
   } catch (err) {
     return next(err);

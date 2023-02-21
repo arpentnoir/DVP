@@ -17,6 +17,9 @@ export const DynamoSchema = {
       abn: { type: String, required: true },
       s3Path: { type: String, required: true },
       decryptionKey: { type: String, required: true },
+      isRevoked: { type: Boolean, default: false },
+      revocationIndex: { type: Number },
+      revocationS3Path: { type: String },
       createdBy: { type: String, required: true },
 
       // metadata
@@ -37,8 +40,9 @@ export const DynamoSchema = {
     RevocationCounter: {
       pk: { type: String, value: 'RevocationCounter' },
       sk: { type: String, value: 'RevocationCounter' },
-      path: { type: String, required: true },
-      counter: { type: Number, required: true },
+      listCounter: { type: Number, require: true },
+      counter: { type: Number, require: true },
+      bitStringLength: { type: Number, require: true },
     },
     DocumentSchema: {
       pk: { type: String, value: 'DocumentSchema' },

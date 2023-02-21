@@ -27,7 +27,7 @@ describe('Storage Controller', () => {
 
       await getDocumentById(requestMock, responseMock, mockNext);
 
-      expect(responseMock.json).toBeCalledWith({ document: 'testDocument' });
+      expect(responseMock.json).toBeCalledWith('testDocument');
     });
 
     it("should send error to error handler if document doesn't exist", async () => {

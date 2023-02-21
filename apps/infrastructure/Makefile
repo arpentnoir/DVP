@@ -16,6 +16,9 @@ DVP_DOMAIN ?= web.${ENV}.${TARGET_DOMAIN}
 DVP_INTERNAL_DOMAIN ?= web.${ENV}.internal.${TARGET_DOMAIN}
 VC_CONTEXT_ENDPOINT ?=  https://${ENV}-dvp-context.s3.${AWS_REGION}.amazonaws.com
 VC_RENDERER_ENDPOINT ?= https://renderer.${ENV}.${TARGET_DOMAIN}
+# TODO Temporarily set to test revocation with a small numeber of VCs
+# Once the feature is tested, this value can be removed and bit length defaults to 16KB
+REVOCATION_LIST_BIT_STRING_LENGTH ?= 8
 
 .EXPORT_ALL_VARIABLES: ; # send all vars to shell
 

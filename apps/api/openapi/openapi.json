@@ -273,6 +273,80 @@
           }
         }
       }
+    },
+    "/status": {
+      "post": {
+        "summary": "Sets the status of a verifiable credential",
+        "tags": ["Credentials"],
+        "operationId": "setCredentialStatus",
+        "description": "Sets the status of a verifiable credential",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SetStatusRequest"
+              }
+            }
+          },
+          "description": "Parameters for setting the status of the credential."
+        },
+        "responses": {
+          "200": {
+            "description": "Credential's status successfully set"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerErrorResponse"
+          }
+        }
+      }
+    },
+    "/status/{statusId}": {
+      "get": {
+        "summary": "Get revocation list by ID",
+        "tags": ["Credentials"],
+        "operationId": "getRevocationList",
+        "parameters": [
+          {
+            "name": "statusId",
+            "in": "path",
+            "required": true,
+            "description": "The revocation list ID",
+            "example": "1",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrieved the revocation list",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/VerifiableCredential"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResourceNotFoundErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerErrorResponse"
+          }
+        }
+      }
     }
   },
   "components": {
@@ -281,6 +355,23 @@
         "type": "string",
         "format": "uuid",
         "example": "77879ba6-9aaf-4895-9e1c-794e4a3653fe"
+      },
+      "CredentialStatus": {
+        "description": "An object containing the type and status of a verifiable credential",
+        "type": "object",
+        "required": ["type", "status"],
+        "properties": {
+          "type": {
+            "description": "Describes the revocation version to be used.",
+            "type": "string",
+            "enum": ["RevocationList2020Status"]
+          },
+          "status": {
+            "description": "Describes whether the status is revoked (1) or not revoked (0).",
+            "type": "string",
+            "enum": ["0", "1"]
+          }
+        }
       },
       "ErrorSource": {
         "description": "An object containing references to the source of an error.",
@@ -635,6 +726,22 @@
         "properties": {
           "verifiableCredential": {
             "$ref": "#/components/schemas/VerifiableCredential"
+          }
+        }
+      },
+      "SetStatusRequest": {
+        "type": "object",
+        "required": ["credentialId", "credentialStatus"],
+        "properties": {
+          "credentialId": {
+            "$ref": "#/components/schemas/Id"
+          },
+          "credentialStatus": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "$ref": "#/components/schemas/CredentialStatus"
+            }
           }
         }
       },

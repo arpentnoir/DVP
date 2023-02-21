@@ -1,32 +1,32 @@
-const MockDbCreateRecord = jest.fn();
-jest.mock('../../db', () => {
-  return {
-    models: {
-      Document: {
-        create: MockDbCreateRecord,
-      },
-    },
-  };
-});
-
+import {
+  DynamoDBClient,
+  GetItemCommand,
+  PutItemCommand,
+  UpdateItemCommand,
+} from '@aws-sdk/client-dynamodb';
 import { IssueCredentialRequestSigningMethodEnum } from '@dvp/api-client';
 import { VerifiableCredential } from '@dvp/api-interfaces';
 import { RequestInvocationContext } from '@dvp/server-common';
 import { getMockReq } from '@jest-mock/express';
+import { mockClient } from 'aws-sdk-client-mock';
+import 'aws-sdk-client-mock-jest';
 import unsignedSvip from '../../../fixtures/genericvc/degree_unsigned.json';
 import unsignedOAV3 from '../../../fixtures/oav3/did.json';
-import {
-  default as validAANZFTA_COO,
-  default as validGeneric,
-} from '../../../fixtures/validateabledata/validAANZFTA_COO.json';
+import validAANZFTA_COO from '../../../fixtures/validateabledata/validAANZFTA_COO.json';
 
+import {
+  DeleteObjectCommand,
+  HeadObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
+import { authTokenWithSubAndAbn } from '../../../tests/integration/utils';
 import { storageClient } from '../../storage/storage.service';
 import { IssueService } from './issue.service';
 
-const deleteDocumentMock = jest.spyOn(storageClient, 'deleteDocument');
-const uploadDocumentMock = jest.spyOn(storageClient, 'uploadDocument');
-
 let unsigned_OA_V3_base: VerifiableCredential;
+const dynamodbMock = mockClient(DynamoDBClient);
+const s3Mock = mockClient(S3Client);
 
 const userId = 'user1234';
 const userAbn = 'abn1234';
@@ -40,6 +40,7 @@ describe('issue.service', () => {
     headers: {
       'Correlation-ID': 'NUMPTYHEAD1',
     },
+    header: jest.fn().mockImplementation(() => authTokenWithSubAndAbn),
   });
 
   mockRequest.route = { path: '/issue' };
@@ -47,17 +48,17 @@ describe('issue.service', () => {
 
   beforeEach(() => {
     unsigned_OA_V3_base = JSON.parse(JSON.stringify(unsignedOAV3));
-    MockDbCreateRecord.mockClear();
-    deleteDocumentMock.mockClear();
-    uploadDocumentMock.mockClear();
+    dynamodbMock.reset();
+    s3Mock.reset();
   });
 
   it('should issue a valid OA credential', async () => {
-    uploadDocumentMock.mockResolvedValueOnce('');
-    MockDbCreateRecord.mockResolvedValueOnce({});
+    s3Mock.on(HeadObjectCommand).rejects({});
+    s3Mock.on(PutObjectCommand).resolvesOnce({});
+    dynamodbMock.on(PutItemCommand).resolvesOnce({});
 
     const issueService = new IssueService(invocationContext);
-    const { verifiableCredential } = await issueService.issue(
+    const { verifiableCredential } = await issueService.baseIssue(
       IssueCredentialRequestSigningMethodEnum.Oa,
       unsignedOAV3 as never
     );
@@ -97,8 +98,10 @@ describe('issue.service', () => {
   });
 
   it('should store the correct metadata for a partial coo', async () => {
+    dynamodbMock.on(PutItemCommand).resolves({});
+
     const partialCoo = {
-      ...validGeneric.verifiableCredential,
+      ...validAANZFTA_COO.verifiableCredential,
       credentialSubject: {
         iD: '0003625',
         freeTradeAgreement: 'AANZFTA',
@@ -117,31 +120,35 @@ describe('issue.service', () => {
       userAbn,
     } as RequestInvocationContext);
 
-    await issueService.storeMetadata(
-      partialCoo as VerifiableCredential,
-      storageId,
-      decryptKey,
-      docStorePath
-    );
-
-    expect(MockDbCreateRecord).toBeCalledWith({
-      id: storageId,
-      abn: userAbn,
-      createdBy: userId,
+    await issueService.storeMetadata({
+      credential: partialCoo as VerifiableCredential,
+      documentId: storageId,
       decryptionKey: decryptKey,
-      s3Path: docStorePath + storageId,
-      documentNumber: '0003625',
-      freeTradeAgreement: 'AANZFTA',
-      importingJurisdiction: 'Indonesia',
-      exporterOrManufacturerAbn: '55004094599',
-      importerName: 'ABC Imports',
-      consignmentReferenceNumber: '15688545563',
-      documentDeclaration: true,
-      issueDate: validGeneric.verifiableCredential.issuanceDate,
+      documentStorePath: docStorePath,
+    });
+
+    expect(dynamodbMock).toHaveReceivedNthCommandWith(1, PutItemCommand, {
+      Item: expect.objectContaining({
+        id: { S: storageId },
+        createdBy: { S: userId },
+        abn: { S: userAbn },
+        s3Path: { S: docStorePath + storageId },
+        decryptionKey: { S: decryptKey },
+        isRevoked: { BOOL: false },
+        documentNumber: { S: '0003625' },
+        freeTradeAgreement: { S: 'AANZFTA' },
+        importingJurisdiction: { S: 'Indonesia' },
+        exporterOrManufacturerAbn: { S: '55004094599' },
+        importerName: { S: 'ABC Imports' },
+        consignmentReferenceNumber: { S: '15688545563' },
+        documentDeclaration: { BOOL: true },
+      }),
     });
   });
 
   it('should store the correct metadata for a full coo', async () => {
+    dynamodbMock.on(PutItemCommand).resolves({});
+
     const fullCoo = {
       ...validAANZFTA_COO.verifiableCredential,
       credentialSubject: {
@@ -161,58 +168,63 @@ describe('issue.service', () => {
       userAbn,
     } as RequestInvocationContext);
 
-    await issueService.storeMetadata(
-      fullCoo as VerifiableCredential,
-      storageId,
-      decryptKey,
-      docStorePath
-    );
-
-    expect(MockDbCreateRecord).toBeCalledWith({
-      id: storageId,
-      abn: userAbn,
-      createdBy: userId,
+    await issueService.storeMetadata({
+      credential: fullCoo as VerifiableCredential,
+      documentId: storageId,
       decryptionKey: decryptKey,
-      s3Path: docStorePath + storageId,
-      documentNumber: '000253',
-      importingJurisdiction: 'Singapore',
-      exporterOrManufacturerAbn: '95307094535',
-      importerName: 'East meets west fine wines',
-      consignmentReferenceNumber: 'dbschenker.com:hawb:DBS626578',
-      issueDate: validAANZFTA_COO.verifiableCredential.issuanceDate,
+      documentStorePath: docStorePath,
+    });
+
+    expect(dynamodbMock).toHaveReceivedNthCommandWith(1, PutItemCommand, {
+      Item: expect.objectContaining({
+        id: { S: storageId },
+        createdBy: { S: userId },
+        abn: { S: userAbn },
+        s3Path: { S: docStorePath + storageId },
+        decryptionKey: { S: decryptKey },
+        isRevoked: { BOOL: false },
+        documentNumber: { S: '000253' },
+        importingJurisdiction: { S: 'Singapore' },
+        exporterOrManufacturerAbn: { S: '95307094535' },
+        importerName: { S: 'East meets west fine wines' },
+        consignmentReferenceNumber: { S: 'dbschenker.com:hawb:DBS626578' },
+      }),
     });
   });
 
   it('should remove undefined values and store the correct metadata for a non CoO VC', async () => {
+    dynamodbMock.on(PutItemCommand).resolves({});
+
     const issueService = new IssueService({
       ...invocationContext,
       userId,
       userAbn,
     } as RequestInvocationContext);
 
-    await issueService.storeMetadata(
-      {
-        ...validGeneric.verifiableCredential,
+    await issueService.storeMetadata({
+      credential: {
+        ...validAANZFTA_COO.verifiableCredential,
         credentialSubject: {},
       } as VerifiableCredential,
-      storageId,
-      decryptKey,
-      docStorePath
-    );
-
-    expect(MockDbCreateRecord.mock.lastCall[0]).toStrictEqual({
-      id: storageId,
-      abn: userAbn,
-      createdBy: userId,
+      documentId: storageId,
       decryptionKey: decryptKey,
-      s3Path: docStorePath + storageId,
-      issueDate: validGeneric.verifiableCredential.issuanceDate,
+      documentStorePath: docStorePath,
+    });
+
+    expect(dynamodbMock).toHaveReceivedNthCommandWith(1, PutItemCommand, {
+      Item: expect.objectContaining({
+        id: { S: storageId },
+        createdBy: { S: userId },
+        abn: { S: userAbn },
+        s3Path: { S: docStorePath + storageId },
+        decryptionKey: { S: decryptKey },
+        isRevoked: { BOOL: false },
+      }),
     });
   });
 
   it('should throw an error if an unexpected error occurs when storing the metadata', async () => {
-    MockDbCreateRecord.mockRejectedValueOnce({});
-    deleteDocumentMock.mockResolvedValueOnce();
+    dynamodbMock.on(PutItemCommand).rejectsOnce({});
 
     const issueService = new IssueService({
       ...invocationContext,
@@ -221,20 +233,21 @@ describe('issue.service', () => {
     } as RequestInvocationContext);
 
     await expect(
-      issueService.storeMetadata(
-        validGeneric.verifiableCredential as VerifiableCredential,
-        storageId,
-        decryptKey,
-        docStorePath
-      )
+      issueService.storeMetadata({
+        credential:
+          validAANZFTA_COO.verifiableCredential as VerifiableCredential,
+        documentId: storageId,
+        decryptionKey: decryptKey,
+        documentStorePath: docStorePath,
+      })
     ).rejects.toThrowError(
       'Failed to store the verifiable credentials metadata'
     );
   });
 
   it('should delete the document if an error occurs when storing the metadata', async () => {
-    MockDbCreateRecord.mockRejectedValueOnce(new Error());
-    deleteDocumentMock.mockResolvedValueOnce();
+    dynamodbMock.on(PutItemCommand).rejectsOnce({});
+    s3Mock.on(DeleteObjectCommand).resolvesOnce({});
 
     const issueService = new IssueService({
       ...invocationContext,
@@ -243,18 +256,21 @@ describe('issue.service', () => {
     } as RequestInvocationContext);
 
     await expect(
-      issueService.storeMetadata(
-        validGeneric.verifiableCredential as VerifiableCredential,
-        storageId,
-        decryptKey,
-        docStorePath
-      )
+      issueService.storeMetadata({
+        credential:
+          validAANZFTA_COO.verifiableCredential as VerifiableCredential,
+        documentId: storageId,
+        decryptionKey: decryptKey,
+        documentStorePath: docStorePath,
+      })
     ).rejects.toThrowError(
       'Failed to store the verifiable credentials metadata'
     );
 
-    expect(deleteDocumentMock).toBeCalledTimes(1);
-    expect(deleteDocumentMock).toBeCalledWith(storageId);
+    expect(s3Mock).toHaveReceivedNthCommandWith(1, DeleteObjectCommand, {
+      Bucket: process.env.DOCUMENT_STORAGE_BUCKET_NAME,
+      Key: `${storageClient.getBasePath()}${storageId}`,
+    });
   });
 
   describe('OpenAttestation', () => {
@@ -277,10 +293,19 @@ describe('issue.service', () => {
   describe('SVIP', () => {
     jest.setTimeout(20000);
     it('should fail if credential fails to validate', async () => {
+      dynamodbMock.on(GetItemCommand).resolvesOnce({
+        Item: {
+          counter: { N: '1' },
+          listCounter: { N: '1' },
+          bitStringLength: { N: '8' },
+        },
+      });
+
       const unsigned_non_OA_V3 = unsigned_OA_V3_base;
       unsigned_non_OA_V3['type'] = ['VerifiableCredential'];
 
       const issueService = new IssueService(invocationContext);
+
       await expect(() =>
         issueService.issue(
           IssueCredentialRequestSigningMethodEnum.Svip,
@@ -289,9 +314,22 @@ describe('issue.service', () => {
       ).rejects.toThrow('credential is not valid JSON-LD');
     });
 
-    it('should issue a valid OA credential', async () => {
-      uploadDocumentMock.mockResolvedValueOnce('');
-      MockDbCreateRecord.mockResolvedValueOnce({});
+    it('should issue a valid SVIP credential', async () => {
+      s3Mock.on(HeadObjectCommand).rejects({});
+      dynamodbMock.on(GetItemCommand).resolves({
+        Item: {
+          counter: { N: '1' },
+          listCounter: { N: '1' },
+          bitStringLength: { S: '8' },
+        },
+      });
+      dynamodbMock.on(PutItemCommand).resolvesOnce({});
+      dynamodbMock.on(UpdateItemCommand).resolves({
+        Attributes: {
+          counter: { N: '1' },
+          listCounter: { N: '1' },
+        },
+      });
 
       const issueService = new IssueService(invocationContext);
       const { verifiableCredential } = await issueService.issue(
@@ -312,6 +350,6 @@ describe('issue.service', () => {
       expect(verifiableCredential.proof).toHaveProperty('verificationMethod');
       expect(verifiableCredential.proof).toHaveProperty('created');
       expect(verifiableCredential.proof).toHaveProperty('jws');
-    });
+    }, 25000);
   });
 });

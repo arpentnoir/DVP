@@ -10,11 +10,11 @@ const mockUploadDocument = jest.fn();
 const mockDeleteDocument = jest.fn();
 
 const mockStorageClient = {
-  getDocumentStorePath: jest.fn(() => 'documents/'),
-  getDocument: mockGetDocument,
-  uploadDocument: mockUploadDocument,
-  isDocumentExists: jest.fn(),
-  deleteDocument: mockDeleteDocument,
+  getBasePath: jest.fn(() => 'documents/'),
+  deleteObject: mockDeleteDocument,
+  getObject: mockGetDocument,
+  uploadObject: mockUploadDocument,
+  isObjectExists: jest.fn(),
 };
 
 describe('Storage Service', () => {
@@ -44,12 +44,12 @@ describe('Storage Service', () => {
       const encryptionKey = generateEncryptionKey();
       const documentId = getUuId();
       mockUploadDocument.mockResolvedValueOnce(documentId);
-      const res = await storageService.uploadDocument(
-        mockStorageClient,
-        JSON.stringify(didSignedDocument),
+      const res = await storageService.uploadDocument({
+        storageClient: mockStorageClient,
+        document: JSON.stringify(didSignedDocument),
         documentId,
-        encryptionKey
-      );
+        encryptionKey,
+      });
       expect(mockUploadDocument).toHaveBeenCalledTimes(1);
       expect(res).toMatchObject({ documentId, encryptionKey });
     });
@@ -58,10 +58,10 @@ describe('Storage Service', () => {
       const storageService = new StorageService(invocationContext);
       const documentId = getUuId();
       mockUploadDocument.mockResolvedValueOnce(documentId);
-      const res = await storageService.uploadDocument(
-        mockStorageClient,
-        JSON.stringify(didSignedDocument)
-      );
+      const res = await storageService.uploadDocument({
+        storageClient: mockStorageClient,
+        document: JSON.stringify(didSignedDocument),
+      });
       expect(mockUploadDocument).toHaveBeenCalledTimes(1);
       expect(res.encryptionKey).toBeDefined();
       expect(res.documentId).toBeDefined();

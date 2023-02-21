@@ -1,4 +1,5 @@
 import {
+  EncryptedDocumentObject,
   QRPayload,
   StorageClient,
   VerifiableCredential,
@@ -13,7 +14,21 @@ import {
 import { encryptString, generateEncryptionKey } from '@govtechsg/oa-encryption';
 import { config } from '../../config';
 
-export const storageClient: StorageClient = new S3Adapter(config.s3Config);
+const DOCUMENTS_BASE_PATH = 'documents/';
+
+export interface IUploadDocument {
+  storageClient: StorageClient;
+  document: string;
+  documentId?: string;
+  encryptionKey?: string;
+  encryptData?: boolean;
+  overwrite?: boolean;
+}
+
+export const storageClient: StorageClient = new S3Adapter(
+  config.s3Config,
+  DOCUMENTS_BASE_PATH
+);
 
 export class StorageService {
   logger: Logger;
@@ -23,12 +38,12 @@ export class StorageService {
   constructor(invocationContext: RequestInvocationContext) {
     this.invocationContext = invocationContext;
     this.logger = Logger.from(invocationContext);
-    this.documentStorePath = storageClient.getDocumentStorePath();
+    this.documentStorePath = storageClient.getBasePath();
   }
 
   async deleteDocument(storageClient: StorageClient, documentId: string) {
     try {
-      await storageClient.deleteDocument(documentId);
+      await storageClient.deleteObject(documentId);
     } catch (err: unknown) {
       this.logger.debug(
         '[StorageService.deleteDocument] Failed to delete the verifiable credential, %o',
@@ -38,9 +53,15 @@ export class StorageService {
     }
   }
 
-  async getDocument(storageClient: StorageClient, documentId: string) {
-    const documentObject = await storageClient.getDocument(documentId);
-    return documentObject?.document;
+  async getDocument<DocumentType>(
+    storageClient: StorageClient,
+    documentId: string
+  ) {
+    const documentObject = await storageClient.getObject<DocumentType>(
+      documentId
+    );
+
+    return documentObject;
   }
 
   embedQrUrl(verifiableCredential: VerifiableCredential) {
@@ -97,30 +118,37 @@ export class StorageService {
     }
   }
 
-  async uploadDocument(
-    storageClient: StorageClient,
-    document: string,
-    documentId?: string,
-    encryptionKey?: string
-  ) {
+  async uploadDocument({
+    storageClient,
+    document,
+    documentId,
+    encryptionKey,
+    encryptData = true,
+    overwrite = false,
+  }: IUploadDocument) {
     const key = encryptionKey || generateEncryptionKey();
     const id = documentId || getUuId();
 
-    const encryptedDocument = encryptString(document, key);
-    if (await storageClient.isDocumentExists(id)) {
+    let payload = document;
+
+    if (encryptData) {
+      const encryptedDocument = encryptString(document, key);
+
+      // When a VC is fetched from storage, the consumer must have the
+      // corresponding key to decrypt the document
+      delete encryptedDocument.key;
+
+      payload = JSON.stringify({ document: encryptedDocument });
+    }
+
+    if (!overwrite && (await storageClient.isObjectExists(id))) {
       throw new ValidationError('documentId', id);
     }
 
-    // When a VC is fetched from storage, the consumer must have the
-    // corresponding key to decrypt the document
-    delete encryptedDocument.key;
+    const documentObjectId = await storageClient.uploadObject(payload, id);
 
-    const documentObjectId = await storageClient.uploadDocument(
-      JSON.stringify({
-        document: encryptedDocument,
-      }),
-      id
-    );
-    return { documentId: documentObjectId, encryptionKey: key };
+    return encryptData
+      ? { documentId: documentObjectId, encryptionKey: key }
+      : { documentId: documentObjectId };
   }
 }

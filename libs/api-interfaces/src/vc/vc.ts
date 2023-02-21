@@ -1,5 +1,5 @@
 import {
-  CredentialStatus,
+  CredentialStatus as OACredentialStatus,
   OpenAttestationDocument,
   OpenAttestationMetadata,
   WrappedDocument,
@@ -30,6 +30,7 @@ export interface CredentialSubject {
       href: string;
     };
   };
+  encodedList?: string;
 }
 
 export interface Issuer {
@@ -38,10 +39,17 @@ export interface Issuer {
   type: string;
 }
 
+export interface SVIPCredentialStatus {
+  id: string;
+  type: string;
+  revocationListIndex: string;
+  revocationListCredential: string;
+}
+
 //TODO: extend as needed
 export interface VerifiableCredential extends ApiVerifiableCredential {
   credentialSubject: CredentialSubject;
-  credentialStatus?: CredentialStatus;
+  credentialStatus?: OACredentialStatus | SVIPCredentialStatus;
   openAttestationMetadata?: OpenAttestationMetadata;
 }
 
