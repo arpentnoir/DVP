@@ -19,5 +19,5 @@ export const config = {
   clientUrl: `https://${process.env.DVP_DOMAIN}`,
   // Defaults to 16KB (131,072 entries)
   revocationListBitStringLength:
-    process.env.REVOCATION_LIST_BIT_STRING_LENGTH ?? 131072,
+    process.env.REVOCATION_LIST_BIT_STRING_LENGTH ?? '131072',
 };
