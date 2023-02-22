@@ -97,6 +97,12 @@ stages:
           - task: PublishPipelineArtifact@1
             condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
             inputs:
+              targetPath: $(System.DefaultWorkingDirectory)/dist/apps/admin-api
+              artifactName: 'admin-api-build'
+
+          - task: PublishPipelineArtifact@1
+            condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
+            inputs:
               targetPath: $(System.DefaultWorkingDirectory)/dist/apps/schema-worker
               artifactName: 'schema-worker-build'
   - stage: deploy

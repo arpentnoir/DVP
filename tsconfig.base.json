@@ -17,6 +17,7 @@
     "paths": {
       "@dvp/api-interfaces": ["libs/api-interfaces/src/index.ts"],
       "@dvp/api-client": ["libs/api-client/src/index.ts"],
+      "@dvp/admin-api-client": ["libs/admin-api-client/src/index.ts"],
       "@dvp/server-common": ["libs/server-common/src/index.ts"],
       "@dvp/vc-ui": ["libs/vc-ui/src/index.ts"]
     },

@@ -1,7 +1,7 @@
-import { logger } from '@dvp/server-common';
 import * as OpenApiValidator from 'express-openapi-validator';
 import { OpenAPIV3 as OpenAPIV3Validator } from 'express-openapi-validator/dist/framework/types';
 import { OpenAPIV3 } from 'openapi-types';
+import { logger } from '../utils';
 
 export type OpenAPIV3Document = OpenAPIV3.Document;
 

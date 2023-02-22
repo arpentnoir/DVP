@@ -1,0 +1,99 @@
+{
+  "name": "admin-api",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/admin-api/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/node:webpack",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "compiler": "babel",
+        "generatePackageJson": true,
+        "outputFileName": "index.js",
+        "externalDependencies": "none",
+        "outputPath": "dist/apps/admin-api",
+        "main": "apps/admin-api/src/index.ts",
+        "tsConfig": "apps/admin-api/tsconfig.app.json"
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "inspect": false,
+          "sourceMap": false,
+          "extractLicenses": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/admin-api/src/environments/environment.ts",
+              "with": "apps/admin-api/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "local_build": {
+      "executor": "@nrwl/webpack:webpack",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "target": "node",
+        "compiler": "tsc",
+        "outputPath": "dist/apps/admin-api",
+        "main": "apps/admin-api/src/server.ts",
+        "tsConfig": "apps/admin-api/tsconfig.app.json"
+      },
+      "configurations": {
+        "production": {
+          "optimization": true,
+          "inspect": false,
+          "fileReplacements": [
+            {
+              "replace": "apps/admin-api/src/environments/environment.ts",
+              "with": "apps/admin-api/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "generate:api-client": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "npx @openapitools/openapi-generator-cli generate -g typescript-axios -i apps/admin-api/openapi/openapi.json --additional-properties=withInterfaces=true -o libs/admin-api-client/src"
+      }
+    },
+    "serve": {
+      "executor": "@nrwl/js:node",
+      "options": {
+        "buildTarget": "api:local_build"
+      },
+      "configurations": {
+        "production": {
+          "buildTarget": "api:local_build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/admin-api/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nrwl/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/admin-api/jest.config.ts",
+        "passWithNoTests": true
+      }
+    },
+    "intergration-tests": {
+      "executor": "@nrwl/jest:jest",
+      "options": {
+        "jestConfig": "apps/admin-api/jest.intergration.config.ts",
+        "passWithNoTests": true
+      }
+    }
+  },
+  "tags": []
+}

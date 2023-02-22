@@ -1,7 +1,7 @@
 // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/50871
 /* eslint-disable @typescript-eslint/no-misused-promises */
+import { authMiddleware } from '@dvp/server-common';
 import { Router } from 'express';
-import { authMiddleware } from '../../middlewares';
 import { getDocumentById, uploadDocument } from './storage.controller';
 
 export const storageRoutes = Router();

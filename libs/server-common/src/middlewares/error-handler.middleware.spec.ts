@@ -1,5 +1,5 @@
-import { NotFoundError, SystemError } from '@dvp/server-common';
 import { getMockReq, getMockRes } from '@jest-mock/express';
+import { NotFoundError, SystemError } from '../error';
 import { errorHandler } from './index';
 const requestMock = getMockReq();
 

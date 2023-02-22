@@ -1,12 +1,12 @@
+import type { NextFunction, Request, Response } from 'express';
+import { HttpError } from 'express-openapi-validator/dist/framework/types';
 import {
   AjvSchemaValidationError,
   ApiError,
   ApiErrors,
   ApplicationError,
   SystemError,
-} from '@dvp/server-common';
-import type { NextFunction, Request, Response } from 'express';
-import { HttpError } from 'express-openapi-validator/dist/framework/types';
+} from '../error';
 export const errorHandler = (
   err: Error,
   req: Request,
@@ -36,7 +36,7 @@ export const errorHandler = (
     err.errors?.forEach((error) => {
       apiErrors.addErrorDetail(
         ApiError.VALIDATION_ERROR_ID,
-        error.error_code,
+        'ValidationError',
         `${error.path}: ${error.message}`
       );
     });

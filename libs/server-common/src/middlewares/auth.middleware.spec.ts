@@ -1,6 +1,6 @@
-import { AuthorizationError } from '@dvp/server-common';
 import { getMockReq, getMockRes } from '@jest-mock/express';
-import { authMiddleware } from './index';
+import { AuthorizationError } from '../error';
+import { authMiddleware } from './auth.middleware';
 
 const mockHeader = jest.fn();
 const requestMock = getMockReq({

@@ -1,5 +1,6 @@
-import { Logger, RequestInvocationContext } from '@dvp/server-common';
 import { RequestHandler } from 'express';
+import { RequestInvocationContext } from '../context';
+import { Logger } from '../utils';
 
 export const loggerMiddleware: RequestHandler = (req, res, next) => {
   const invocationContext = new RequestInvocationContext(req);

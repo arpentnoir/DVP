@@ -14,11 +14,13 @@
     "lint": "nx run-many --target=lint --all",
     "storybook": "nx storybook vc-ui",
     "generate:api-client": "nx generate:api-client api",
+    "generate:admin-api-client": "nx generate:api-client admin-api",
     "postinstall": "husky install"
   },
   "private": true,
   "dependencies": {
     "@aws-amplify/ui-react": "^4.3.2",
+    "@aws-sdk/client-kms": "^3.267.0",
     "@aws-sdk/client-s3": "^3.211.0",
     "@aws-sdk/client-sqs": "^3.254.0",
     "@emotion/react": "^11.10.5",

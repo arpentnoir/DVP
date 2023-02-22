@@ -1,5 +1,5 @@
 import { RequestHandler } from 'express';
-import { AuthorizationError } from '@dvp/server-common';
+import { AuthorizationError } from '../error';
 
 export const authMiddleware: RequestHandler = (req, res, next) => {
   try {

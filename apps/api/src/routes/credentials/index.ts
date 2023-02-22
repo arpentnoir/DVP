@@ -1,5 +1,5 @@
+import { authMiddleware } from '@dvp/server-common';
 import { Router } from 'express';
-import { authMiddleware } from '../../middlewares';
 import { getCredentials } from './credentials.controller';
 import { issueRoutes } from './issue';
 import { validateRoutes } from './validate';

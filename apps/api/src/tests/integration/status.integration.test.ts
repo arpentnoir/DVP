@@ -238,6 +238,7 @@ describe('issue api', () => {
                   errors: expect.arrayContaining([
                     {
                       id: 'DVPAPI-002',
+                      code: 'ValidationError',
                       detail:
                         "/body/credentialId: must have required property 'credentialId'",
                     },
@@ -259,6 +260,7 @@ describe('issue api', () => {
                   errors: expect.arrayContaining([
                     {
                       id: 'DVPAPI-002',
+                      code: 'ValidationError',
                       detail: '/body/credentialId: must match format "uuid"',
                     },
                   ]),
@@ -277,6 +279,7 @@ describe('issue api', () => {
                   errors: expect.arrayContaining([
                     {
                       id: 'DVPAPI-002',
+                      code: 'ValidationError',
                       detail:
                         "/body/credentialStatus: must have required property 'credentialStatus'",
                     },
@@ -296,6 +299,7 @@ describe('issue api', () => {
                   errors: expect.arrayContaining([
                     {
                       id: 'DVPAPI-002',
+                      code: 'ValidationError',
                       detail:
                         '/body/credentialStatus: must NOT have fewer than 1 items',
                     },
@@ -315,11 +319,13 @@ describe('issue api', () => {
                   errors: expect.arrayContaining([
                     {
                       id: 'DVPAPI-002',
+                      code: 'ValidationError',
                       detail:
                         "/body/credentialStatus/0/type: must have required property 'type'",
                     },
                     {
                       id: 'DVPAPI-002',
+                      code: 'ValidationError',
                       detail:
                         "/body/credentialStatus/0/status: must have required property 'status'",
                     },

@@ -1,3 +1,4 @@
+import * as adminApi from './admin-api';
 import * as api from './api';
 import * as schemaWorker from './schema-worker';
 
@@ -8,6 +9,7 @@ export default () => ({
   dynamodb,
   auditLogBucket,
   api,
+  adminApi,
   auth,
   vpc,
   kms,
