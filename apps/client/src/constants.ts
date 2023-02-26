@@ -18,13 +18,14 @@ export const FAIL_VC_FETCH_DECRYPT_ERR_MSG =
   'Unable to fetch and/or decrypt Verifiable Credential';
 
 export const FAIL_CREATE_VC = 'Unable to create Verifiable Credential';
-export const API_ENDPOINTS = { VERIFY: '/verify', ISSUE: '/issue' };
+export const API_ENDPOINTS = { VERIFY: '/credentials/verify', ISSUE: '/credentials/issue' };
 
 export const GENERIC_SVIP_META_DATA = {
   '@context': [
     'https://www.w3.org/2018/credentials/v1',
     `${contextUrl}/AANZFTA-CoO.json`,
     `${contextUrl}/AANZFTA-CoO-Context-Partial.json`,
+    "https://w3id.org/vc-revocation-list-2020/v1"
   ],
   type: ['VerifiableCredential'],
   issuer: {
