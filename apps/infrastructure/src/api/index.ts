@@ -2,6 +2,7 @@
 import * as aws from '@pulumi/aws';
 import * as awsx from '@pulumi/awsx';
 import * as pulumi from '@pulumi/pulumi';
+import { Components } from "gs-pulumi-library";
 import { auth, kms } from '../common';
 import { dynamodbDocumentsTable } from '../common/dynamodb';
 
@@ -25,29 +26,35 @@ const apiLogGroup = new aws.cloudwatch.LogGroup(`${stack}-api-log-group`);
 
 ////////////////////////////////////////////////////////////////////////////////
 // S3 bucket for document store
-const documentStoreBucket = new aws.s3.Bucket(`${stack}-document-store`, {
-  bucket: `${stack}-document-store`,
+const documentStoreBucket = new Components.aws.S3Bucket(`${stack}-document-store`, {
+  description: "S3 Bucket for `dvpWebsite` document store.",
+  bucketName: `${stack}-document-store`,
+  logBucket: "none",
+  forceDestroy: true,
 });
 
 // Set the access policy for the document store bucket
-new aws.s3.BucketPolicy('documentStoreBucketPolicy', {
-  bucket: documentStoreBucket.bucket,
+new aws.s3.BucketPolicy(`${stack}-document-store-policy`, {
+  bucket: documentStoreBucket.bucket.bucket,
   policy: pulumi
-    .all([documentStoreBucket.bucket, lambdaRole.arn])
+    .all([documentStoreBucket.bucket.bucket, lambdaRole.arn])
     .apply(([bucket, arn]) => bucketPolicy(bucket, arn)),
 });
 
 ////////////////////////////////////////////////////////////////////////////////
 // S3 bucket for revocation list
-const revocationListBucket = new aws.s3.Bucket(`${stack}-revocation-list`, {
-  bucket: `${stack}-revocation-list`,
+const revocationListBucket = new Components.aws.S3Bucket(`${stack}-revocation-list`, {
+  description: "S3 Bucket for `dvpWebsite` revocation list.",
+  bucketName: `${stack}-revocation-list`,
+  logBucket: "none",
+  forceDestroy: true,
 });
 
-// Set the access policy for the revocation list bucket
-new aws.s3.BucketPolicy('revocationListBucket', {
-  bucket: revocationListBucket.bucket,
+// Set the access policy for the revocation list
+new aws.s3.BucketPolicy(`${stack}-revocation-list-policy`, {
+  bucket: revocationListBucket.bucket.bucket,
   policy: pulumi
-    .all([revocationListBucket.bucket, lambdaRole.arn])
+    .all([revocationListBucket.bucket.bucket, lambdaRole.arn])
     .apply(([bucket, arn]) => bucketPolicy(bucket, arn)),
 });
 
@@ -56,8 +63,8 @@ new aws.s3.BucketPolicy('revocationListBucket', {
 
 const environmentVariables = {
   variables: {
-    DOCUMENT_STORAGE_BUCKET_NAME: documentStoreBucket.bucket,
-    REVOCATION_LIST_BUCKET_NAME: revocationListBucket.bucket,
+    DOCUMENT_STORAGE_BUCKET_NAME: documentStoreBucket.bucket.bucket,
+    REVOCATION_LIST_BUCKET_NAME: revocationListBucket.bucket.bucket,
     REVOCATION_LIST_BIT_STRING_LENGTH: config.revocationListBitStringLength,
     API_URL: config.apiUrl,
     CLIENT_URL: config.clientUrl,
@@ -302,5 +309,5 @@ new aws.apigateway.BasePathMapping(`${stack}-api-domain-mapping`, {
   domainName: apiDomainName.domainName,
 });
 
-export const documentStoreBucketUrl = documentStoreBucket.websiteEndpoint;
+export const documentStoreBucketUrl = documentStoreBucket.bucket.websiteEndpoint;
 export const apigatewayUrl = `https://${config.dvpApiDomain}`;
