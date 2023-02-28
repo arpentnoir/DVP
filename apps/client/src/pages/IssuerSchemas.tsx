@@ -25,13 +25,13 @@ export const IssuerSchemas = () => {
   return (
     <BaseLayout title="Issuer Schemas">
       <Box paddingBottom="40px">
-        <Text variant="h4" fontWeight="bold">
+        <Text variant="h1" fontWeight="bold">
           {issuerName}
         </Text>
       </Box>
 
       <Box>
-        <Text variant="body1" fontWeight="bold">
+        <Text variant="h3" fontWeight="bold">
           Document schemas
         </Text>
         <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>

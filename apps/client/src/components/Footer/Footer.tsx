@@ -9,52 +9,60 @@ export const Footer = () => {
     <Stack
       sx={{
         backgroundColor: 'black',
-        flexDirection: { xs: 'column', md: 'row' },
+        alignItems: 'center',
       }}
-      padding={{ xs: '20px 20px', md: '20px 100px', lg: '20px 180px' }}
-      justifyContent="space-between"
-      alignItems="center"
     >
       <Stack
         sx={{
+          maxWidth: '1140px',
+          width: '100%',
+          padding: { xs: '20px 20px', md: '20px 10px' },
           flexDirection: { xs: 'column', md: 'row' },
+          justifyContent: 'space-between',
           alignItems: 'center',
         }}
       >
-        <Button
-          sx={{ color: 'white' }}
-          variant="text"
-          label={'Who we are'}
-          onClick={() => null}
-        />
-        <Button
-          sx={{ color: 'white' }}
-          variant="text"
-          label={'Our Ministers'}
-          onClick={() => null}
-        />
-        <Button
-          sx={{ color: 'white' }}
-          variant="text"
-          label={'About us'}
-          onClick={() => null}
-        />
-        <Button
-          sx={{ color: 'white' }}
-          variant="text"
-          label={'Contact us'}
-          onClick={() => null}
+        <Stack
+          sx={{
+            flexDirection: { xs: 'column', md: 'row' },
+            alignItems: 'center',
+          }}
+        >
+          <Button
+            sx={{ color: 'white' }}
+            variant="text"
+            label={'Who we are'}
+            onClick={() => null}
+          />
+          <Button
+            sx={{ color: 'white' }}
+            variant="text"
+            label={'Our Ministers'}
+            onClick={() => null}
+          />
+          <Button
+            sx={{ color: 'white' }}
+            variant="text"
+            label={'About us'}
+            onClick={() => null}
+          />
+          <Button
+            sx={{ color: 'white' }}
+            variant="text"
+            label={'Contact us'}
+            onClick={() => null}
+          />
+        </Stack>
+        <Box
+          component="img"
+          tabIndex={0}
+          sx={{
+            width: '150px',
+          }}
+          alt={FOOTER_LOGO_ALT_TEXT}
+          src={LOGO_PATH}
         />
       </Stack>
-      <Box
-        component="img"
-        tabIndex={0}
-        sx={{
-          width: '150px',
-        }}
-        alt={FOOTER_LOGO_ALT_TEXT}
-        src={LOGO_PATH}
-      />
     </Stack>
   );
 };

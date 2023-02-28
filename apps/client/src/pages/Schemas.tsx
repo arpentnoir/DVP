@@ -29,7 +29,7 @@ export const Schemas = () => {
   return (
     <BaseLayout title="Schemas">
       <Box paddingBottom="40px">
-        <Text variant="h4" fontWeight="bold" paddingBottom="24px">
+        <Text variant="h1" fontWeight="bold" paddingBottom="24px">
           Schemas
         </Text>
         <Text>
@@ -47,7 +47,7 @@ export const Schemas = () => {
       </Box>
 
       <Box>
-        <Text variant="body1" fontWeight="bold">
+        <Text variant="h3" fontWeight="bold">
           Document schemas
         </Text>
         <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>

@@ -4,102 +4,106 @@ exports[`Footer should render correctly 1`] = `
 <body>
   <div>
     <div
-      class="css-mi62ix-MuiStack-root"
+      class="css-1sei285-MuiStack-root"
     >
       <div
-        class="css-hyap7f-MuiStack-root"
+        class="css-1qqqzbk-MuiStack-root"
       >
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1vqwuaw-MuiButtonBase-root-MuiButton-root"
-          data-testid="button:Who we are"
-          tabindex="0"
-          type="button"
+        <div
+          class="css-hyap7f-MuiStack-root"
         >
-          <div
-            class="css-doi3ij-MuiStack-root"
+          <button
+            class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1vqwuaw-MuiButtonBase-root-MuiButton-root"
+            data-testid="button:Who we are"
+            tabindex="0"
+            type="button"
           >
-            <p
-              class="MuiTypography-root MuiTypography-body2 css-e784if-MuiTypography-root"
-              data-testid="button:Who we are:label"
-              tabindex="0"
+            <div
+              class="css-doi3ij-MuiStack-root"
             >
-              Who we are
-            </p>
-          </div>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
-        </button>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1vqwuaw-MuiButtonBase-root-MuiButton-root"
-          data-testid="button:Our Ministers"
+              <p
+                class="MuiTypography-root MuiTypography-body2 css-e784if-MuiTypography-root"
+                data-testid="button:Who we are:label"
+                tabindex="0"
+              >
+                Who we are
+              </p>
+            </div>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+          <button
+            class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1vqwuaw-MuiButtonBase-root-MuiButton-root"
+            data-testid="button:Our Ministers"
+            tabindex="0"
+            type="button"
+          >
+            <div
+              class="css-doi3ij-MuiStack-root"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body2 css-e784if-MuiTypography-root"
+                data-testid="button:Our Ministers:label"
+                tabindex="0"
+              >
+                Our Ministers
+              </p>
+            </div>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+          <button
+            class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1vqwuaw-MuiButtonBase-root-MuiButton-root"
+            data-testid="button:About us"
+            tabindex="0"
+            type="button"
+          >
+            <div
+              class="css-doi3ij-MuiStack-root"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body2 css-e784if-MuiTypography-root"
+                data-testid="button:About us:label"
+                tabindex="0"
+              >
+                About us
+              </p>
+            </div>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+          <button
+            class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1vqwuaw-MuiButtonBase-root-MuiButton-root"
+            data-testid="button:Contact us"
+            tabindex="0"
+            type="button"
+          >
+            <div
+              class="css-doi3ij-MuiStack-root"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body2 css-e784if-MuiTypography-root"
+                data-testid="button:Contact us:label"
+                tabindex="0"
+              >
+                Contact us
+              </p>
+            </div>
+            <span
+              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+            />
+          </button>
+        </div>
+        <img
+          alt="Australian Government"
+          class="MuiBox-root css-1nbic85"
+          src="assets/footer-logo-white.svg"
           tabindex="0"
-          type="button"
-        >
-          <div
-            class="css-doi3ij-MuiStack-root"
-          >
-            <p
-              class="MuiTypography-root MuiTypography-body2 css-e784if-MuiTypography-root"
-              data-testid="button:Our Ministers:label"
-              tabindex="0"
-            >
-              Our Ministers
-            </p>
-          </div>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
-        </button>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1vqwuaw-MuiButtonBase-root-MuiButton-root"
-          data-testid="button:About us"
-          tabindex="0"
-          type="button"
-        >
-          <div
-            class="css-doi3ij-MuiStack-root"
-          >
-            <p
-              class="MuiTypography-root MuiTypography-body2 css-e784if-MuiTypography-root"
-              data-testid="button:About us:label"
-              tabindex="0"
-            >
-              About us
-            </p>
-          </div>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
-        </button>
-        <button
-          class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1vqwuaw-MuiButtonBase-root-MuiButton-root"
-          data-testid="button:Contact us"
-          tabindex="0"
-          type="button"
-        >
-          <div
-            class="css-doi3ij-MuiStack-root"
-          >
-            <p
-              class="MuiTypography-root MuiTypography-body2 css-e784if-MuiTypography-root"
-              data-testid="button:Contact us:label"
-              tabindex="0"
-            >
-              Contact us
-            </p>
-          </div>
-          <span
-            class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-          />
-        </button>
+        />
       </div>
-      <img
-        alt="Australian Government"
-        class="MuiBox-root css-1nbic85"
-        src="assets/footer-logo-white.svg"
-        tabindex="0"
-      />
     </div>
   </div>
 </body>

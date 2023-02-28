@@ -7,10 +7,8 @@ const envConfig = getEnvConfig();
 
 export const AuthenticatedRoutes: FunctionComponent = () => {
   return (
-    <div style={{ height: '100%' }}>
-      <Authenticator variation="modal" hideSignUp={envConfig.DISABLE_SIGNUP}>
-        <Outlet />
-      </Authenticator>
-    </div>
+    <Authenticator variation="modal" hideSignUp={envConfig.DISABLE_SIGNUP}>
+      <Outlet />
+    </Authenticator>
   );
 };

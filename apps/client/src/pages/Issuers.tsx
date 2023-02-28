@@ -130,7 +130,7 @@ export const Issuers = () => {
   return (
     <BaseLayout title="Issuers">
       <Box paddingBottom="40px">
-        <Text variant="h4" fontWeight="bold" paddingBottom="24px">
+        <Text variant="h1" fontWeight="bold" paddingBottom="24px">
           Issuers
         </Text>
         <Text>

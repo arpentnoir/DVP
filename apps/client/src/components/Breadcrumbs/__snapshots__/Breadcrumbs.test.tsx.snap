@@ -1,0 +1,93 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Breadcrumbs should render correctly 1`] = `
+<body>
+  <div>
+    <div
+      role="presentation"
+    >
+      <nav
+        aria-label="breadcrumb"
+        class="MuiTypography-root MuiTypography-body1 MuiBreadcrumbs-root css-1a3e67b-MuiTypography-root-MuiBreadcrumbs-root"
+      >
+        <ol
+          class="MuiBreadcrumbs-ol css-4pdmu4-MuiBreadcrumbs-ol"
+        >
+          <li
+            class="MuiBreadcrumbs-li"
+          >
+            <a
+              class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineHover css-17dcqu8-MuiTypography-root-MuiLink-root"
+              href="/"
+            >
+              Home
+            </a>
+          </li>
+          <li
+            aria-hidden="true"
+            class="MuiBreadcrumbs-separator css-1wuw8dw-MuiBreadcrumbs-separator"
+          >
+            <div
+              class="MuiBox-root css-69knei"
+              data-testid="breadcrumbs-separator"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1nhaepu-MuiSvgIcon-root"
+                data-testid="ArrowForwardIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="m12 4-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"
+                />
+              </svg>
+            </div>
+          </li>
+          <li
+            class="MuiBreadcrumbs-li"
+          >
+            <a
+              class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineHover css-17dcqu8-MuiTypography-root-MuiLink-root"
+              href="/test"
+              tabindex="0"
+            >
+              Test
+            </a>
+          </li>
+          <li
+            aria-hidden="true"
+            class="MuiBreadcrumbs-separator css-1wuw8dw-MuiBreadcrumbs-separator"
+          >
+            <div
+              class="MuiBox-root css-69knei"
+              data-testid="breadcrumbs-separator"
+            >
+              <svg
+                aria-hidden="true"
+                class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1nhaepu-MuiSvgIcon-root"
+                data-testid="ArrowForwardIcon"
+                focusable="false"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  d="m12 4-1.41 1.41L16.17 11H4v2h12.17l-5.58 5.59L12 20l8-8z"
+                />
+              </svg>
+            </div>
+          </li>
+          <li
+            class="MuiBreadcrumbs-li"
+          >
+            <a
+              class="MuiTypography-root MuiTypography-inherit MuiLink-root MuiLink-underlineHover css-17dcqu8-MuiTypography-root-MuiLink-root"
+              href="/test/route"
+              tabindex="0"
+            />
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </div>
+</body>
+`;

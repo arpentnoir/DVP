@@ -29,12 +29,12 @@ exports[`Menu should render correctly 1`] = `
             />
           </svg>
           <p
-            class="MuiTypography-root MuiTypography-body2 css-1dnu2q9-MuiTypography-root"
-            data-testid="button:Menu:label"
+            class="MuiTypography-root MuiTypography-body2 css-168g7ec-MuiTypography-root"
+            data-testid="button:MENU:label"
             style="margin-left: 8px;"
             tabindex="0"
           >
-            Menu
+            MENU
           </p>
         </div>
         <span

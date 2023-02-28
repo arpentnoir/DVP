@@ -27,6 +27,7 @@ variables:
     NX_BRANCH: $(Build.SourceBranchName)
     BASE_SHA: main~1
   HEAD_SHA: $(git rev-parse HEAD)
+  NODE_OPTIONS: '--max_old_space_size=16384'
 
 stages:
   - stage: build

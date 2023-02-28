@@ -2,7 +2,6 @@ import { Button, Text } from '@dvp/vc-ui';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import CloseIcon from '@mui/icons-material/Close';
 import NavigateBeforeIcon from '@mui/icons-material/NavigateBefore';
-import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import {
   Box,
   ButtonBase,
@@ -48,7 +47,7 @@ export const MenuBar = React.forwardRef<HTMLButtonElement>((_props, ref) => {
           onClick={() => setOpen(true)}
           aria-expanded={open}
           aria-label="Menu"
-          label="Menu"
+          label="MENU"
           leftIcon={
             <MenuIcon
               sx={{
@@ -58,8 +57,9 @@ export const MenuBar = React.forwardRef<HTMLButtonElement>((_props, ref) => {
           }
           textProps={{
             sx: {
-              fontSize: { xs: 20, sm: 26 },
               display: { xs: 'none', sm: 'block' },
+              fontSize: theme.typography.button.fontSize,
+              fontFamily: theme.typography.button.fontFamily,
             },
 
             style: {
@@ -119,7 +119,11 @@ export const MenuSide = ({
             aria-label="Close Menu"
           >
             <CloseIcon fontSize="large" />
-            <Text fontSize="20x" paddingLeft="6px">
+            <Text
+              paddingLeft="6px"
+              fontSize={theme.typography.button.fontSize}
+              fontFamily={theme.typography.button.fontFamily}
+            >
               MENU
             </Text>
           </ButtonBase>
@@ -138,7 +142,13 @@ export const MenuSide = ({
             aria-label="Close Menu"
           >
             <NavigateBeforeIcon fontSize="large" />
-            <Text lineHeight="22px" paddingLeft="6px" textAlign="left">
+            <Text
+              lineHeight="22px"
+              paddingLeft="6px"
+              textAlign="left"
+              fontSize={theme.typography.button.fontSize}
+              fontFamily={theme.typography.button.fontFamily}
+            >
               HOME AFFAIRS PORTFOLIO
             </Text>
           </ButtonBase>
@@ -204,7 +214,6 @@ export const MenuBarItem = ({
         <Text fontWeight="inherit" variant="body1">
           {label}
         </Text>
-        <NavigateNextIcon />
       </ButtonBase>
       {showDivider && <Divider />}
     </Box>

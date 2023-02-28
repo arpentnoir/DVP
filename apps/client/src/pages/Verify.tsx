@@ -95,7 +95,7 @@ export const Verify = () => {
 
   const displayResult = useMemo(() => {
     return (
-      <>
+      <Stack height={'100%'} paddingBottom={{ xs: '30px', sm: '0px' }}>
         {error && <ErrorMessage />}
         <CertificateUpload
           handleFiles={handleFiles}
@@ -103,18 +103,22 @@ export const Verify = () => {
           key={errorKeyId.toString()}
           acceptMessage={ACCEPT_MESSAGE}
         />
-      </>
+      </Stack>
     );
   }, [error, uploadErrorMessage, errorKeyId]);
 
   return (
     <BaseLayout title="Verify a document">
       <Stack
-        sx={{ display: 'flex', height: '100%' }}
+        sx={{
+          display: 'flex',
+          height: '100%',
+          gap: '56px',
+        }}
         spacing={{ xs: '16px', md: 0 }}
       >
         <Box>
-          <Text variant="h4" fontWeight="bold" paddingBottom="24px">
+          <Text variant="h1" fontWeight="bold" paddingBottom="24px">
             Verify a document
           </Text>
           <Text>
@@ -135,18 +139,14 @@ export const Verify = () => {
             flex: 1,
           }}
         >
-          <Stack
-            height="100%"
-            maxWidth="800px"
-            justifyContent="center"
-            margin="auto"
-          >
+          <Stack height={'100%'} justifyContent="center" margin="auto">
             {loading ? (
               <Stack
                 sx={{
                   height: '100%',
                   alignItems: 'center',
                   justifyContent: 'center',
+                  flex: 1,
                 }}
               >
                 <CircularProgress />

@@ -2,10 +2,6 @@
 
 exports[`BaseApp should render correctly 1`] = `
 <body>
-  <div>
-    <div
-      style="height: 100%;"
-    />
-  </div>
+  <div />
 </body>
 `;

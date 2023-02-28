@@ -105,7 +105,7 @@ export const Schema = () => {
   return (
     <BaseLayout title="Schema">
       <Box paddingBottom="40px">
-        <Text variant="h4" fontWeight="bold" paddingBottom="24px">
+        <Text variant="h1" fontWeight="bold" paddingBottom="24px">
           {schemaName}
         </Text>
         <Text>
@@ -115,7 +115,7 @@ export const Schema = () => {
 
         <Text
           fontWeight="bold"
-          variant="body1"
+          variant="h3"
           paddingTop="24px"
           paddingBottom="8px"
         >

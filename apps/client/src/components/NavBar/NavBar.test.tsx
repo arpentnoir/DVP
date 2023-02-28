@@ -38,6 +38,6 @@ describe('NavBar', () => {
       </Authenticator.Provider>
     );
     await waitFor(() => getByTestId('menu-button'));
-    getByTestId('button:Logout');
+    getByTestId('button:LOGOUT');
   });
 });

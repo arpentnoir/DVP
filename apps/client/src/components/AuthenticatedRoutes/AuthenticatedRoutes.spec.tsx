@@ -6,9 +6,9 @@ import {
   Routes,
   useNavigate,
 } from 'react-router-dom';
-import { AuthenticatedRoutes } from './AuthenticatedRoutes';
 import * as pages from '../../pages';
 import { Home } from '../../pages';
+import { AuthenticatedRoutes } from './AuthenticatedRoutes';
 
 describe('BaseApp', () => {
   it('should render correctly', () => {

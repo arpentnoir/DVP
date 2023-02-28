@@ -90,7 +90,7 @@ export const Identities = () => {
   return (
     <BaseLayout title="Identities">
       <Box paddingBottom="40px">
-        <Text variant="h4" fontWeight="bold" paddingBottom="24px">
+        <Text variant="h1" fontWeight="bold" paddingBottom="24px">
           Identities
         </Text>
         <Text>
@@ -108,7 +108,7 @@ export const Identities = () => {
       </Box>
 
       <Box paddingBottom="40px">
-        <Text variant="body1" fontWeight="bold">
+        <Text variant="h3" fontWeight="bold">
           Identifiers (DIDs)
         </Text>
         <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>
@@ -134,7 +134,7 @@ export const Identities = () => {
       </Box>
 
       <Box paddingBottom="30px">
-        <Text variant="body1" fontWeight="bold">
+        <Text variant="h3" fontWeight="bold">
           Key pairs
         </Text>
         <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>

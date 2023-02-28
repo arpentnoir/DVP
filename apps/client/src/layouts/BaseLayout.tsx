@@ -17,10 +17,11 @@ export const BaseLayout = ({ children, title, ...rest }: IBaseLayout) => {
         maxWidth={false}
         {...rest}
         sx={{
-          paddingX: { xs: '40px', md: '112px' },
+          paddingX: { xs: '40px', lg: '0' },
           paddingY: { xs: '40px', md: '60px' },
-          ...rest.sx,
+          maxWidth: '950px',
           flex: 1,
+          ...rest.sx,
         }}
         disableGutters
       >

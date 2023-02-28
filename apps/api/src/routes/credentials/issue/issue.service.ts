@@ -3,7 +3,7 @@ import {
   DocumentMetadata,
   IssuedDocument,
   IssuerFunction,
-  VerifiableCredential
+  VerifiableCredential,
 } from '@dvp/api-interfaces';
 import {
   ApplicationError,
@@ -13,7 +13,7 @@ import {
   openAttestation,
   RequestInvocationContext,
   transmute,
-  ValidationError
+  ValidationError,
 } from '@dvp/server-common';
 import { isUndefined, omitBy } from 'lodash';
 import { config } from '../../../config';

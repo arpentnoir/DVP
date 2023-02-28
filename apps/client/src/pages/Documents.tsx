@@ -133,7 +133,7 @@ export const Documents = () => {
   return (
     <BaseLayout title="Documents">
       <Box paddingBottom="40px">
-        <Text variant="h4" fontWeight="bold" paddingBottom="24px">
+        <Text variant="h1" fontWeight="bold" paddingBottom="24px">
           Documents
         </Text>
         <Text>
@@ -148,7 +148,7 @@ export const Documents = () => {
           lorem. Morbi convallis convallis diam sit amet lacinia. Aliquam in
           elementum tellus.
         </Text>
-        <Text variant="body1" fontWeight="bold" paddingTop="40px">
+        <Text variant="h3" fontWeight="bold" paddingTop="40px">
           Documents issued
         </Text>
         <Text>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</Text>

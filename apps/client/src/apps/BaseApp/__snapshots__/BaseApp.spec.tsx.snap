@@ -29,8 +29,8 @@ exports[`BaseApp should render correctly 1`] = `
             class="MuiBox-root css-lt80mk"
           >
             <button
-              class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-128y893-MuiButtonBase-root-MuiButton-root"
-              data-testid="button:Login"
+              class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-eytzub-MuiButtonBase-root-MuiButton-root"
+              data-testid="button:LOGIN"
               tabindex="0"
               type="button"
             >
@@ -38,11 +38,11 @@ exports[`BaseApp should render correctly 1`] = `
                 class="css-doi3ij-MuiStack-root"
               >
                 <p
-                  class="MuiTypography-root MuiTypography-body2 css-11vy9io-MuiTypography-root"
-                  data-testid="button:Login:label"
+                  class="MuiTypography-root MuiTypography-body2 css-f9se0d-MuiTypography-root"
+                  data-testid="button:LOGIN:label"
                   tabindex="0"
                 >
-                  Login
+                  LOGIN
                 </p>
               </div>
               <span
@@ -53,324 +53,332 @@ exports[`BaseApp should render correctly 1`] = `
         </div>
       </header>
       <div
-        class="MuiContainer-root MuiContainer-disableGutters css-p2lp1a-MuiContainer-root"
+        class="MuiContainer-root MuiContainer-disableGutters css-dpgzcu-MuiContainer-root"
       >
         <div
-          class="MuiGrid-root MuiGrid-container css-1852etw-MuiGrid-root"
+          class="MuiGrid-root MuiGrid-container css-uv4xu-MuiGrid-root"
         >
           <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 css-1b3l6lk-MuiGrid-root"
+            class="css-nen11g-MuiStack-root"
           >
             <div
-              class="css-1mq5zow-MuiStack-root"
+              class="css-7zlskd-MuiStack-root"
             >
               <div
-                class="MuiBox-root css-0"
+                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 css-1b3l6lk-MuiGrid-root"
               >
-                <h4
-                  class="MuiTypography-root MuiTypography-h4 css-w1s77r-MuiTypography-root"
-                  tabindex="0"
-                >
-                  DIGITAL VERIFICATION
-                </h4>
-                <h5
-                  class="MuiTypography-root MuiTypography-h5 css-rcnmou-MuiTypography-root"
-                  tabindex="0"
-                >
-                  PLATFORM
-                </h5>
-              </div>
-              <p
-                class="MuiTypography-root MuiTypography-body2 css-wqquqw-MuiTypography-root"
-                tabindex="0"
-              >
-                Lorem ipsum dolar sit amet consectetur
-              </p>
-              <div
-                class="css-1v3364e-MuiStack-root"
-              >
-                <button
-                  class="MuiButtonBase-root css-10d1a0h-MuiButtonBase-root"
-                  tabindex="0"
-                  type="button"
+                <div
+                  class="css-hwbtf3-MuiStack-root"
                 >
                   <div
-                    class="css-1lkzb43-MuiStack-root"
+                    class="MuiBox-root css-0"
                   >
-                    <p
-                      class="MuiTypography-root MuiTypography-body1 css-h7gqvj-MuiTypography-root"
+                    <h1
+                      class="MuiTypography-root MuiTypography-h1 css-a226le-MuiTypography-root"
                       tabindex="0"
                     >
-                      Verify a document
-                    </p>
-                    <svg
-                      aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1gnggxu-MuiSvgIcon-root"
-                      data-testid="NavigateNextIcon"
-                      focusable="false"
-                      viewBox="0 0 24 24"
+                      DIGITAL VERIFICATION
+                    </h1>
+                    <h1
+                      class="MuiTypography-root MuiTypography-h1 css-a226le-MuiTypography-root"
+                      tabindex="0"
                     >
-                      <path
-                        d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+                      PLATFORM
+                    </h1>
+                  </div>
+                  <p
+                    class="MuiTypography-root MuiTypography-body2 css-1nuaw8y-MuiTypography-root"
+                    tabindex="0"
+                  >
+                    Lorem ipsum dolar sit amet consectetur
+                  </p>
+                  <div
+                    class="css-124fyjl-MuiStack-root"
+                  >
+                    <button
+                      class="MuiButtonBase-root css-10d1a0h-MuiButtonBase-root"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <div
+                        class="css-1lkzb43-MuiStack-root"
+                      >
+                        <p
+                          class="MuiTypography-root MuiTypography-body1 css-fp1q5u-MuiTypography-root"
+                          tabindex="0"
+                        >
+                          Verify a document
+                        </p>
+                        <svg
+                          aria-hidden="true"
+                          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1vdifv0-MuiSvgIcon-root"
+                          data-testid="NavigateNextIcon"
+                          focusable="false"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+                          />
+                        </svg>
+                      </div>
+                      <span
+                        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
                       />
-                    </svg>
-                  </div>
-                  <span
-                    class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-                  />
-                </button>
-                <button
-                  class="MuiButtonBase-root css-10d1a0h-MuiButtonBase-root"
-                  tabindex="0"
-                  type="button"
-                >
-                  <div
-                    class="css-1lkzb43-MuiStack-root"
-                  >
-                    <p
-                      class="MuiTypography-root MuiTypography-body1 css-h7gqvj-MuiTypography-root"
+                    </button>
+                    <button
+                      class="MuiButtonBase-root css-10d1a0h-MuiButtonBase-root"
                       tabindex="0"
+                      type="button"
                     >
-                      Help and support
-                    </p>
-                    <svg
-                      aria-hidden="true"
-                      class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1gnggxu-MuiSvgIcon-root"
-                      data-testid="NavigateNextIcon"
-                      focusable="false"
-                      viewBox="0 0 24 24"
-                    >
-                      <path
-                        d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+                      <div
+                        class="css-1lkzb43-MuiStack-root"
+                      >
+                        <p
+                          class="MuiTypography-root MuiTypography-body1 css-fp1q5u-MuiTypography-root"
+                          tabindex="0"
+                        >
+                          Help and support
+                        </p>
+                        <svg
+                          aria-hidden="true"
+                          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-1vdifv0-MuiSvgIcon-root"
+                          data-testid="NavigateNextIcon"
+                          focusable="false"
+                          viewBox="0 0 24 24"
+                        >
+                          <path
+                            d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+                          />
+                        </svg>
+                      </div>
+                      <span
+                        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
                       />
-                    </svg>
+                    </button>
                   </div>
-                  <span
-                    class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-                  />
-                </button>
+                </div>
               </div>
-            </div>
-          </div>
-          <div
-            class="MuiGrid-root MuiGrid-item MuiGrid-grid-sm-6 css-1t57ysw-MuiGrid-root"
-          >
-            <div
-              class="MuiBox-root css-16q3p4y"
-            />
-          </div>
-          <div
-            class="MuiGrid-root MuiGrid-container css-87wcwu-MuiGrid-root"
-          >
-            <div
-              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 MuiGrid-grid-lg-3 css-14j1sok-MuiGrid-root"
-            >
               <div
-                class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-1veos4r-MuiPaper-root-MuiCard-root"
+                class="MuiGrid-root MuiGrid-item MuiGrid-grid-sm-6 css-w5l21d-MuiGrid-root"
               >
                 <div
-                  class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
-                >
-                  <div
-                    class="css-3y1137-MuiStack-root"
-                  >
-                    <p
-                      class="MuiTypography-root MuiTypography-body1 css-4fm83e-MuiTypography-root"
-                      tabindex="0"
-                    >
-                      Lorem
-                    </p>
-                  </div>
-                  <p
-                    class="MuiTypography-root MuiTypography-body2 css-1lh1hti-MuiTypography-root"
-                    tabindex="0"
-                  >
-                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
-                  </p>
-                </div>
-                <div
-                  class="MuiCardActions-root MuiCardActions-spacing css-1t6e9jv-MuiCardActions-root"
-                >
-                  <button
-                    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium css-th8pqi-MuiButtonBase-root-MuiButton-root"
-                    data-testid="button:Action"
-                    tabindex="0"
-                    type="button"
-                  >
-                    <div
-                      class="css-doi3ij-MuiStack-root"
-                    >
-                      <p
-                        class="MuiTypography-root MuiTypography-body2 css-1v86dio-MuiTypography-root"
-                        data-testid="button:Action:label"
-                        tabindex="0"
-                      >
-                        Action
-                      </p>
-                    </div>
-                    <span
-                      class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-                    />
-                  </button>
-                </div>
+                  class="MuiBox-root css-jnllwp"
+                />
               </div>
             </div>
             <div
-              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 MuiGrid-grid-lg-3 css-14j1sok-MuiGrid-root"
+              class="MuiGrid-root MuiGrid-container css-1mru3pf-MuiGrid-root"
             >
               <div
-                class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-1veos4r-MuiPaper-root-MuiCard-root"
+                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 MuiGrid-grid-lg-3 css-14j1sok-MuiGrid-root"
               >
                 <div
-                  class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+                  class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-1veos4r-MuiPaper-root-MuiCard-root"
                 >
                   <div
-                    class="css-3y1137-MuiStack-root"
-                  >
-                    <p
-                      class="MuiTypography-root MuiTypography-body1 css-4fm83e-MuiTypography-root"
-                      tabindex="0"
-                    >
-                      Ipsum
-                    </p>
-                  </div>
-                  <p
-                    class="MuiTypography-root MuiTypography-body2 css-1lh1hti-MuiTypography-root"
-                    tabindex="0"
-                  >
-                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
-                  </p>
-                </div>
-                <div
-                  class="MuiCardActions-root MuiCardActions-spacing css-1t6e9jv-MuiCardActions-root"
-                >
-                  <button
-                    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium css-th8pqi-MuiButtonBase-root-MuiButton-root"
-                    data-testid="button:Action"
-                    tabindex="0"
-                    type="button"
+                    class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
                   >
                     <div
-                      class="css-doi3ij-MuiStack-root"
+                      class="css-3y1137-MuiStack-root"
                     >
                       <p
-                        class="MuiTypography-root MuiTypography-body2 css-1v86dio-MuiTypography-root"
-                        data-testid="button:Action:label"
+                        class="MuiTypography-root MuiTypography-body1 css-j63srw-MuiTypography-root"
                         tabindex="0"
                       >
-                        Action
+                        Lorem
                       </p>
                     </div>
-                    <span
-                      class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-                    />
-                  </button>
+                    <p
+                      class="MuiTypography-root MuiTypography-body2 css-gjhwj6-MuiTypography-root"
+                      tabindex="0"
+                    >
+                      It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+                    </p>
+                  </div>
+                  <div
+                    class="MuiCardActions-root MuiCardActions-spacing css-1t6e9jv-MuiCardActions-root"
+                  >
+                    <button
+                      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium css-c09va-MuiButtonBase-root-MuiButton-root"
+                      data-testid="button:Action"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <div
+                        class="css-doi3ij-MuiStack-root"
+                      >
+                        <p
+                          class="MuiTypography-root MuiTypography-body2 css-13sysnx-MuiTypography-root"
+                          data-testid="button:Action:label"
+                          tabindex="0"
+                        >
+                          Action
+                        </p>
+                      </div>
+                      <span
+                        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                      />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div
-              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 MuiGrid-grid-lg-3 css-14j1sok-MuiGrid-root"
-            >
               <div
-                class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-1veos4r-MuiPaper-root-MuiCard-root"
+                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 MuiGrid-grid-lg-3 css-14j1sok-MuiGrid-root"
               >
                 <div
-                  class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+                  class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-1veos4r-MuiPaper-root-MuiCard-root"
                 >
                   <div
-                    class="css-3y1137-MuiStack-root"
-                  >
-                    <p
-                      class="MuiTypography-root MuiTypography-body1 css-4fm83e-MuiTypography-root"
-                      tabindex="0"
-                    >
-                      Dolor
-                    </p>
-                  </div>
-                  <p
-                    class="MuiTypography-root MuiTypography-body2 css-1lh1hti-MuiTypography-root"
-                    tabindex="0"
-                  >
-                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
-                  </p>
-                </div>
-                <div
-                  class="MuiCardActions-root MuiCardActions-spacing css-1t6e9jv-MuiCardActions-root"
-                >
-                  <button
-                    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium css-th8pqi-MuiButtonBase-root-MuiButton-root"
-                    data-testid="button:Action"
-                    tabindex="0"
-                    type="button"
+                    class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
                   >
                     <div
-                      class="css-doi3ij-MuiStack-root"
+                      class="css-3y1137-MuiStack-root"
                     >
                       <p
-                        class="MuiTypography-root MuiTypography-body2 css-1v86dio-MuiTypography-root"
-                        data-testid="button:Action:label"
+                        class="MuiTypography-root MuiTypography-body1 css-j63srw-MuiTypography-root"
                         tabindex="0"
                       >
-                        Action
+                        Ipsum
                       </p>
                     </div>
-                    <span
-                      class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-                    />
-                  </button>
+                    <p
+                      class="MuiTypography-root MuiTypography-body2 css-gjhwj6-MuiTypography-root"
+                      tabindex="0"
+                    >
+                      It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+                    </p>
+                  </div>
+                  <div
+                    class="MuiCardActions-root MuiCardActions-spacing css-1t6e9jv-MuiCardActions-root"
+                  >
+                    <button
+                      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium css-c09va-MuiButtonBase-root-MuiButton-root"
+                      data-testid="button:Action"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <div
+                        class="css-doi3ij-MuiStack-root"
+                      >
+                        <p
+                          class="MuiTypography-root MuiTypography-body2 css-13sysnx-MuiTypography-root"
+                          data-testid="button:Action:label"
+                          tabindex="0"
+                        >
+                          Action
+                        </p>
+                      </div>
+                      <span
+                        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                      />
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div
-              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 MuiGrid-grid-lg-3 css-14j1sok-MuiGrid-root"
-            >
               <div
-                class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-1veos4r-MuiPaper-root-MuiCard-root"
+                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 MuiGrid-grid-lg-3 css-14j1sok-MuiGrid-root"
               >
                 <div
-                  class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+                  class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-1veos4r-MuiPaper-root-MuiCard-root"
                 >
                   <div
-                    class="css-3y1137-MuiStack-root"
-                  >
-                    <p
-                      class="MuiTypography-root MuiTypography-body1 css-4fm83e-MuiTypography-root"
-                      tabindex="0"
-                    >
-                      Amet
-                    </p>
-                  </div>
-                  <p
-                    class="MuiTypography-root MuiTypography-body2 css-1lh1hti-MuiTypography-root"
-                    tabindex="0"
-                  >
-                    It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
-                  </p>
-                </div>
-                <div
-                  class="MuiCardActions-root MuiCardActions-spacing css-1t6e9jv-MuiCardActions-root"
-                >
-                  <button
-                    class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium css-th8pqi-MuiButtonBase-root-MuiButton-root"
-                    data-testid="button:Action"
-                    tabindex="0"
-                    type="button"
+                    class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
                   >
                     <div
-                      class="css-doi3ij-MuiStack-root"
+                      class="css-3y1137-MuiStack-root"
                     >
                       <p
-                        class="MuiTypography-root MuiTypography-body2 css-1v86dio-MuiTypography-root"
-                        data-testid="button:Action:label"
+                        class="MuiTypography-root MuiTypography-body1 css-j63srw-MuiTypography-root"
                         tabindex="0"
                       >
-                        Action
+                        Dolor
                       </p>
                     </div>
-                    <span
-                      class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-                    />
-                  </button>
+                    <p
+                      class="MuiTypography-root MuiTypography-body2 css-gjhwj6-MuiTypography-root"
+                      tabindex="0"
+                    >
+                      It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+                    </p>
+                  </div>
+                  <div
+                    class="MuiCardActions-root MuiCardActions-spacing css-1t6e9jv-MuiCardActions-root"
+                  >
+                    <button
+                      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium css-c09va-MuiButtonBase-root-MuiButton-root"
+                      data-testid="button:Action"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <div
+                        class="css-doi3ij-MuiStack-root"
+                      >
+                        <p
+                          class="MuiTypography-root MuiTypography-body2 css-13sysnx-MuiTypography-root"
+                          data-testid="button:Action:label"
+                          tabindex="0"
+                        >
+                          Action
+                        </p>
+                      </div>
+                      <span
+                        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                      />
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div
+                class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 MuiGrid-grid-lg-3 css-14j1sok-MuiGrid-root"
+              >
+                <div
+                  class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-1veos4r-MuiPaper-root-MuiCard-root"
+                >
+                  <div
+                    class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+                  >
+                    <div
+                      class="css-3y1137-MuiStack-root"
+                    >
+                      <p
+                        class="MuiTypography-root MuiTypography-body1 css-j63srw-MuiTypography-root"
+                        tabindex="0"
+                      >
+                        Amet
+                      </p>
+                    </div>
+                    <p
+                      class="MuiTypography-root MuiTypography-body2 css-gjhwj6-MuiTypography-root"
+                      tabindex="0"
+                    >
+                      It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+                    </p>
+                  </div>
+                  <div
+                    class="MuiCardActions-root MuiCardActions-spacing css-1t6e9jv-MuiCardActions-root"
+                  >
+                    <button
+                      class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium css-c09va-MuiButtonBase-root-MuiButton-root"
+                      data-testid="button:Action"
+                      tabindex="0"
+                      type="button"
+                    >
+                      <div
+                        class="css-doi3ij-MuiStack-root"
+                      >
+                        <p
+                          class="MuiTypography-root MuiTypography-body2 css-13sysnx-MuiTypography-root"
+                          data-testid="button:Action:label"
+                          tabindex="0"
+                        >
+                          Action
+                        </p>
+                      </div>
+                      <span
+                        class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                      />
+                    </button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -378,102 +386,106 @@ exports[`BaseApp should render correctly 1`] = `
         </div>
       </div>
       <div
-        class="css-mi62ix-MuiStack-root"
+        class="css-1sei285-MuiStack-root"
       >
         <div
-          class="css-hyap7f-MuiStack-root"
+          class="css-1qqqzbk-MuiStack-root"
         >
-          <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-128y893-MuiButtonBase-root-MuiButton-root"
-            data-testid="button:Who we are"
-            tabindex="0"
-            type="button"
+          <div
+            class="css-hyap7f-MuiStack-root"
           >
-            <div
-              class="css-doi3ij-MuiStack-root"
+            <button
+              class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-eytzub-MuiButtonBase-root-MuiButton-root"
+              data-testid="button:Who we are"
+              tabindex="0"
+              type="button"
             >
-              <p
-                class="MuiTypography-root MuiTypography-body2 css-11vy9io-MuiTypography-root"
-                data-testid="button:Who we are:label"
-                tabindex="0"
+              <div
+                class="css-doi3ij-MuiStack-root"
               >
-                Who we are
-              </p>
-            </div>
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-            />
-          </button>
-          <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-128y893-MuiButtonBase-root-MuiButton-root"
-            data-testid="button:Our Ministers"
+                <p
+                  class="MuiTypography-root MuiTypography-body2 css-1213u1-MuiTypography-root"
+                  data-testid="button:Who we are:label"
+                  tabindex="0"
+                >
+                  Who we are
+                </p>
+              </div>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+            <button
+              class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-eytzub-MuiButtonBase-root-MuiButton-root"
+              data-testid="button:Our Ministers"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="css-doi3ij-MuiStack-root"
+              >
+                <p
+                  class="MuiTypography-root MuiTypography-body2 css-1213u1-MuiTypography-root"
+                  data-testid="button:Our Ministers:label"
+                  tabindex="0"
+                >
+                  Our Ministers
+                </p>
+              </div>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+            <button
+              class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-eytzub-MuiButtonBase-root-MuiButton-root"
+              data-testid="button:About us"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="css-doi3ij-MuiStack-root"
+              >
+                <p
+                  class="MuiTypography-root MuiTypography-body2 css-1213u1-MuiTypography-root"
+                  data-testid="button:About us:label"
+                  tabindex="0"
+                >
+                  About us
+                </p>
+              </div>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+            <button
+              class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-eytzub-MuiButtonBase-root-MuiButton-root"
+              data-testid="button:Contact us"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="css-doi3ij-MuiStack-root"
+              >
+                <p
+                  class="MuiTypography-root MuiTypography-body2 css-1213u1-MuiTypography-root"
+                  data-testid="button:Contact us:label"
+                  tabindex="0"
+                >
+                  Contact us
+                </p>
+              </div>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+          </div>
+          <img
+            alt="Australian Government"
+            class="MuiBox-root css-1nbic85"
+            src="assets/footer-logo-white.svg"
             tabindex="0"
-            type="button"
-          >
-            <div
-              class="css-doi3ij-MuiStack-root"
-            >
-              <p
-                class="MuiTypography-root MuiTypography-body2 css-11vy9io-MuiTypography-root"
-                data-testid="button:Our Ministers:label"
-                tabindex="0"
-              >
-                Our Ministers
-              </p>
-            </div>
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-            />
-          </button>
-          <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-128y893-MuiButtonBase-root-MuiButton-root"
-            data-testid="button:About us"
-            tabindex="0"
-            type="button"
-          >
-            <div
-              class="css-doi3ij-MuiStack-root"
-            >
-              <p
-                class="MuiTypography-root MuiTypography-body2 css-11vy9io-MuiTypography-root"
-                data-testid="button:About us:label"
-                tabindex="0"
-              >
-                About us
-              </p>
-            </div>
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-            />
-          </button>
-          <button
-            class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-128y893-MuiButtonBase-root-MuiButton-root"
-            data-testid="button:Contact us"
-            tabindex="0"
-            type="button"
-          >
-            <div
-              class="css-doi3ij-MuiStack-root"
-            >
-              <p
-                class="MuiTypography-root MuiTypography-body2 css-11vy9io-MuiTypography-root"
-                data-testid="button:Contact us:label"
-                tabindex="0"
-              >
-                Contact us
-              </p>
-            </div>
-            <span
-              class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
-            />
-          </button>
+          />
         </div>
-        <img
-          alt="Australian Government"
-          class="MuiBox-root css-1nbic85"
-          src="assets/footer-logo-white.svg"
-          tabindex="0"
-        />
       </div>
     </div>
   </div>

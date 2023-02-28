@@ -1,10 +1,10 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`CertificateUpload should render correctly 1`] = `
+exports[`CertificateUpload Desktop should render correctly: Desktop 1`] = `
 <body>
   <div>
     <div
-      class="MuiBox-root css-1qj0fvz"
+      class="MuiBox-root css-xi606m"
       id="certificate-upload"
     >
       <div
@@ -20,20 +20,27 @@ exports[`CertificateUpload should render correctly 1`] = `
       </div>
       <label
         aria-label="Upload file"
-        class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-animated MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-animated css-z5ab98-MuiFormLabel-root-MuiInputLabel-root"
+        class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-animated MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-animated css-1l91s8u-MuiFormLabel-root-MuiInputLabel-root"
         for="input-file-upload"
         id="label-file-upload"
       >
         <div
-          class="css-hnuxw1-MuiStack-root"
+          class="css-1kz0kwo-MuiStack-root"
         >
           <div
-            class="css-1q46w03-MuiStack-root"
+            class="css-1fbeulj-MuiStack-root"
           >
-            <img
-              class="MuiBox-root css-eu33wj"
-              src="OpenBox.svg"
-            />
+            <svg
+              aria-hidden="true"
+              class="MuiSvgIcon-root MuiSvgIcon-fontSizeLarge css-13frft-MuiSvgIcon-root"
+              data-testid="CloudUploadIcon"
+              focusable="false"
+              viewBox="0 0 24 24"
+            >
+              <path
+                d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"
+              />
+            </svg>
             <h6
               class="MuiTypography-root MuiTypography-h6 css-n8wto6-MuiTypography-root"
               tabindex="-1"
@@ -68,6 +75,87 @@ exports[`CertificateUpload should render correctly 1`] = `
           </div>
         </div>
       </label>
+    </div>
+  </div>
+</body>
+`;
+
+exports[`CertificateUpload Mobile should render correctly: Mobile 1`] = `
+<body>
+  <div>
+    <div
+      class="MuiBox-root css-xi606m"
+      id="certificate-upload"
+    >
+      <div
+        class="css-1g3jqqf-MuiStack-root"
+      >
+        <div
+          class="css-1wrk7t-MuiStack-root"
+        >
+          <div
+            class="css-1i78psr-MuiStack-root"
+          >
+            <button
+              class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1eoulhv-MuiButtonBase-root-MuiButton-root"
+              data-testid="button:Scan QR code"
+              tabindex="0"
+              type="button"
+            >
+              <div
+                class="css-doi3ij-MuiStack-root"
+              >
+                <h4
+                  class="MuiTypography-root MuiTypography-h4 css-5ukp3i-MuiTypography-root"
+                  data-testid="button:Scan QR code:label"
+                  tabindex="-1"
+                >
+                  Scan QR code
+                </h4>
+              </div>
+              <span
+                class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+              />
+            </button>
+            <div
+              class="MuiBox-root css-1xu3tth"
+            >
+              <p
+                class="MuiTypography-root MuiTypography-body1 css-1sx1eu0-MuiTypography-root"
+                tabindex="-1"
+              >
+                Or  
+              </p>
+              <div
+                aria-controls="filename"
+                aria-label="Select a file. Max 3MB"
+                class="MuiBox-root css-13imy7l"
+                role="button"
+                tabindex="0"
+              >
+                Select a file
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary css-1g6u8k6-MuiInputBase-root-MuiInput-root"
+      >
+        <input
+          class="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+          data-testid="input-file-upload"
+          id="input-file-upload"
+          type="file"
+          value=""
+        />
+      </div>
+      <label
+        aria-label="Upload file"
+        class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-animated MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-animated css-1l91s8u-MuiFormLabel-root-MuiInputLabel-root"
+        for="input-file-upload"
+        id="label-file-upload"
+      />
     </div>
   </div>
 </body>

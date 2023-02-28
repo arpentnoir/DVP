@@ -4,7 +4,13 @@ import { Amplify } from 'aws-amplify';
 import React from 'react';
 import { ErrorBoundary } from 'react-error-boundary';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-import { AppError, Footer, NavBar, NotFoundError } from '../../components';
+import {
+  AppError,
+  Footer,
+  NavBar,
+  Breadcrumbs,
+  NotFoundError,
+} from '../../components';
 import { getAwsCognitoConfig } from '../../config';
 import {
   CreateFormPage,
@@ -38,6 +44,7 @@ export const BaseApp: React.FC<IBaseApp> = ({ children }) => {
           <Router>
             <Stack sx={{ height: '100%' }}>
               <NavBar />
+              <Breadcrumbs />
               <ErrorBoundary FallbackComponent={AppError}>
                 <Routes>
                   <Route path="/viewer" element={<Viewer />} />

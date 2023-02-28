@@ -4,7 +4,7 @@ exports[`BaseLayout should render correctly 1`] = `
 <body>
   <div>
     <div
-      class="MuiContainer-root MuiContainer-disableGutters css-1gwj8np-MuiContainer-root"
+      class="MuiContainer-root MuiContainer-disableGutters css-1y9y4eh-MuiContainer-root"
     />
   </div>
 </body>

@@ -123,17 +123,26 @@ export const NavBar = () => {
         >
           {isAuthed ? (
             <Button
-              sx={{ color: 'white' }}
               variant="text"
-              label={'Logout'}
+              label={'LOGOUT'}
               onClick={signOut}
+              textProps={{
+                color: 'white',
+                fontSize: theme.typography.button.fontSize,
+                fontFamily: theme.typography.button.fontFamily,
+              }}
             />
           ) : (
             <Button
               sx={{ color: 'white' }}
               variant="text"
-              label={'Login'}
+              label={'LOGIN'}
               onClick={login}
+              textProps={{
+                color: 'white',
+                fontSize: theme.typography.button.fontSize,
+                fontFamily: theme.typography.button.fontFamily,
+              }}
             />
           )}
         </Box>

@@ -1,43 +1,90 @@
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import { CertificateUpload } from './CertificateUpload';
+import { setScreenSize } from '../../utils/test.utils';
 
 const handleFiles = jest.fn();
 const ACCEPT_MESSAGE = 'Max 3MB';
 const ERROR_MESSAGE = 'Something went wrong';
 
 describe('CertificateUpload', () => {
-  it('should render correctly', () => {
-    const { baseElement } = render(
-      <CertificateUpload
-        handleFiles={handleFiles}
-        acceptMessage={ACCEPT_MESSAGE}
-        errorMessage=""
-      />
-    );
+  describe('Desktop', () => {
+    beforeAll(() => {
+      (window.matchMedia as any) = setScreenSize('sm');
+    });
 
-    expect(baseElement).toMatchSnapshot();
+    it('should render correctly', () => {
+      const { baseElement } = render(
+        <CertificateUpload
+          handleFiles={handleFiles}
+          acceptMessage={ACCEPT_MESSAGE}
+          errorMessage=""
+        />
+      );
+
+      expect(baseElement).toMatchSnapshot('Desktop');
+    });
+
+    it('should display error message if present', () => {
+      let baseElement = render(
+        <CertificateUpload
+          handleFiles={handleFiles}
+          acceptMessage={ACCEPT_MESSAGE}
+          errorMessage=""
+        />
+      );
+
+      expect(baseElement.queryByText('Something went wrong')).toBeFalsy();
+
+      baseElement = render(
+        <CertificateUpload
+          handleFiles={handleFiles}
+          acceptMessage={ACCEPT_MESSAGE}
+          errorMessage={ERROR_MESSAGE}
+        />
+      );
+
+      expect(baseElement.queryByText('Something went wrong')).toBeTruthy();
+    });
   });
 
-  it('should display error message if present', () => {
-    let baseElement = render(
-      <CertificateUpload
-        handleFiles={handleFiles}
-        acceptMessage={ACCEPT_MESSAGE}
-        errorMessage=""
-      />
-    );
+  describe('Mobile', () => {
+    beforeAll(() => {
+      (window.matchMedia as any) = setScreenSize('xs');
+    });
 
-    expect(baseElement.queryByText('Something went wrong')).toBeFalsy();
+    it('should render correctly', () => {
+      const { baseElement } = render(
+        <CertificateUpload
+          handleFiles={handleFiles}
+          acceptMessage={ACCEPT_MESSAGE}
+          errorMessage=""
+        />
+      );
 
-    baseElement = render(
-      <CertificateUpload
-        handleFiles={handleFiles}
-        acceptMessage={ACCEPT_MESSAGE}
-        errorMessage={ERROR_MESSAGE}
-      />
-    );
+      expect(baseElement).toMatchSnapshot('Mobile');
+    });
 
-    expect(baseElement.queryByText('Something went wrong')).toBeTruthy();
+    it('should display error message if present', () => {
+      let baseElement = render(
+        <CertificateUpload
+          handleFiles={handleFiles}
+          acceptMessage={ACCEPT_MESSAGE}
+          errorMessage=""
+        />
+      );
+
+      expect(baseElement.queryByText('Something went wrong')).toBeFalsy();
+
+      baseElement = render(
+        <CertificateUpload
+          handleFiles={handleFiles}
+          acceptMessage={ACCEPT_MESSAGE}
+          errorMessage={ERROR_MESSAGE}
+        />
+      );
+
+      expect(baseElement.queryByText('Something went wrong')).toBeTruthy();
+    });
   });
 
   it('should call handleFiles on upload', async () => {
