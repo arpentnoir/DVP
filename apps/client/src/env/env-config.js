@@ -9,7 +9,7 @@ window._env_ = {
   AUTH_USER_POOL: 'ap-southeast-2_77WijBpne',
   AUTH_OAUTH_SCOPE: 'email openid profile phone',
   VC_CONTEXT_ENDPOINT:
-    'https://dev-dvp-context.s3.ap-southeast-2.amazonaws.com',
+    'https://context.dev.dvp.ha.showthething.com',
   VC_RENDERER_ENDPOINT: 'https://renderer.dev.dvp.ha.showthething.com',
   DISABLE_SIGNUP: true,
 };
