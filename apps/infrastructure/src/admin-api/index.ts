@@ -184,7 +184,7 @@ new aws.apigateway.RestApiPolicy(`${stack}-admin-api-authorizers-policy`, {
   }`,
 });
 
-new aws.apigateway.MethodSettings('all', {
+new aws.apigateway.MethodSettings(`${stack}-admin-api-method-settings`, {
   restApi: apiGateway.restAPI.id,
   stageName: apiGateway.stage.stageName,
   methodPath: '*/*',
@@ -195,40 +195,49 @@ new aws.apigateway.MethodSettings('all', {
 });
 
 ////////////////////////////////////////////////////////////////////////////////
-// Custom domain name for api
+// Custom domain name for admin api
 
-const provider = new aws.Provider(`${stack}-provider-us-east-1`, {
+const providerAdmin = new aws.Provider(`${stack}-provider-admin-us-east-1`, {
   region: 'us-east-1',
 });
 
-// Get ssl certificate
-const sslCertificate = pulumi.output(
-  aws.acm.getCertificate(
-    {
-      domain: config.dvpAdminApiDomain,
-      statuses: ['ISSUED'],
-    },
-    { provider: provider }
-  )
-);
-
 // Get hosted zone
-const hostedZoneId = aws.route53
+const hostedZoneAdminId = aws.route53
   .getZone({ name: config.targetDomain }, {})
   .then((zone) => zone.zoneId);
+
+// Create new certificate
+const sslNewCertificateAdmin = new aws.acm.Certificate(config.dvpAdminApiDomain, {
+  domainName: config.dvpAdminApiDomain,
+  validationMethod: "DNS",
+});
+
+const sslNewCertificateUSEastAdmin = new aws.acm.Certificate(`${config.dvpAdminApiDomain}-us-east`, {
+  domainName: config.dvpAdminApiDomain,
+  validationMethod: "DNS",
+}, { provider: providerAdmin });
+
+// Add to route53 DNS.  Required for validation
+const sslCertificateValidation = new aws.route53.Record(`${config.dvpAdminApiDomain}-validation`, {
+  name: sslNewCertificateAdmin.domainValidationOptions[0].resourceRecordName,
+  records: [sslNewCertificateAdmin.domainValidationOptions[0].resourceRecordValue],
+  ttl: 60,
+  type: sslNewCertificateAdmin.domainValidationOptions[0].resourceRecordType,
+  zoneId: hostedZoneAdminId,
+});
 
 // Register custom domain name with ApiGateway
 const apiDomainName = new aws.apigateway.DomainName(
   `${stack}-admin-api-domain-name`,
   {
-    certificateArn: sslCertificate.arn,
+    certificateArn: sslNewCertificateUSEastAdmin.arn,
     domainName: config.dvpAdminApiDomain,
-  }
+  }, { dependsOn: [sslCertificateValidation] }
 );
 
 // Create dns record
 new aws.route53.Record(`${stack}-admin-api-dns`, {
-  zoneId: hostedZoneId,
+  zoneId: hostedZoneAdminId,
   type: 'A',
   name: config.dvpAdminApiDomain,
   aliases: [
