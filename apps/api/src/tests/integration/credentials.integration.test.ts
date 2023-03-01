@@ -2,7 +2,7 @@ import { decode } from '@dvp/server-common';
 import request from 'supertest';
 import { app } from '../../app';
 import { models } from '../../db';
-import { authTokenWithSubAndAbn } from './utils';
+import { authTokenWithSubAndAbn } from '../utils';
 jest.mock('../../db', () => {
   return {
     models: {

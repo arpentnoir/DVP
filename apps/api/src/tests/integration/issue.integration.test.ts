@@ -5,9 +5,9 @@ import {
   UpdateItemCommand,
 } from '@aws-sdk/client-dynamodb';
 import {
+  DeleteObjectCommand,
   HeadObjectCommand,
   PutObjectCommand,
-  DeleteObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
 import { IssueCredentialRequestSigningMethodEnum } from '@dvp/api-client';
@@ -22,7 +22,7 @@ import {
   authTokenWithoutAbn,
   authTokenWithoutSub,
   authTokenWithSubAndAbn,
-} from './utils';
+} from '../utils';
 
 let oa_doc;
 

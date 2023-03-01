@@ -14,7 +14,6 @@ export const initializeDynamoDataTable = (
     client: dynamoClient,
     logger: true,
     partial: false,
-
     schema: DynamoSchema,
   });
 
@@ -22,5 +21,6 @@ export const initializeDynamoDataTable = (
     Document: table.getModel('Document'),
     RevocationCounter: table.getModel('RevocationCounter'),
     DocumentSchema: table.getModel('DocumentSchema'),
+    KeyPair: table.getModel('KeyPair'),
   };
 };

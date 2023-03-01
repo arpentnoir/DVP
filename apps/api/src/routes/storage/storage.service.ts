@@ -1,5 +1,4 @@
 import {
-  EncryptedDocumentObject,
   QRPayload,
   StorageClient,
   VerifiableCredential,
@@ -56,7 +55,7 @@ export class StorageService {
   async getDocument<DocumentType>(
     storageClient: StorageClient,
     documentId: string
-  ) {
+  ): Promise<DocumentType> {
     const documentObject = await storageClient.getObject<DocumentType>(
       documentId
     );

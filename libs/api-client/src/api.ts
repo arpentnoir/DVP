@@ -12,35 +12,63 @@
  * Do not edit the class manually.
  */
 
-import { Configuration } from './configuration';
 import globalAxios, {
-  AxiosPromise,
   AxiosInstance,
+  AxiosPromise,
   AxiosRequestConfig,
 } from 'axios';
+import { Configuration } from './configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import {
-  DUMMY_BASE_URL,
   assertParamExists,
-  setApiKeyToObject,
-  setBasicAuthToObject,
-  setBearerAuthToObject,
-  setOAuthToObject,
-  setSearchParams,
-  serializeDataIfNeeded,
-  toPathString,
   createRequestFunction,
+  DUMMY_BASE_URL,
+  serializeDataIfNeeded,
+  setSearchParams,
+  toPathString,
 } from './common';
 // @ts-ignore
-import {
-  BASE_PATH,
-  COLLECTION_FORMATS,
-  RequestArgs,
-  BaseAPI,
-  RequiredError,
-} from './base';
+import { BaseAPI, BASE_PATH, RequestArgs } from './base';
 
+/**
+ * Create keypair request payload containing
+ * @export
+ * @interface CreateKeyPairRequest
+ */
+export interface CreateKeyPairRequest {
+  /**
+   * key pair name, should be unique
+   * @type {string}
+   * @memberof CreateKeyPairRequest
+   */
+  name: string;
+}
+/**
+ * Create keypair response containing the public key in plain text
+ * @export
+ * @interface CreateKeyPairResponse
+ */
+export interface CreateKeyPairResponse {
+  /**
+   * key pair id
+   * @type {string}
+   * @memberof CreateKeyPairResponse
+   */
+  keyId: string;
+  /**
+   * key pair name
+   * @type {string}
+   * @memberof CreateKeyPairResponse
+   */
+  name: string;
+  /**
+   * plaintext public key
+   * @type {string}
+   * @memberof CreateKeyPairResponse
+   */
+  publicKey: string;
+}
 /**
  * A JSON-LD Verifiable Credential without a proof.
  * @export
@@ -362,6 +390,56 @@ export interface ErrorsResponseSchema {
   errors: Array<Error>;
 }
 /**
+ * get keypair response
+ * @export
+ * @interface GetKeyPairResponse
+ */
+export interface GetKeyPairResponse {
+  /**
+   * key pair id
+   * @type {string}
+   * @memberof GetKeyPairResponse
+   */
+  keyId: string;
+  /**
+   * key pair name
+   * @type {string}
+   * @memberof GetKeyPairResponse
+   */
+  name: string;
+  /**
+   *
+   * @type {string}
+   * @memberof GetKeyPairResponse
+   */
+  publickey?: string;
+  /**
+   *
+   * @type {boolean}
+   * @memberof GetKeyPairResponse
+   */
+  disabled?: boolean;
+}
+/**
+ *
+ * @export
+ * @interface GetKeyPairResponseAllOf
+ */
+export interface GetKeyPairResponseAllOf {
+  /**
+   *
+   * @type {string}
+   * @memberof GetKeyPairResponseAllOf
+   */
+  publickey?: string;
+  /**
+   *
+   * @type {boolean}
+   * @memberof GetKeyPairResponseAllOf
+   */
+  disabled?: boolean;
+}
+/**
  *
  * @export
  * @interface GetRevocationList200Response
@@ -484,6 +562,25 @@ export interface IssuerOneOf {
   name?: string;
 }
 /**
+ * keypair object
+ * @export
+ * @interface KeyPair
+ */
+export interface KeyPair {
+  /**
+   * key pair id
+   * @type {string}
+   * @memberof KeyPair
+   */
+  keyId: string;
+  /**
+   * key pair name
+   * @type {string}
+   * @memberof KeyPair
+   */
+  name: string;
+}
+/**
  * A JSON-LD Linked Data proof.
  * @export
  * @interface LinkedDataProof
@@ -543,6 +640,19 @@ export interface LinkedDataProof {
    * @memberof LinkedDataProof
    */
   proofValue?: string;
+}
+/**
+ * list keypair response
+ * @export
+ * @interface ListKeyPairResponse
+ */
+export interface ListKeyPairResponse {
+  /**
+   *
+   * @type {Array<KeyPair>}
+   * @memberof ListKeyPairResponse
+   */
+  results?: Array<KeyPair>;
 }
 /**
  * An object containing the details of a particular error.
@@ -630,50 +740,6 @@ export interface SetStatusRequest {
    * @memberof SetStatusRequest
    */
   credentialStatus: Array<CredentialStatus>;
-}
-/**
- *
- * @export
- * @interface ValidateCredentialRequest
- */
-export interface ValidateCredentialRequest {
-  /**
-   *
-   * @type {string}
-   * @memberof ValidateCredentialRequest
-   */
-  schemaType: string;
-  /**
-   *
-   * @type {VerifiableCredential}
-   * @memberof ValidateCredentialRequest
-   */
-  verifiableCredential: VerifiableCredential;
-}
-/**
- * Pagination data object
- * @export
- * @interface Pagination
- */
-export interface Pagination {
-  /**
-   *
-   * @type {string}
-   * @memberof Pagination
-   */
-  nextCursor?: string;
-  /**
-   *
-   * @type {string}
-   * @memberof Pagination
-   */
-  prevCursor?: string;
-  /**
-   *
-   * @type {number}
-   * @memberof Pagination
-   */
-  limit?: number;
 }
 /**
  *
@@ -1900,6 +1966,620 @@ export class DefaultApi extends BaseAPI implements DefaultApiInterface {
   ) {
     return DefaultApiFp(this.configuration)
       .uploadDocument(documentUploadRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+}
+
+/**
+ * KeyPairApi - axios parameter creator
+ * @export
+ */
+export const KeyPairApiAxiosParamCreator = function (
+  configuration?: Configuration
+) {
+  return {
+    /**
+     *
+     * @summary creates a JWK public/private signing keypair that can be used to sign the credentials
+     * @param {CreateKeyPairRequest} [createKeyPairRequest] Parameters uploading the document
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createKeyPair: async (
+      createKeyPairRequest?: CreateKeyPairRequest,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/keypairs`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'POST',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      localVarHeaderParameter['Content-Type'] = 'application/json';
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+      localVarRequestOptions.data = serializeDataIfNeeded(
+        createKeyPairRequest,
+        localVarRequestOptions,
+        configuration
+      );
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary delete a key pair
+     * @param {string} keyId Key pair id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteKeyPair: async (
+      keyId: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'keyId' is not null or undefined
+      assertParamExists('deleteKeyPair', 'keyId', keyId);
+      const localVarPath = `/keypairs/{keyId}`.replace(
+        `{${'keyId'}}`,
+        encodeURIComponent(String(keyId))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'DELETE',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary disable a key pair
+     * @param {string} keyId Key pair id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    disableKeyPair: async (
+      keyId: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'keyId' is not null or undefined
+      assertParamExists('disableKeyPair', 'keyId', keyId);
+      const localVarPath = `/keypairs/{keyId}/disable`.replace(
+        `{${'keyId'}}`,
+        encodeURIComponent(String(keyId))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'PUT',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary get a key pair
+     * @param {string} keyId Key pair id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getKeyPair: async (
+      keyId: string,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      // verify required parameter 'keyId' is not null or undefined
+      assertParamExists('getKeyPair', 'keyId', keyId);
+      const localVarPath = `/keypairs/{keyId}`.replace(
+        `{${'keyId'}}`,
+        encodeURIComponent(String(keyId))
+      );
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+    /**
+     *
+     * @summary return list of keys pairs
+     * @param {boolean} [includeDisabled] Include disabled key pairs in the response
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listKeyPairs: async (
+      includeDisabled?: boolean,
+      options: AxiosRequestConfig = {}
+    ): Promise<RequestArgs> => {
+      const localVarPath = `/keypairs`;
+      // use dummy base URL string because the URL constructor only accepts absolute URLs.
+      const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+      let baseOptions;
+      if (configuration) {
+        baseOptions = configuration.baseOptions;
+      }
+
+      const localVarRequestOptions = {
+        method: 'GET',
+        ...baseOptions,
+        ...options,
+      };
+      const localVarHeaderParameter = {} as any;
+      const localVarQueryParameter = {} as any;
+
+      if (includeDisabled !== undefined) {
+        localVarQueryParameter['includeDisabled'] = includeDisabled;
+      }
+
+      setSearchParams(localVarUrlObj, localVarQueryParameter);
+      let headersFromBaseOptions =
+        baseOptions && baseOptions.headers ? baseOptions.headers : {};
+      localVarRequestOptions.headers = {
+        ...localVarHeaderParameter,
+        ...headersFromBaseOptions,
+        ...options.headers,
+      };
+
+      return {
+        url: toPathString(localVarUrlObj),
+        options: localVarRequestOptions,
+      };
+    },
+  };
+};
+
+/**
+ * KeyPairApi - functional programming interface
+ * @export
+ */
+export const KeyPairApiFp = function (configuration?: Configuration) {
+  const localVarAxiosParamCreator = KeyPairApiAxiosParamCreator(configuration);
+  return {
+    /**
+     *
+     * @summary creates a JWK public/private signing keypair that can be used to sign the credentials
+     * @param {CreateKeyPairRequest} [createKeyPairRequest] Parameters uploading the document
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async createKeyPair(
+      createKeyPairRequest?: CreateKeyPairRequest,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<CreateKeyPairResponse>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.createKeyPair(
+        createKeyPairRequest,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     *
+     * @summary delete a key pair
+     * @param {string} keyId Key pair id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async deleteKeyPair(
+      keyId: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.deleteKeyPair(
+        keyId,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     *
+     * @summary disable a key pair
+     * @param {string} keyId Key pair id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async disableKeyPair(
+      keyId: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (axios?: AxiosInstance, basePath?: string) => AxiosPromise<void>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.disableKeyPair(
+        keyId,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     *
+     * @summary get a key pair
+     * @param {string} keyId Key pair id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async getKeyPair(
+      keyId: string,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<GetKeyPairResponse>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.getKeyPair(
+        keyId,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+    /**
+     *
+     * @summary return list of keys pairs
+     * @param {boolean} [includeDisabled] Include disabled key pairs in the response
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    async listKeyPairs(
+      includeDisabled?: boolean,
+      options?: AxiosRequestConfig
+    ): Promise<
+      (
+        axios?: AxiosInstance,
+        basePath?: string
+      ) => AxiosPromise<ListKeyPairResponse>
+    > {
+      const localVarAxiosArgs = await localVarAxiosParamCreator.listKeyPairs(
+        includeDisabled,
+        options
+      );
+      return createRequestFunction(
+        localVarAxiosArgs,
+        globalAxios,
+        BASE_PATH,
+        configuration
+      );
+    },
+  };
+};
+
+/**
+ * KeyPairApi - factory interface
+ * @export
+ */
+export const KeyPairApiFactory = function (
+  configuration?: Configuration,
+  basePath?: string,
+  axios?: AxiosInstance
+) {
+  const localVarFp = KeyPairApiFp(configuration);
+  return {
+    /**
+     *
+     * @summary creates a JWK public/private signing keypair that can be used to sign the credentials
+     * @param {CreateKeyPairRequest} [createKeyPairRequest] Parameters uploading the document
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    createKeyPair(
+      createKeyPairRequest?: CreateKeyPairRequest,
+      options?: any
+    ): AxiosPromise<CreateKeyPairResponse> {
+      return localVarFp
+        .createKeyPair(createKeyPairRequest, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary delete a key pair
+     * @param {string} keyId Key pair id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    deleteKeyPair(keyId: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .deleteKeyPair(keyId, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary disable a key pair
+     * @param {string} keyId Key pair id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    disableKeyPair(keyId: string, options?: any): AxiosPromise<void> {
+      return localVarFp
+        .disableKeyPair(keyId, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary get a key pair
+     * @param {string} keyId Key pair id
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    getKeyPair(keyId: string, options?: any): AxiosPromise<GetKeyPairResponse> {
+      return localVarFp
+        .getKeyPair(keyId, options)
+        .then((request) => request(axios, basePath));
+    },
+    /**
+     *
+     * @summary return list of keys pairs
+     * @param {boolean} [includeDisabled] Include disabled key pairs in the response
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     */
+    listKeyPairs(
+      includeDisabled?: boolean,
+      options?: any
+    ): AxiosPromise<ListKeyPairResponse> {
+      return localVarFp
+        .listKeyPairs(includeDisabled, options)
+        .then((request) => request(axios, basePath));
+    },
+  };
+};
+
+/**
+ * KeyPairApi - interface
+ * @export
+ * @interface KeyPairApi
+ */
+export interface KeyPairApiInterface {
+  /**
+   *
+   * @summary creates a JWK public/private signing keypair that can be used to sign the credentials
+   * @param {CreateKeyPairRequest} [createKeyPairRequest] Parameters uploading the document
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof KeyPairApiInterface
+   */
+  createKeyPair(
+    createKeyPairRequest?: CreateKeyPairRequest,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<CreateKeyPairResponse>;
+
+  /**
+   *
+   * @summary delete a key pair
+   * @param {string} keyId Key pair id
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof KeyPairApiInterface
+   */
+  deleteKeyPair(
+    keyId: string,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<void>;
+
+  /**
+   *
+   * @summary disable a key pair
+   * @param {string} keyId Key pair id
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof KeyPairApiInterface
+   */
+  disableKeyPair(
+    keyId: string,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<void>;
+
+  /**
+   *
+   * @summary get a key pair
+   * @param {string} keyId Key pair id
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof KeyPairApiInterface
+   */
+  getKeyPair(
+    keyId: string,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<GetKeyPairResponse>;
+
+  /**
+   *
+   * @summary return list of keys pairs
+   * @param {boolean} [includeDisabled] Include disabled key pairs in the response
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof KeyPairApiInterface
+   */
+  listKeyPairs(
+    includeDisabled?: boolean,
+    options?: AxiosRequestConfig
+  ): AxiosPromise<ListKeyPairResponse>;
+}
+
+/**
+ * KeyPairApi - object-oriented interface
+ * @export
+ * @class KeyPairApi
+ * @extends {BaseAPI}
+ */
+export class KeyPairApi extends BaseAPI implements KeyPairApiInterface {
+  /**
+   *
+   * @summary creates a JWK public/private signing keypair that can be used to sign the credentials
+   * @param {CreateKeyPairRequest} [createKeyPairRequest] Parameters uploading the document
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof KeyPairApi
+   */
+  public createKeyPair(
+    createKeyPairRequest?: CreateKeyPairRequest,
+    options?: AxiosRequestConfig
+  ) {
+    return KeyPairApiFp(this.configuration)
+      .createKeyPair(createKeyPairRequest, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary delete a key pair
+   * @param {string} keyId Key pair id
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof KeyPairApi
+   */
+  public deleteKeyPair(keyId: string, options?: AxiosRequestConfig) {
+    return KeyPairApiFp(this.configuration)
+      .deleteKeyPair(keyId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary disable a key pair
+   * @param {string} keyId Key pair id
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof KeyPairApi
+   */
+  public disableKeyPair(keyId: string, options?: AxiosRequestConfig) {
+    return KeyPairApiFp(this.configuration)
+      .disableKeyPair(keyId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary get a key pair
+   * @param {string} keyId Key pair id
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof KeyPairApi
+   */
+  public getKeyPair(keyId: string, options?: AxiosRequestConfig) {
+    return KeyPairApiFp(this.configuration)
+      .getKeyPair(keyId, options)
+      .then((request) => request(this.axios, this.basePath));
+  }
+
+  /**
+   *
+   * @summary return list of keys pairs
+   * @param {boolean} [includeDisabled] Include disabled key pairs in the response
+   * @param {*} [options] Override http request option.
+   * @throws {RequiredError}
+   * @memberof KeyPairApi
+   */
+  public listKeyPairs(includeDisabled?: boolean, options?: AxiosRequestConfig) {
+    return KeyPairApiFp(this.configuration)
+      .listKeyPairs(includeDisabled, options)
       .then((request) => request(this.axios, this.basePath));
   }
 }

@@ -30,6 +30,10 @@ export const dynamodbDocumentsTable = new aws.dynamodb.Table(
     hashKey: 'pk',
     rangeKey: 'sk',
     billingMode: 'PAY_PER_REQUEST',
+    ttl: {
+      attributeName: 'ttl',
+      enabled: true,
+    },
     globalSecondaryIndexes: [
       {
         hashKey: 'gs1pk',

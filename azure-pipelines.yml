@@ -46,7 +46,7 @@ stages:
           - script: npx nx run-many --target=lint --parallel=2
             displayName: 'Run linting'
 
-          - script: npx nx run-many --target=test --skip-nx-cache --parallel=1 --coverage --reporters=default --reporters=jest-junit --coverageReporters=cobertura
+          - script: npx nx run-many --target=test --skip-nx-cache --parallel=1  --runInBand --coverage --reporters=default --reporters=jest-junit --coverageReporters=cobertura
             displayName: 'Run tests'
 
           - task: PublishTestResults@2

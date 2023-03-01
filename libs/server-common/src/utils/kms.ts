@@ -1,11 +1,13 @@
 import {
-  DataKeyPairSpec,
-  GenerateDataKeyPairWithoutPlaintextCommand,
+  DecryptCommand,
+  DecryptCommandInput,
+  EncryptCommand,
+  EncryptCommandInput,
   KMSClient,
   KMSClientConfig,
 } from '@aws-sdk/client-kms';
 
-interface GenerateKeyPairParams {
+interface CommonParams {
   /**
    * The configuration interface of KMSClient class constructor that set the region, credentials and other options.
    */
@@ -27,20 +29,43 @@ interface GenerateKeyPairParams {
     abn: string;
   };
 }
-export const generateKeyPair = async ({
+
+interface DecryptParams extends CommonParams {
+  encryptedData: DecryptCommandInput['CiphertextBlob'];
+}
+
+interface EncryptParams extends CommonParams {
+  data: EncryptCommandInput['Plaintext'];
+}
+
+export const encrypt = async ({
   kMSClientConfig,
   keyId,
   encryptionContext,
-}: GenerateKeyPairParams) => {
+  data,
+}: EncryptParams): Promise<ArrayBuffer | undefined> => {
   const client = new KMSClient(kMSClientConfig);
-  const command = new GenerateDataKeyPairWithoutPlaintextCommand({
+  const command = new EncryptCommand({
     KeyId: keyId,
-    KeyPairSpec: DataKeyPairSpec.RSA_2048,
+    EncryptionContext: encryptionContext,
+    Plaintext: data,
+  });
+  const response = await client.send(command);
+  return response?.CiphertextBlob;
+};
+
+export const decrypt = async ({
+  kMSClientConfig,
+  keyId,
+  encryptionContext,
+  encryptedData,
+}: DecryptParams) => {
+  const client = new KMSClient(kMSClientConfig);
+  const command = new DecryptCommand({
+    KeyId: keyId,
+    CiphertextBlob: encryptedData,
     EncryptionContext: encryptionContext,
   });
   const response = await client.send(command);
-  return {
-    publicKey: response.PublicKey,
-    encryptedPrivateKey: response.PrivateKeyCiphertextBlob,
-  };
+  return new TextDecoder().decode(response.Plaintext);
 };

@@ -1,9 +1,9 @@
 import { VerifiableCredential } from '@dvp/api-interfaces';
 import { getMockInvocationContext, getUuId } from '@dvp/server-common';
 import { generateEncryptionKey } from '@govtechsg/oa-encryption';
-import { StorageService } from './storage.service';
 import didSignedDocument from '../../fixtures/oav3/did-signed.json';
 import oa_doc from '../../fixtures/oav3/did.json';
+import { StorageService } from './storage.service';
 
 const mockGetDocument = jest.fn();
 const mockUploadDocument = jest.fn();

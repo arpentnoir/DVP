@@ -20,7 +20,7 @@ import {
   PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
-import { authTokenWithSubAndAbn } from '../../../tests/integration/utils';
+import { authTokenWithSubAndAbn } from '../../../tests/utils';
 import { storageClient } from '../../storage/storage.service';
 import { IssueService } from './issue.service';
 
@@ -269,6 +269,7 @@ describe('issue.service', () => {
 
     expect(s3Mock).toHaveReceivedNthCommandWith(1, DeleteObjectCommand, {
       Bucket: process.env.DOCUMENT_STORAGE_BUCKET_NAME,
+      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
       Key: `${storageClient.getBasePath()}${storageId}`,
     });
   });

@@ -1,4 +1,5 @@
-import { StatusListS3Config, S3Config } from '@dvp/api-interfaces';
+import { KMSClientConfig } from '@aws-sdk/client-kms';
+import { S3Config, StatusListS3Config } from '@dvp/api-interfaces';
 import { checkEnv } from '@dvp/server-common';
 
 checkEnv([
@@ -7,6 +8,7 @@ checkEnv([
   'CLIENT_URL',
   'AWS_REGION',
   'DYNAMODB_DOCUMENTS_TABLE',
+  'KMS_KEY_ID',
   'REVOCATION_LIST_BUCKET_NAME',
   'REVOCATION_LIST_BIT_STRING_LENGTH',
 ]);
@@ -22,6 +24,10 @@ export interface ApiConfig {
   dynamodb: {
     documentsTableName: string;
   };
+  kms: {
+    keyId: string;
+    clientConfig: KMSClientConfig;
+  };
   statusListS3Config: StatusListS3Config;
   s3Config: S3Config;
 }
@@ -35,6 +41,12 @@ export const config: ApiConfig = {
     mnemonic:
       process.env.DID_MNEMONIC ||
       'coast lesson mountain spy inform deposit two trophy album endless party crumble base grape artefact',
+  },
+  kms: {
+    keyId: process.env.KMS_KEY_ID,
+    clientConfig: {
+      region: process.env.AWS_REGION,
+    },
   },
   dynamodb: {
     documentsTableName: process.env.DYNAMODB_DOCUMENTS_TABLE,

@@ -1,11 +1,12 @@
 /* eslint-disable */
-export default {
+import type { Config } from 'jest';
+const config: Config = {
   displayName: 'api unit tests',
   preset: '../../jest.preset.js',
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.spec.json',
-    }
+    },
   },
   testEnvironment: 'node',
   transform: {
@@ -21,3 +22,5 @@ export default {
     },
   },
 };
+
+export default config;

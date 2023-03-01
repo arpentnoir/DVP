@@ -16,6 +16,166 @@
     }
   ],
   "paths": {
+    "/keypairs": {
+      "post": {
+        "summary": "creates a JWK public/private signing keypair that can be used to sign the credentials",
+        "tags": ["KeyPair"],
+        "operationId": "createKeyPair",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateKeyPairRequest"
+              }
+            }
+          },
+          "description": "Parameters uploading the document"
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully created a keypair",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CreateKeyPairResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerErrorResponse"
+          }
+        }
+      },
+      "get": {
+        "summary": "return list of keys pairs ",
+        "tags": ["KeyPair"],
+        "operationId": "listKeyPairs",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "includeDisabled",
+            "description": "Include disabled key pairs in the response ",
+            "schema": {
+              "type": "boolean"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully created a keypair",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListKeyPairResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerErrorResponse"
+          }
+        }
+      }
+    },
+    "/keypairs/{keyId}": {
+      "get": {
+        "summary": "get a key pair",
+        "tags": ["KeyPair"],
+        "operationId": "getKeyPair",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "keyId",
+            "required": true,
+            "description": "Key pair id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully created a keypair",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GetKeyPairResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerErrorResponse"
+          }
+        }
+      },
+      "delete": {
+        "summary": "delete a key pair",
+        "tags": ["KeyPair"],
+        "operationId": "deleteKeyPair",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "keyId",
+            "required": true,
+            "description": "Key pair id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted a keypair"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerErrorResponse"
+          }
+        }
+      }
+    },
+    "/keypairs/{keyId}/disable": {
+      "put": {
+        "summary": "disable a key pair",
+        "tags": ["KeyPair"],
+        "operationId": "disableKeyPair",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "keyId",
+            "required": true,
+            "description": "Key pair id",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully disabled a keypair"
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerErrorResponse"
+          }
+        }
+      }
+    },
     "/storage/documents": {
       "post": {
         "summary": "encrypt and upload document",
@@ -355,6 +515,82 @@
         "type": "string",
         "format": "uuid",
         "example": "77879ba6-9aaf-4895-9e1c-794e4a3653fe"
+      },
+      "CreateKeyPairRequest": {
+        "description": "Create keypair request payload containing",
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "key pair name, should be unique"
+          }
+        }
+      },
+      "CreateKeyPairResponse": {
+        "description": "Create keypair response containing the public key in plain text",
+        "type": "object",
+        "required": ["keyId", "name", "publicKey"],
+        "properties": {
+          "keyId": {
+            "type": "string",
+            "description": "key pair id"
+          },
+          "name": {
+            "type": "string",
+            "description": "key pair name"
+          },
+          "publicKey": {
+            "type": "string",
+            "description": "plaintext public key"
+          }
+        }
+      },
+      "KeyPair": {
+        "description": "keypair object",
+        "type": "object",
+        "required": ["keyId", "name"],
+        "properties": {
+          "keyId": {
+            "type": "string",
+            "description": "key pair id"
+          },
+          "name": {
+            "type": "string",
+            "description": "key pair name"
+          }
+        }
+      },
+      "GetKeyPairResponse": {
+        "description": "get keypair response",
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/KeyPair"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "publickey": {
+                "type": "string"
+              },
+              "disabled": {
+                "type": "boolean"
+              }
+            }
+          }
+        ]
+      },
+      "ListKeyPairResponse": {
+        "description": "list keypair response",
+        "type": "object",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/KeyPair"
+            }
+          }
+        }
       },
       "CredentialStatus": {
         "description": "An object containing the type and status of a verifiable credential",

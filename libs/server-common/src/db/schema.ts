@@ -37,6 +37,26 @@ export const DynamoSchema = {
       gs1pk: { type: String, value: 'Document' },
       gs1sk: { type: String, value: 'Document#${id}' },
     },
+
+    KeyPair: {
+      pk: { type: String, value: 'Abn#${abn}' },
+      sk: { type: String, value: 'KeyPair#${keyId}' },
+      abn: { type: String, required: true },
+
+      keyId: { type: String, generate: 'uuid' },
+      name: { type: String, required: true, unique: true, scope: '${abn}' },
+
+      kmsId: { type: String, required: true },
+      publicKey: { type: String, required: true },
+      encryptedPrivateKey: { type: ArrayBuffer, required: true },
+      disabled: { type: Boolean, default: false },
+      deleted: { type: Boolean, default: false },
+      ttl: { type: Number, ttl: true }, //  DynamoDB TTL date(Epoch timestamp) to evict the keypair
+
+      createdBy: { type: String },
+      updatedBy: { type: String },
+    },
+
     RevocationCounter: {
       pk: { type: String, value: 'RevocationCounter' },
       sk: { type: String, value: 'RevocationCounter' },
@@ -44,6 +64,7 @@ export const DynamoSchema = {
       counter: { type: Number, require: true },
       bitStringLength: { type: Number, require: true },
     },
+
     DocumentSchema: {
       pk: { type: String, value: 'DocumentSchema' },
       sk: { type: String, value: 'DocumentSchema#${name}#${type}' },
@@ -61,6 +82,7 @@ export const DynamoSchema = {
 };
 
 export type DocumentType = Entity<typeof DynamoSchema.models.Document>;
+export type KeyPairType = Entity<typeof DynamoSchema.models.KeyPair>;
 export type RevocationType = Entity<
   typeof DynamoSchema.models.RevocationCounter
 >;

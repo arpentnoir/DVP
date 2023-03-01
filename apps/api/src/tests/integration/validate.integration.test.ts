@@ -6,7 +6,7 @@ import missingRequiredGeneric from '../../fixtures/validateabledata/generic-miss
 import validAANZFTA_COO from '../../fixtures/validateabledata/validAANZFTA_COO.json';
 import validGenericData from '../../fixtures/validateabledata/validGeneric.json';
 import { ExpectedBody } from '../../routes/credentials/validate/validate.controller';
-import { authTokenWithSubAndAbn } from './utils';
+import { authTokenWithSubAndAbn } from '../utils';
 
 describe('validate api', () => {
   const endpoint = '/api/credentials/validate';
