@@ -69,6 +69,7 @@ const environmentVariables = {
     API_URL: config.apiUrl,
     CLIENT_URL: config.clientUrl,
     DYNAMODB_DOCUMENTS_TABLE: dynamodbDocumentsTable.name,
+    KMS_KEY_ID: kms.kmsCmk.id,
   },
 };
 
