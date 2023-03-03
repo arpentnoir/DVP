@@ -116,35 +116,33 @@ export const NavBar = () => {
         </Stack>
         <Box
           sx={{
+            position: 'absolute',
+            right: 0,
+            height: { xs: '60px', sm: '80px' },
             backgroundColor: theme.palette.common.backgroundDark,
-            height: '100%',
             display: 'flex',
           }}
         >
-          {isAuthed ? (
-            <Button
-              variant="text"
-              label={'LOGOUT'}
-              onClick={signOut}
-              textProps={{
-                color: 'white',
-                fontSize: theme.typography.button.fontSize,
-                fontFamily: theme.typography.button.fontFamily,
-              }}
-            />
-          ) : (
-            <Button
-              sx={{ color: 'white' }}
-              variant="text"
-              label={'LOGIN'}
-              onClick={login}
-              textProps={{
-                color: 'white',
-                fontSize: theme.typography.button.fontSize,
-                fontFamily: theme.typography.button.fontFamily,
-              }}
-            />
-          )}
+          <Button
+            variant="text"
+            label={isAuthed ? 'logout' : 'login'}
+            onClick={isAuthed ? signOut : login}
+            sx={{
+              color: 'white',
+              boxShadow: 'none',
+              backgroundColor: theme.palette.common.backgroundDark,
+              ':hover': {
+                boxShadow: 'none',
+                backgroundColor: theme.palette.common.tabBlueDark,
+              },
+            }}
+            textProps={{
+              color: 'white',
+              textTransform: 'uppercase',
+              fontSize: { xs: '12px', sm: theme.typography.button.fontSize },
+              fontFamily: theme.typography.button.fontFamily,
+            }}
+          />
         </Box>
       </Stack>
     </AppBar>

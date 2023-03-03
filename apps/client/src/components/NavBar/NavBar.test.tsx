@@ -22,7 +22,7 @@ describe('NavBar', () => {
       </Authenticator.Provider>
     );
 
-    const signOutButton = queryByTestId('button:Logout');
+    const signOutButton = queryByTestId('button:logout');
     expect(signOutButton).toBeNull();
 
     const menuButton = queryByTestId('menu-button');
@@ -38,6 +38,6 @@ describe('NavBar', () => {
       </Authenticator.Provider>
     );
     await waitFor(() => getByTestId('menu-button'));
-    getByTestId('button:LOGOUT');
+    getByTestId('button:logout');
   });
 });

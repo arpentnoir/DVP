@@ -8,19 +8,27 @@ import { BaseLayout } from '../layouts';
 // TODO: Replace with real data
 const actions = [
   {
-    name: 'Lorem',
+    name: 'LOREM',
     text: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
   },
   {
-    name: 'Ipsum',
+    name: 'IPSUM',
     text: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
   },
   {
-    name: 'Dolor',
+    name: 'DOLOR',
     text: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
   },
   {
-    name: 'Amet',
+    name: 'LOREM',
+    text: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+  },
+  {
+    name: 'IPSUM',
+    text: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
+  },
+  {
+    name: 'DOLOR',
     text: 'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.',
   },
 ];
@@ -38,11 +46,12 @@ export const Home = () => {
         backgroundColor: theme.palette.common.backgroundBlue,
         display: 'flex',
         justifyContent: 'center',
+        flexDirection: 'column',
         maxWidth: '100%',
       }}
     >
-      <Grid container height={'100%'} maxWidth={'1140px'}>
-        <Stack>
+      <Box width="100%" sx={{ display: 'flex', justifyContent: 'center' }}>
+        <Grid container maxWidth={'1140px'}>
           <Stack
             direction={'row'}
             sx={{
@@ -52,7 +61,7 @@ export const Home = () => {
               width: '100%',
             }}
           >
-            <Grid item xs={12} sm={6}>
+            <Grid item xs={12} md={6}>
               <Stack
                 padding={{
                   xs: '60px 20px 0px 20px',
@@ -81,6 +90,9 @@ export const Home = () => {
                       sx={{
                         borderBottom: '1px solid white',
                         padding: '16px 20px',
+                        ':hover': {
+                          borderColor: theme.palette.common.featureGold,
+                        },
                       }}
                     >
                       <Text color="white" fontWeight="bold" variant="body1">
@@ -100,6 +112,9 @@ export const Home = () => {
                       sx={{
                         borderBottom: '1px solid white',
                         padding: '16px 20px',
+                        ':hover': {
+                          borderColor: theme.palette.common.featureGold,
+                        },
                       }}
                     >
                       <Text color="white" fontWeight="bold" variant="body1">
@@ -115,11 +130,11 @@ export const Home = () => {
             </Grid>
             <Grid
               item
-              sm={6}
+              md={6}
               sx={{
                 display: {
                   xs: 'none',
-                  sm: 'block',
+                  md: 'block',
                   background: 'url("assets/home-background.jpg")',
                   backgroundPosition: 'bottom right',
                   backgroundSize: 'cover',
@@ -136,39 +151,61 @@ export const Home = () => {
             >
               <Box
                 sx={{
-                  background: theme.palette.common.backgroundBlue,
-                  position: 'relative',
-                  top: '-100px',
-                  left: '-120px',
-                  width: '200px',
-                  height: 'calc(100% + 300px)',
-                  transform: 'rotate(-15deg)',
+                  height: 0,
+                  width: 0,
+                  borderBottom: `700px solid ${theme.palette.common.backgroundBlue}`,
+                  borderRight: '200px solid transparent',
                 }}
               />
             </Grid>
           </Stack>
-          <Grid
-            container
-            spacing="30px"
-            padding={{
-              xs: '0px 40px 100px 40px',
-              sm: '60px 40px',
-            }}
-          >
-            {actions.map((action) => (
-              <Grid item lg={3} md={4} sm={6} xs={12} key={action.name}>
-                <Card
-                  sx={{ flex: 1, padding: '16px' }}
-                  name={action.name}
-                  text={action.text}
-                  handleAction={() => null}
-                  actionLabel="Action"
-                />
-              </Grid>
-            ))}
-          </Grid>
-        </Stack>
-      </Grid>
+        </Grid>
+      </Box>
+      <Box
+        sx={{
+          backgroundColor: theme.palette.common.neutralGrey,
+          display: 'flex',
+          justifyContent: 'center',
+        }}
+      >
+        <Grid
+          container
+          maxWidth={'1140px'}
+          padding={{
+            xs: '20px',
+            sm: '60px 40px',
+          }}
+        >
+          {actions.map((action) => (
+            <Grid item md={4} sm={6} xs={12} key={action.name}>
+              <Card
+                sx={{
+                  flex: 1,
+                  padding: '16px',
+                  borderRadius: 0,
+                  borderColor: theme.palette.common.neutralGrey,
+                  borderWidth: '1px',
+                  borderStyle: 'solid',
+                  ':hover': {
+                    backgroundColor: theme.palette.common.backgroundBlue,
+                    color: 'white',
+                    borderColor: theme.palette.common.backgroundBlue,
+                  },
+                  cursor: 'pointer',
+                }}
+                elevation={0}
+                name={action.name}
+                text={action.text}
+                headerAction={
+                  <NavigateNextIcon
+                    sx={{ color: theme.palette.common.featureGold }}
+                  />
+                }
+              />
+            </Grid>
+          ))}
+        </Grid>
+      </Box>
     </BaseLayout>
   );
 };
