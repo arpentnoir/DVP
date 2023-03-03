@@ -45,6 +45,8 @@ else
           AttributeName=sk,AttributeType=S \
           AttributeName=gs1pk,AttributeType=S \
           AttributeName=gs1sk,AttributeType=S \
+          AttributeName=gs2pk,AttributeType=S \
+          AttributeName=gs2sk,AttributeType=S \
       --key-schema \
           AttributeName=pk,KeyType=HASH \
           AttributeName=sk,KeyType=RANGE \
@@ -55,6 +57,14 @@ else
                   \"IndexName\": \"gs1\",
                   \"KeySchema\": [{\"AttributeName\":\"gs1pk\",\"KeyType\":\"HASH\"},
                                   {\"AttributeName\":\"gs1sk\",\"KeyType\":\"RANGE\"}],
+                  \"Projection\":{
+                      \"ProjectionType\":\"ALL\"
+                  }
+              },
+               {
+                  \"IndexName\": \"gs2\",
+                  \"KeySchema\": [{\"AttributeName\":\"gs2pk\",\"KeyType\":\"HASH\"},
+                                  {\"AttributeName\":\"gs2sk\",\"KeyType\":\"RANGE\"}],
                   \"Projection\":{
                       \"ProjectionType\":\"ALL\"
                   }
