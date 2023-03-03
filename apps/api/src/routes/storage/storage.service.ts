@@ -24,7 +24,7 @@ export interface IUploadDocument {
   overwrite?: boolean;
 }
 
-export const storageClient: StorageClient = new S3Adapter(
+export const storageClient: StorageClient = S3Adapter(
   config.s3Config,
   DOCUMENTS_BASE_PATH
 );

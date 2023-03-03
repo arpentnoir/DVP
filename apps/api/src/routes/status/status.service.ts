@@ -26,7 +26,7 @@ import { StorageService } from '../storage/storage.service';
 
 const IS_REVOKED = '1';
 
-export const statusStorageClient: StorageClient = new S3Adapter(
+export const statusStorageClient: StorageClient = S3Adapter(
   config.statusListS3Config as S3Config
 );
 

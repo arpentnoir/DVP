@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 . "$(dirname -- "$0")/_/husky.sh"
 
-NODE_OPTIONS='--max_old_space_size=16384' npx nx run-many affected --target=test --coverage --runInBand --parallel=2
+ENABLE_LOCALSTACK='false' NODE_OPTIONS='--max_old_space_size=16384' npx nx run-many affected --target=test --coverage --runInBand --parallel=2

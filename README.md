@@ -34,6 +34,13 @@ To build the internal app, run `yarn build:internal`. This will create a bundle 
 
 To run the internal app, run `yarn start:internal`. This will serve a bundle which only includes the base app and internal specific routes.
 
+### Localstack
+
+Localstack simulates aws cloud environment locally. To run against localstack, ensure that the following environmental variable is set to true in the environment variable files located at apps\api\.env and apps\schema-worker\.env.
+`ENABLE_LOCALSTACK=true`
+
+The localstack open source version doesn't include cognito service, so it's not included in the default resources created.
+
 ### Test
 
 To test the client, run `yarn test`.

@@ -43,3 +43,6 @@ Thumbs.db
 
 # Yarn
 .yarn/*
+
+# Localstack temp files
+/localstack/localstack
