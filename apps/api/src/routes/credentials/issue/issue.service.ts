@@ -3,6 +3,7 @@ import {
   DocumentMetadata,
   IssuedDocument,
   IssuerFunction,
+  RevocationType,
   VerifiableCredential,
 } from '@dvp/api-interfaces';
 import {
@@ -18,14 +19,16 @@ import {
 import { isUndefined, omitBy } from 'lodash';
 import { config } from '../../../config';
 import { models } from '../../../db';
-import { StatusService } from '../../status/status.service';
 import { storageClient, StorageService } from '../../storage/storage.service';
-
+import { OAStatusRouteName } from '../status';
+import { StatusService } from '../status/status.service';
 export interface IMetaData {
   credential: VerifiableCredential;
   documentId: string;
   decryptionKey: string;
   documentStorePath: string;
+  signingMethod: IssueCredentialRequestSigningMethodEnum;
+  documentHash?: string;
   revocationIndex?: number;
   revocationS3Path?: string;
 }
@@ -41,6 +44,22 @@ export class IssueService {
 
   generateCredentialId(uuid?: string) {
     return `urn:uuid:${uuid ?? getUuId()}`;
+  }
+
+  getOARevocationData() {
+    return {
+      type: RevocationType.OcspResponder,
+      location: `${config.apiURL}/credentials/status/${OAStatusRouteName}`,
+    };
+  }
+
+  getDocumentHash(
+    credential: VerifiableCredential,
+    signingMethod: IssueCredentialRequestSigningMethodEnum
+  ) {
+    return signingMethod === IssueCredentialRequestSigningMethodEnum.Oa
+      ? `0x${credential?.proof?.targetHash}`
+      : undefined;
   }
 
   getIssuer(
@@ -75,6 +94,8 @@ export class IssueService {
     documentId,
     decryptionKey,
     documentStorePath,
+    signingMethod,
+    documentHash,
     revocationIndex,
     revocationS3Path,
   }: IMetaData): Promise<void> {
@@ -120,12 +141,13 @@ export class IssueService {
         isUndefined
       );
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
       await models.Document.create({
         id: documentId,
         createdBy: userId,
         abn: userAbn,
         s3Path: `${documentStorePath}${documentId}`,
+        signingMethod,
+        documentHash,
         decryptionKey,
         revocationIndex,
         revocationS3Path,
@@ -154,6 +176,9 @@ export class IssueService {
 
       // Defaults to SVIP
       if (signingMethod === IssueCredentialRequestSigningMethodEnum.Oa) {
+        // Injects OA credentialStatus data
+        credential.openAttestationMetadata.proof.revocation =
+          this.getOARevocationData();
         issueResult = await this.baseIssue(signingMethod, credential, true);
       } else {
         issueResult = await this.issueWithStatus(signingMethod, credential);
@@ -271,12 +296,19 @@ export class IssueService {
           encryptionKey,
         });
 
+        const documentHash = this.getDocumentHash(
+          verifiableCredential,
+          signingMethod
+        );
+
         // Store the metadata of the issued verifiable credential
         await this.storeMetadata({
           credential: verifiableCredential,
           documentId,
           decryptionKey: encryptionKey,
           documentStorePath,
+          documentHash,
+          signingMethod,
           revocationIndex,
           revocationS3Path,
         });

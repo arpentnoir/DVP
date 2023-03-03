@@ -1,3 +1,4 @@
+import { IssueCredentialRequestSigningMethodEnum } from '@dvp/api-client';
 import { Entity } from 'dynamodb-onetable';
 
 export const DynamoSchema = {
@@ -8,6 +9,10 @@ export const DynamoSchema = {
       hash: 'gs1pk',
       sort: 'gs1sk',
     },
+    gs2: {
+      hash: 'gs2pk',
+      sort: 'gs2sk',
+    },
   },
   models: {
     Document: {
@@ -17,10 +22,19 @@ export const DynamoSchema = {
       abn: { type: String, required: true },
       s3Path: { type: String, required: true },
       decryptionKey: { type: String, required: true },
+      signingMethod: {
+        type: String,
+        required: true,
+        enum: [
+          IssueCredentialRequestSigningMethodEnum.Oa,
+          IssueCredentialRequestSigningMethodEnum.Svip,
+        ],
+      },
       isRevoked: { type: Boolean, default: false },
       revocationIndex: { type: Number },
       revocationS3Path: { type: String },
       createdBy: { type: String, required: true },
+      documentHash: { type: String },
 
       // metadata
       documentNumber: { type: String },
@@ -36,6 +50,8 @@ export const DynamoSchema = {
       // global secondary index
       gs1pk: { type: String, value: 'Document' },
       gs1sk: { type: String, value: 'Document#${id}' },
+      gs2pk: { type: String, value: 'DocumentHash' },
+      gs2sk: { type: String, value: 'DocumentHash#${documentHash}' },
     },
 
     KeyPair: {

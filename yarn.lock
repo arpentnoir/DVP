@@ -6917,10 +6917,10 @@
     debug "4.3.4"
     node-forge "1.3.1"
 
-"@govtechsg/oa-verify@^7.12.0":
-  version "7.12.0"
-  resolved "https://registry.yarnpkg.com/@govtechsg/oa-verify/-/oa-verify-7.12.0.tgz#7355bb14f26b94538b762fe879f5cc071372890f"
-  integrity sha512-kYepojF8xJjxCpy+tSpdwaRR3vz1+C+5rQZljzaaFLsFdzgNyVnD5DcYLy+GiEfq44HxrwckJWHO8ZtTBaYdPg==
+"@govtechsg/oa-verify@^8.0.0":
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/@govtechsg/oa-verify/-/oa-verify-8.0.0.tgz#d6d0426e24d8552c24b07d89d0a46c7683ea4f0f"
+  integrity sha512-COXOypaQMXN3BCEV13Q9oD9SzaPIOf2M4cwiryIUS0CfNkkK3iCQyjM5REGdpk3jO8YRn4WjYLpNiAdr8xHxvA==
   dependencies:
     "@govtechsg/dnsprove" "^2.5.0"
     "@govtechsg/document-store" "^2.2.3"

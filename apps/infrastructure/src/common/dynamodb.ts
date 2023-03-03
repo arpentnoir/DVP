@@ -26,6 +26,14 @@ export const dynamodbDocumentsTable = new aws.dynamodb.Table(
         name: 'gs1sk',
         type: 'S',
       },
+      {
+        name: 'gs2pk',
+        type: 'S',
+      },
+      {
+        name: 'gs2sk',
+        type: 'S',
+      },
     ],
     hashKey: 'pk',
     rangeKey: 'sk',
@@ -39,6 +47,12 @@ export const dynamodbDocumentsTable = new aws.dynamodb.Table(
         hashKey: 'gs1pk',
         name: 'gs1',
         rangeKey: 'gs1sk',
+        projectionType: 'ALL',
+      },
+      {
+        hashKey: 'gs2pk',
+        name: 'gs2',
+        rangeKey: 'gs2sk',
         projectionType: 'ALL',
       },
     ],

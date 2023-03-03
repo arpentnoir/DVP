@@ -434,7 +434,7 @@
         }
       }
     },
-    "/status": {
+    "/credentials/status": {
       "post": {
         "summary": "Sets the status of a verifiable credential",
         "tags": ["Credentials"],
@@ -463,20 +463,20 @@
         }
       }
     },
-    "/status/{statusId}": {
+    "/credentials/status/revocation-list-2020/{listId}": {
       "get": {
         "summary": "Get revocation list by ID",
         "tags": ["Credentials"],
         "operationId": "getRevocationList",
         "parameters": [
           {
-            "name": "statusId",
+            "name": "listId",
             "in": "path",
             "required": true,
             "description": "The revocation list ID",
             "example": "1",
             "schema": {
-              "type": "integer"
+              "type": "string"
             }
           }
         ],
@@ -490,6 +490,51 @@
                   "allOf": [
                     {
                       "$ref": "#/components/schemas/VerifiableCredential"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "404": {
+            "$ref": "#/components/responses/ResourceNotFoundErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerErrorResponse"
+          }
+        }
+      }
+    },
+    "/credentials/status/oa-ocsp/{documentHash}": {
+      "get": {
+        "summary": "Get revocation list by ID",
+        "tags": ["Credentials"],
+        "operationId": "getRevocationLists",
+        "parameters": [
+          {
+            "name": "documentHash",
+            "in": "path",
+            "required": true,
+            "description": "The revocation list ID",
+            "example": "1",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully returned OA VC revocation status",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "allOf": [
+                    {
+                      "$ref": "#/components/schemas/OARevocationStatus"
                     }
                   ]
                 }
@@ -600,7 +645,7 @@
           "type": {
             "description": "Describes the revocation version to be used.",
             "type": "string",
-            "enum": ["RevocationList2020Status"]
+            "enum": ["RevocationList2020Status", "OpenAttestationOCSP"]
           },
           "status": {
             "description": "Describes whether the status is revoked (1) or not revoked (0).",
@@ -965,12 +1010,23 @@
           }
         }
       },
+      "OARevocationStatus": {
+        "type": "object",
+        "properties": {
+          "documentHash": {
+            "type": "string"
+          },
+          "revoked": {
+            "type": "boolean"
+          }
+        }
+      },
       "SetStatusRequest": {
         "type": "object",
         "required": ["credentialId", "credentialStatus"],
         "properties": {
           "credentialId": {
-            "$ref": "#/components/schemas/Id"
+            "type": "string"
           },
           "credentialStatus": {
             "type": "array",

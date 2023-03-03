@@ -11,6 +11,7 @@ import { getMockReq } from '@jest-mock/express';
 import { mockClient } from 'aws-sdk-client-mock';
 import 'aws-sdk-client-mock-jest';
 import unsignedSvip from '../../../fixtures/genericvc/degree_unsigned.json';
+import signedOAV3 from '../../../fixtures/oav3/did-wrapped.json';
 import unsignedOAV3 from '../../../fixtures/oav3/did.json';
 import validAANZFTA_COO from '../../../fixtures/validateabledata/validAANZFTA_COO.json';
 
@@ -125,6 +126,8 @@ describe('issue.service', () => {
       documentId: storageId,
       decryptionKey: decryptKey,
       documentStorePath: docStorePath,
+      signingMethod: IssueCredentialRequestSigningMethodEnum.Oa,
+      documentHash: 'oa-document-hash',
     });
 
     expect(dynamodbMock).toHaveReceivedNthCommandWith(1, PutItemCommand, {
@@ -135,6 +138,8 @@ describe('issue.service', () => {
         s3Path: { S: docStorePath + storageId },
         decryptionKey: { S: decryptKey },
         isRevoked: { BOOL: false },
+        signingMethod: { S: 'OA' },
+        documentHash: { S: 'oa-document-hash' },
         documentNumber: { S: '0003625' },
         freeTradeAgreement: { S: 'AANZFTA' },
         importingJurisdiction: { S: 'Indonesia' },
@@ -173,6 +178,8 @@ describe('issue.service', () => {
       documentId: storageId,
       decryptionKey: decryptKey,
       documentStorePath: docStorePath,
+      signingMethod: IssueCredentialRequestSigningMethodEnum.Oa,
+      documentHash: 'oa-document-hash',
     });
 
     expect(dynamodbMock).toHaveReceivedNthCommandWith(1, PutItemCommand, {
@@ -183,6 +190,8 @@ describe('issue.service', () => {
         s3Path: { S: docStorePath + storageId },
         decryptionKey: { S: decryptKey },
         isRevoked: { BOOL: false },
+        signingMethod: { S: 'OA' },
+        documentHash: { S: 'oa-document-hash' },
         documentNumber: { S: '000253' },
         importingJurisdiction: { S: 'Singapore' },
         exporterOrManufacturerAbn: { S: '95307094535' },
@@ -209,6 +218,8 @@ describe('issue.service', () => {
       documentId: storageId,
       decryptionKey: decryptKey,
       documentStorePath: docStorePath,
+      signingMethod: IssueCredentialRequestSigningMethodEnum.Oa,
+      documentHash: 'oa-document-hash',
     });
 
     expect(dynamodbMock).toHaveReceivedNthCommandWith(1, PutItemCommand, {
@@ -219,6 +230,8 @@ describe('issue.service', () => {
         s3Path: { S: docStorePath + storageId },
         decryptionKey: { S: decryptKey },
         isRevoked: { BOOL: false },
+        signingMethod: { S: 'OA' },
+        documentHash: { S: 'oa-document-hash' },
       }),
     });
   });
@@ -239,6 +252,7 @@ describe('issue.service', () => {
         documentId: storageId,
         decryptionKey: decryptKey,
         documentStorePath: docStorePath,
+        signingMethod: IssueCredentialRequestSigningMethodEnum.Oa,
       })
     ).rejects.toThrowError(
       'Failed to store the verifiable credentials metadata'
@@ -262,6 +276,7 @@ describe('issue.service', () => {
         documentId: storageId,
         decryptionKey: decryptKey,
         documentStorePath: docStorePath,
+        signingMethod: IssueCredentialRequestSigningMethodEnum.Oa,
       })
     ).rejects.toThrowError(
       'Failed to store the verifiable credentials metadata'
@@ -275,6 +290,21 @@ describe('issue.service', () => {
   });
 
   describe('OpenAttestation', () => {
+    describe('getDocumentHash', () => {
+      it('should return document hash for an OA. VC', () => {
+        const issueService = new IssueService(invocationContext);
+
+        expect(
+          issueService.getDocumentHash(
+            signedOAV3 as VerifiableCredential,
+            IssueCredentialRequestSigningMethodEnum.Oa
+          )
+        ).toStrictEqual(
+          `0x39d61d63571aa26b1cf8b84f8e26b34f3c43ea1819583c2ebcd8a382843e4bf1`
+        );
+      });
+    });
+
     it('should fail if openAttestationMetadata is missing', async () => {
       const unsigned_no_openAttestationMetadata_OA_V3 = unsigned_OA_V3_base;
       delete unsigned_no_openAttestationMetadata_OA_V3[
@@ -293,6 +323,17 @@ describe('issue.service', () => {
 
   describe('SVIP', () => {
     jest.setTimeout(20000);
+    describe('getOARevocationData', () => {
+      it('should correctly get OA revocation data', () => {
+        const issueService = new IssueService(invocationContext);
+
+        expect(issueService.getOARevocationData()).toStrictEqual({
+          location: 'api/credentials/status/oa-ocsp',
+          type: 'OCSP_RESPONDER',
+        });
+      });
+    });
+
     it('should fail if credential fails to validate', async () => {
       dynamodbMock.on(GetItemCommand).resolvesOnce({
         Item: {

@@ -3,10 +3,19 @@ import {
   OpenAttestationDocument,
   OpenAttestationMetadata,
   WrappedDocument,
+  VerifiableCredentialWrappedProof,
 } from '@govtechsg/open-attestation/dist/types/3.0/types';
 
-import { VerifiableCredential as ApiVerifiableCredential } from '@dvp/api-client';
+import {
+  LinkedDataProof,
+  VerifiableCredential as ApiVerifiableCredential,
+} from '@dvp/api-client';
 
+export enum RevocationType {
+  None = 'NONE',
+  OcspResponder = 'OCSP_RESPONDER',
+  RevocationStore = 'REVOCATION_STORE',
+}
 export interface Message {
   message: string;
 }
@@ -46,16 +55,22 @@ export interface SVIPCredentialStatus {
   revocationListCredential: string;
 }
 
+export interface Proof extends LinkedDataProof {
+  targetHash?: string;
+}
+
 //TODO: extend as needed
 export interface VerifiableCredential extends ApiVerifiableCredential {
   credentialSubject: CredentialSubject;
   credentialStatus?: OACredentialStatus | SVIPCredentialStatus;
   openAttestationMetadata?: OpenAttestationMetadata;
+  proof?: Proof;
 }
 
 export interface OAVerifiableCredential
   extends Omit<OpenAttestationDocument, 'credentialSubject'> {
   credentialSubject: CredentialSubject;
+  proof: VerifiableCredentialWrappedProof;
 }
 
 export type WrappedVerifiableCredential =
