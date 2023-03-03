@@ -19,7 +19,8 @@
     "storybook": "nx storybook vc-ui",
     "generate:api-client": "nx generate:api-client api",
     "generate:admin-api-client": "nx generate:api-client admin-api",
-    "postinstall": "husky install"
+    "postinstall": "husky install",
+    "e2e:test": "nx run-many --target=e2e"
   },
   "private": true,
   "dependencies": {

@@ -44,5 +44,7 @@ Thumbs.db
 # Yarn
 .yarn/*
 
+#e2e
+downloads/
 # Localstack temp files
 /localstack/localstack

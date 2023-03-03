@@ -1,13 +1,9 @@
-import { getGreeting } from '../support/app.po';
+describe('client app', () => {
 
-describe('client', () => {
-  beforeEach(() => cy.visit('/'));
-
-  it('should display welcome message', () => {
-    // Custom command example, see `../support/commands.ts` file
-    cy.login('my-email@something.com', 'myPassword');
-
-    // Function helper example, see `../support/app.po.ts` file
-    getGreeting().contains('Welcome client');
+  ///Placeholder
+  it('should open to login page', () => {
+    cy.visit('/issue');
+    cy.get('label').contains('Username');
+    cy.get('label').contains('Password');
   });
 });

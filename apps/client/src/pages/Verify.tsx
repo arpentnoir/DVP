@@ -148,6 +148,7 @@ export const Verify = () => {
                   justifyContent: 'center',
                   flex: 1,
                 }}
+                data-testid="verification-loading"
               >
                 <CircularProgress />
                 <Text

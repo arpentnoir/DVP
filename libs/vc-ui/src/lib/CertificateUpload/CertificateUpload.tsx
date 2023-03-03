@@ -248,6 +248,7 @@ export const CertificateUpload = ({
                     aria-controls="filename"
                     tabIndex={0}
                     aria-label={`Select a file. ${acceptMessage}`}
+                    data-testid="file-select-button"
                     onKeyUp={onKeyUp}
                     sx={{
                       display: 'inline',
@@ -270,6 +271,7 @@ export const CertificateUpload = ({
                     id="vc-upload-error"
                     ref={errorRef}
                     aria-label={errorMessage}
+                    data-testid="vc-upload-error"
                     tabIndex={1}
                     sx={{
                       backgroundColor: 'transparent',

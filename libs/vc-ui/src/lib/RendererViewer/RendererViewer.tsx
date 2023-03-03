@@ -153,6 +153,7 @@ export const RendererViewer = ({ document }: IRendererViewer) => {
                 onFocus={() => {
                   setTabIndex('0');
                 }}
+                data-testid="render_tab"
               />
             )}
             <Tab
@@ -163,6 +164,7 @@ export const RendererViewer = ({ document }: IRendererViewer) => {
               onFocus={() => {
                 setTabIndex('1');
               }}
+              data-testid="json_tab"
             />
           </TabList>
         </Box>
@@ -186,7 +188,11 @@ export const RendererViewer = ({ document }: IRendererViewer) => {
             aria-label="JSON version of the Credential subject"
           >
             {state.document?.credentialSubject ? (
-              <pre aria-hidden="true" style={{ overflow: 'auto' }}>
+              <pre
+                aria-hidden="true"
+                style={{ overflow: 'auto' }}
+                data-testid="json-vc-data"
+              >
                 {JSON.stringify(state.document?.credentialSubject, null, 2)}
               </pre>
             ) : (

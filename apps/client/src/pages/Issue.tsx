@@ -56,7 +56,12 @@ export const Issue = () => {
 
   return (
     <BaseLayout title="Form Select">
-      <Text variant="h1" fontWeight="bold" paddingBottom="24px">
+      <Text
+        variant="h1"
+        fontWeight="bold"
+        paddingBottom="24px"
+        data-testid="issue-header"
+      >
         Issue document
       </Text>
       <Text>

@@ -1,0 +1,76 @@
+{
+  "@context": [
+    "https://www.w3.org/2018/credentials/v1",
+    "https://dev-dvp-context.s3.ap-southeast-2.amazonaws.com/AANZFTA-CoO.json",
+    "https://dev-dvp-context.s3.ap-southeast-2.amazonaws.com/AANZFTA-CoO-Context-Partial.json"
+  ],
+  "type": ["VerifiableCredential"],
+  "issuer": {
+    "id": "did:key:z6MkvsJoJF1ucfDbqVsbmTnxypFYCLAKZSuCMjPv4a3yLG3u"
+  },
+  "issuanceDate": "2023-02-14T02:50:39.245Z",
+  "credentialSubject": {
+    "iD": "fgvf",
+    "issueDateTime": "2023-02-14T12:00:00+11:00",
+    "firstSignatoryAuthentication": {
+      "signature": "7676"
+    },
+    "secondSignatoryAuthentication": {
+      "signature": "687"
+    },
+    "supplyChainConsignment": {
+      "exportCountry": {
+        "name": "gfcf"
+      },
+      "importCountry": {
+        "name": "gfcgf"
+      },
+      "consignor": {
+        "iD": "8667878",
+        "name": "A real person",
+        "postalAddress": {
+          "line1": "7878 fgff",
+          "cityName": "ytcyc",
+          "postcode": "67876",
+          "countryCode": "67876"
+        }
+      },
+      "consignee": {
+        "name": "Bob",
+        "iD": "877878",
+        "postalAddress": {
+          "line1": "9876 created st",
+          "cityName": "imagination town",
+          "postcode": "67887",
+          "countryCode": "404"
+        }
+      },
+      "loadingBaseportLocation": {
+        "name": "hgvg"
+      },
+      "mainCarriageTransportMovement": {
+        "departureEvent": {
+          "departureDateTime": "2023-02-14T12:00:00+11:00"
+        },
+        "usedTransportMeans": {
+          "iD": "67876"
+        }
+      },
+      "unloadingBaseportLocation": {
+        "iD": "gkgvk"
+      }
+    },
+    "links": {
+      "self": {
+        "href": "https://web.dev.dvp.ha.showthething.com/verify?q=%7B%22payload%22%3A%7B%22uri%22%3A%22https%3A%2F%2Fapi.dev.dvp.ha.showthething.com%2Fapi%2Fstorage%2Fdocuments%2F1e406969-0118-49c3-aa71-643f1a2939d9%22%2C%22key%22%3A%22270c6bca619befe24c9c784a515580aa5d2d816be1d459363b54ca08a3d4b116%22%7D%7D"
+      }
+    }
+  },
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "created": "2023-02-14T02:50:47Z",
+    "verificationMethod": "did:key:z6MkvsJoJF1ucfDbqVsbmTnxypFYCLAKZSuCMjPv4a3yLG3u#z6MkvsJoJF1ucfDbqVsbmTnxypFYCLAKZSuCMjPv4a3yLG3u",
+    "proofPurpose": "assertionMethod",
+    "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..aOrqYii-FHB20BKo-stoJinN7xW4JrT4t1n7LiOe9dldBVB0_VYEHTMdRNS3z0lAZyllwTCuJZZ6loQNy7dWBw"
+  }
+}

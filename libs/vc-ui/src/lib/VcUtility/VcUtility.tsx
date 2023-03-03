@@ -85,6 +85,9 @@ export const VcUtility = ({ document, onPrint, isPrintable }: IVcUtility) => {
                 },
               }}
               InputProps={{
+                inputProps: {
+                  'data-testid': 'input-vc-uri',
+                },
                 endAdornment: (
                   <InputAdornment position="end">
                     <IconButton

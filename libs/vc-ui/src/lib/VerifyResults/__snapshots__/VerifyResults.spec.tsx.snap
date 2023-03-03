@@ -20,6 +20,7 @@ exports[`VerifyResults should render correctly 1`] = `
     >
       <div
         class="MuiBox-root css-0"
+        data-testid="issued-by"
       >
         <h6
           class="MuiTypography-root MuiTypography-h6 css-2ulfj5-MuiTypography-root"

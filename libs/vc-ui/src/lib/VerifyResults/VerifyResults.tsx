@@ -124,7 +124,7 @@ export const Results = ({ issuer, checks, errors }: IValid) => {
       >
         {/* Only show issuer if VC is valid */}
         {!hasErrors && (
-          <Box>
+          <Box data-testid="issued-by">
             <Text variant="h6">Issued by:</Text>
             <Text
               fontWeight="bold"

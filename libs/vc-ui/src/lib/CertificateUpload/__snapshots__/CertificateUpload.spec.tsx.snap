@@ -60,6 +60,7 @@ exports[`CertificateUpload Desktop should render correctly: Desktop 1`] = `
                 aria-controls="filename"
                 aria-label="Select a file. Max 3MB"
                 class="MuiBox-root css-13imy7l"
+                data-testid="file-select-button"
                 role="button"
                 tabindex="0"
               >
