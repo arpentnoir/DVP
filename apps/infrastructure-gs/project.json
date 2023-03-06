@@ -1,0 +1,37 @@
+{
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "name": "infrastructure-gs",
+  "projectType": "application",
+  "sourceRoot": "apps/infrastructure-gs/src",
+  "targets": {
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "options": {
+        "lintFilePatterns": ["apps/infrastructure-gs/**/*.ts"]
+      }
+    },
+    "up": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "make pulumi-up",
+        "cwd": "apps/infrastructure-gs"
+      }
+    },
+    "preview": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "make pulumi-preview",
+        "cwd": "apps/infrastructure-gs"
+      }
+    },
+    "destroy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "make pulumi-destroy",
+        "cwd": "apps/infrastructure-gs"
+      }
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["client", "api"]
+}

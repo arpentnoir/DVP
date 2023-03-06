@@ -1,0 +1,162 @@
+trigger:
+  - main
+  - develop
+pr:
+  - main
+  - develop
+
+parameters:
+  - name: ENV
+    displayName: Deployment environment
+    default: default
+    values:
+      - default
+      - dev
+      - test
+      - preprod
+
+variables:
+  CI: 'true'
+  isMain: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+  isDevelop: $[eq(variables['Build.SourceBranch'], 'refs/heads/develop')]
+  isPR: $[eq(variables['Build.Reason'], 'PullRequest')]
+  ${{ if eq(variables.isMain, 'true') }}:
+    TARGET_ENV: test # deploy master to test environment
+  ${{ elseif eq(variables.isDevelop, 'true') }}:
+    TARGET_ENV: dev # deploy develop to dev environment
+  ${{ elseif ne(parameters.ENV, 'default')}}:
+    TARGET_ENV: ${{ parameters.ENV }} # ENV parameter overrides TARGET_ENV if set
+  ${{ else }}:
+    TARGET_ENV: dev # set default TARGET_ENV to dev
+  ${{ if eq(variables['Build.Reason'], 'PullRequest') }}:
+    NX_BRANCH: $(System.PullRequest.PullRequestNumber)
+    TARGET_BRANCH: $[replace(variables['System.PullRequest.TargetBranch'],'refs/heads/','origin/')]
+    BASE_SHA: main
+  ${{ if ne(variables['Build.Reason'], 'PullRequest') }}:
+    NX_BRANCH: $(Build.SourceBranchName)
+    BASE_SHA: main~1
+  HEAD_SHA: $(git rev-parse HEAD)
+  NODE_OPTIONS: '--max_old_space_size=16384'
+
+stages:
+  - stage: build_test
+    pool:
+      vmImage: ubuntu-latest
+    variables:
+      disable.coverage.autogenerate: true
+    jobs:
+      - job: build_test
+        steps:
+          - checkout: self
+            fetchDepth: 2
+            displayName: Checkout
+
+          - template: .azure-pipelines/steps/install-node-modules-gs.yml
+
+          - script: npx nx workspace-lint
+            displayName: 'Run nx workspace linting'
+
+          - script: npx nx run-many --target=lint --parallel=2
+            displayName: 'Run linting'
+
+          - script: npx nx run-many --target=test --skip-nx-cache --parallel=2  --runInBand --coverage --reporters=default --reporters=jest-junit --coverageReporters=cobertura
+            displayName: 'Run tests'
+
+          - task: PublishTestResults@2
+            inputs:
+              testResultsFormat: 'JUnit'
+              testResultsFiles: '**/junit.xml'
+              failTaskOnFailedTests: true
+            displayName: Publish test results to AzDo
+
+          - script: npx nx run-many --target=build --parallel=2
+            displayName: 'Run build'
+
+          - task: PublishPipelineArtifact@1
+            condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
+            inputs:
+              targetPath: $(System.DefaultWorkingDirectory)/dist/apps/client-internet
+              artifactName: 'client-build-internet'
+
+          - script: npx nx build client --configuration=production-internal --skip-nx-cache
+            displayName: 'Run build internal client app'
+
+          - task: PublishPipelineArtifact@1
+            condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
+            inputs:
+              targetPath: $(System.DefaultWorkingDirectory)/dist/apps/client-internal
+              artifactName: 'client-build-internal'
+
+          - task: PublishPipelineArtifact@1
+            condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
+            inputs:
+              targetPath: $(System.DefaultWorkingDirectory)/dist/apps/api
+              artifactName: 'api-build'
+
+          - task: PublishPipelineArtifact@1
+            condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
+            inputs:
+              targetPath: $(System.DefaultWorkingDirectory)/dist/apps/admin-api
+              artifactName: 'admin-api-build'
+
+          - task: PublishPipelineArtifact@1
+            condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
+            inputs:
+              targetPath: $(System.DefaultWorkingDirectory)/dist/apps/schema-worker
+              artifactName: 'schema-worker-build'
+
+  - stage: deploy
+    dependsOn: build_test
+    condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
+    pool:
+      vmImage: ubuntu-latest
+    jobs:
+      - job: deploy
+        steps:
+          - script: |
+              echo "Deployment environment: ${{variables.TARGET_ENV}}"
+
+          - task: AzureKeyVault@2
+            inputs:
+              connectedServiceName: 'gs-ha-dvp-serviceconnection'
+              keyVaultName: 'gs-ha-dvp'
+              secretsFilter: '*'
+              runAsPreJob: true
+
+          - task: DownloadPipelineArtifact@2
+            inputs:
+              source: 'current' # Options: current, specific
+              path: $(System.DefaultWorkingDirectory)/artifacts
+
+          - template: .azure-pipelines/steps/install-node-modules-gs.yml
+
+          - bash: |
+              # exit if a command returns a non-zero exit code and also print the commands and their args as they are executed
+              set -e -x
+
+              # Download and install required tools pulumi
+              rm -rf $HOME/.pulumi
+              rm -rf /usr/local/bin/pulumi*
+              curl -fsSL https://get.pulumi.com | sh -s -- --version 3.55.0
+              /bin/cp -rf $HOME/.pulumi/bin/* /usr/local/bin
+              ls -ld ./artifacts
+              chmod 777 ./artifacts
+              cd apps/infrastructure-gs/policypack && yarn install
+
+            displayName: Install pulumi
+
+          - bash: |
+              npx nx run infrastructure-gs:preview --verbose
+            displayName: Run `pulumi preview`
+            env:
+              ENV: ${{ variables.TARGET_ENV }}
+              AWS_ACCESS_KEY_ID: $(AWS-ACCESS-KEY-ID)
+              AWS_SECRET_ACCESS_KEY: $(aws-secret-access-key)
+
+          - bash: |
+              npx nx run infrastructure-gs:up --verbose
+            displayName: Run `pulumi up`
+            env:
+              ENV: ${{ variables.TARGET_ENV }}
+              AWS_ACCESS_KEY_ID: $(AWS-ACCESS-KEY-ID)
+              AWS_SECRET_ACCESS_KEY: $(aws-secret-access-key)
