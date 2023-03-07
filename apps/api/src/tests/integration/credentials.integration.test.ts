@@ -92,7 +92,7 @@ describe('credentials api', () => {
     ${'nextCursor'} | ${'test'} | ${422}
     ${'prevCursor'} | ${'test'} | ${422}
   `(
-    'returns $expected when $a is added to $b',
+    'returns $statusCode when $field value is $val',
     async ({ field, val, statusCode }) => {
       await request(app)
         .get(endpoint)

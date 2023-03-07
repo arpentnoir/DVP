@@ -249,6 +249,85 @@
         }
       }
     },
+    "/document-schemas": {
+      "get": {
+        "summary": "List document schemas",
+        "description": "List document schemas",
+        "tags": ["DocumentSchema"],
+        "operationId": "getDocumentSchemas",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "nextCursor",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Starting key for the next result set. If you don't pass a nextCursor parameter, but do pass a limit parameter, the default value retrieves the first portion (or \"page\") of results."
+          },
+          {
+            "in": "query",
+            "name": "prevCursor",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Starting key for the previous result set. If you pass prevCursor and nextCursor together, nextCursor takes precedence"
+          },
+          {
+            "in": "query",
+            "name": "limit",
+            "schema": {
+              "type": "integer",
+              "maximum": 100
+            },
+            "description": "The numbers of items to return"
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "schema": {
+              "type": "string"
+            },
+            "description": "Searches for the query string in the searchable fields"
+          },
+          {
+            "in": "query",
+            "name": "name",
+            "schema": {
+              "type": "string"
+            },
+            "description": "filter by schema name"
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "schema": {
+              "type": "string",
+              "enum": ["asc", "desc"]
+            },
+            "description": "The supported sort directions are either `asc` for ascending or `desc` for descending. If a sort direction is not specified, then order will default to `asc`",
+            "example": "desc"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of document schemas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentSchemasResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerErrorResponse"
+          }
+        }
+      }
+    },
     "/credentials": {
       "get": {
         "summary": "List all the issued credentials",
@@ -916,6 +995,36 @@
           }
         }
       },
+      "DocumentSchemasResponseItem": {
+        "type": "object",
+        "description": "Document schema",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "document schema name"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["full", "partial"],
+            "description": "document schema type"
+          }
+        }
+      },
+      "DocumentSchemasResponse": {
+        "type": "object",
+        "description": "List of document schemas",
+        "properties": {
+          "results": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/DocumentSchemasResponseItem"
+            }
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          }
+        }
+      },
       "Issuer": {
         "description": "A JSON-LD Verifiable Credential Issuer.",
         "oneOf": [
@@ -1142,10 +1251,12 @@
         "description": "Pagination data object",
         "properties": {
           "nextCursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "prevCursor": {
-            "type": "string"
+            "type": "string",
+            "nullable": true
           },
           "limit": {
             "type": "number"

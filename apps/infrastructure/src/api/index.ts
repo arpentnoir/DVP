@@ -2,15 +2,15 @@
 import * as aws from '@pulumi/aws';
 import * as awsx from '@pulumi/awsx';
 import * as pulumi from '@pulumi/pulumi';
-import { Components } from "gs-pulumi-library";
+import { Components } from 'gs-pulumi-library';
 import { auth, kms } from '../common';
 import { dynamodbDocumentsTable } from '../common/dynamodb';
 
 import * as vpc from '../common/vpc';
 import { config } from './config';
 import { bucketPolicy } from './policies/s3Policies';
-import { lambdaRole } from './roles/lambdaRole';
 import { cloudWatchRole } from './roles/cloudWatchRole';
+import { lambdaRole } from './roles/lambdaRole';
 
 const stack = pulumi.getStack();
 
@@ -26,12 +26,15 @@ const apiLogGroup = new aws.cloudwatch.LogGroup(`${stack}-api-log-group`);
 
 ////////////////////////////////////////////////////////////////////////////////
 // S3 bucket for document store
-const documentStoreBucket = new Components.aws.S3Bucket(`${stack}-document-store`, {
-  description: "S3 Bucket for `dvpWebsite` document store.",
-  bucketName: `${stack}-document-store`,
-  logBucket: "none",
-  forceDestroy: true,
-});
+const documentStoreBucket = new Components.aws.S3Bucket(
+  `${stack}-document-store`,
+  {
+    description: 'S3 Bucket for `dvpWebsite` document store.',
+    bucketName: `${stack}-document-store`,
+    logBucket: 'none',
+    forceDestroy: true,
+  }
+);
 
 // Set the access policy for the document store bucket
 new aws.s3.BucketPolicy(`${stack}-document-store-policy`, {
@@ -43,12 +46,15 @@ new aws.s3.BucketPolicy(`${stack}-document-store-policy`, {
 
 ////////////////////////////////////////////////////////////////////////////////
 // S3 bucket for revocation list
-const revocationListBucket = new Components.aws.S3Bucket(`${stack}-revocation-list`, {
-  description: "S3 Bucket for `dvpWebsite` revocation list.",
-  bucketName: `${stack}-revocation-list`,
-  logBucket: "none",
-  forceDestroy: true,
-});
+const revocationListBucket = new Components.aws.S3Bucket(
+  `${stack}-revocation-list`,
+  {
+    description: 'S3 Bucket for `dvpWebsite` revocation list.',
+    bucketName: `${stack}-revocation-list`,
+    logBucket: 'none',
+    forceDestroy: true,
+  }
+);
 
 // Set the access policy for the revocation list
 new aws.s3.BucketPolicy(`${stack}-revocation-list-policy`, {
@@ -252,22 +258,29 @@ const hostedZoneId = aws.route53
 // Create new certificate
 const sslNewCertificate = new aws.acm.Certificate(config.dvpApiDomain, {
   domainName: config.dvpApiDomain,
-  validationMethod: "DNS",
+  validationMethod: 'DNS',
 });
 
-const sslNewCertificateUSEast = new aws.acm.Certificate(`${config.dvpApiDomain}-us-east`, {
-  domainName: config.dvpApiDomain,
-  validationMethod: "DNS",
-}, { provider: provider });
+const sslNewCertificateUSEast = new aws.acm.Certificate(
+  `${config.dvpApiDomain}-us-east`,
+  {
+    domainName: config.dvpApiDomain,
+    validationMethod: 'DNS',
+  },
+  { provider: provider }
+);
 
 // Add to route53 DNS.  Required for validation
-const sslCertificateValidation = new aws.route53.Record(`${config.dvpApiDomain}-validation`, {
-  name: sslNewCertificate.domainValidationOptions[0].resourceRecordName,
-  records: [sslNewCertificate.domainValidationOptions[0].resourceRecordValue],
-  ttl: 60,
-  type: sslNewCertificate.domainValidationOptions[0].resourceRecordType,
-  zoneId: hostedZoneId,
-});
+const sslCertificateValidation = new aws.route53.Record(
+  `${config.dvpApiDomain}-validation`,
+  {
+    name: sslNewCertificate.domainValidationOptions[0].resourceRecordName,
+    records: [sslNewCertificate.domainValidationOptions[0].resourceRecordValue],
+    ttl: 60,
+    type: sslNewCertificate.domainValidationOptions[0].resourceRecordType,
+    zoneId: hostedZoneId,
+  }
+);
 
 // Get ssl certificate
 const sslCertificate = pulumi.output(
@@ -310,5 +323,6 @@ new aws.apigateway.BasePathMapping(`${stack}-api-domain-mapping`, {
   domainName: apiDomainName.domainName,
 });
 
-export const documentStoreBucketUrl = documentStoreBucket.bucket.websiteEndpoint;
+export const documentStoreBucketUrl =
+  documentStoreBucket.bucket.websiteEndpoint;
 export const apigatewayUrl = `https://${config.dvpApiDomain}`;
