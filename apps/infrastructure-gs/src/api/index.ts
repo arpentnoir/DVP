@@ -96,7 +96,10 @@ const dynamodbLambdaPolicy = new aws.iam.Policy(
             'dynamodb:UpdateItem',
             'dynamodb:DeleteItem',
           ],
-          Resource: dynamodbDocumentsTable.arn,
+          Resource: [
+            dynamodbDocumentsTable.arn,
+            pulumi.interpolate`${dynamodbDocumentsTable.arn}/index/*`,
+          ],
         },
       ],
     },
@@ -171,7 +174,7 @@ const routes: awsx.apigateway.Route[] = [
   path: '/{proxy+}',
   method: method as awsx.apigateway.Method,
   eventHandler: lambdaApiHandler,
-  authorizers: method !== 'OPTIONS' ? [authorizer] : [],
+  authorizers: method !== 'OPTIONS' && method !== 'GET' ? [authorizer] : [],
 }));
 
 const apiGateway = new awsx.apigateway.API(`${stack}-api`, {
