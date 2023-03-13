@@ -7,6 +7,15 @@ echo "The present working directory is $( pwd; )";
 
 echo "aws s3api head-bucket --bucket ${PULUMI_STATE}";
 
+# Check that the schema exists for this environment
+SQS_EXISTS=$(aws sqs get-queue-url --queue-name dvp-${ENV}-credential-schemas-event-queue --region ${AWS_REGION} 2>&1 || true)
+SQS_EXIST_CHECK="error"
+
+if [[ $SQS_EXISTS == *"$SQS_EXIST_CHECK"* ]]; then
+    echo "Error: Schema does not exist for this environment.  Please run the schema pipeline first"
+    exit 1
+fi
+
 # Create the pulumi state bucket if required
 BUCKET_EXISTS=$(aws s3api head-bucket --bucket ${PULUMI_STATE} 2>&1 || true)
 if [ ! -z "$BUCKET_EXISTS" ]; then
