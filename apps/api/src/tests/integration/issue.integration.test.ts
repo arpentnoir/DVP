@@ -57,14 +57,14 @@ const fullCoo = {
 
 describe('issue api', () => {
   jest.setTimeout(20000);
-  const endpoint = '/api/credentials/issue';
+  const endpoint = '/v1/credentials/issue';
 
   beforeEach(() => {
     s3Mock.reset();
     dynamodbMock.reset();
   });
 
-  describe('POST /api/credentials/issue', () => {
+  describe('POST /v1/credentials/issue', () => {
     beforeEach(() => {
       oa_doc = JSON.parse(JSON.stringify(oa_doc_base));
     });
@@ -415,7 +415,7 @@ describe('issue api', () => {
             credential: oa_doc,
           })
           .expect('Content-Type', /json/)
-          .expect(500)
+          .expect(401)
           .expect((res) => {
             expect(res.body.errors[0].id).toContain('DVPAPI-003');
           });
@@ -429,7 +429,7 @@ describe('issue api', () => {
             credential: oa_doc,
           })
           .expect('Content-Type', /json/)
-          .expect(500)
+          .expect(403)
           .expect((res) => {
             expect(res.body.errors[0].id).toContain('DVPAPI-003');
           });

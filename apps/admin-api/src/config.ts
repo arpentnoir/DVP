@@ -17,6 +17,7 @@ export interface ApiConfig {
   s3Config: S3Config;
   revocationListS3Config: S3Config;
   apiURL: string;
+  apiInternalPath: string;
   clientURL: string;
   didConfig: DIDConfig;
   dynamodb: {
@@ -42,6 +43,7 @@ export const config: ApiConfig = {
     },
   } as S3Config,
   apiURL: process.env.API_URL,
+  apiInternalPath: process.env.API_INTERNAL_PATH || '/v1',
   clientURL: process.env.CLIENT_URL,
   didConfig: {
     mnemonic:

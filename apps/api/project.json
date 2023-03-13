@@ -15,7 +15,8 @@
         "externalDependencies": "none",
         "outputPath": "dist/apps/api",
         "main": "apps/api/src/index.ts",
-        "tsConfig": "apps/api/tsconfig.app.json"
+        "tsConfig": "apps/api/tsconfig.app.json",
+        "assets": ["apps/api/src/openapi/openapi.json"]
       },
       "configurations": {
         "production": {
@@ -58,7 +59,7 @@
     "generate:api-client": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "npx @openapitools/openapi-generator-cli generate -g typescript-axios -i apps/api/openapi/openapi.json --additional-properties=withInterfaces=true -o libs/api-client/src"
+        "command": "npx @openapitools/openapi-generator-cli generate -g typescript-axios -i apps/api/src/openapi/openapi.json --additional-properties=withInterfaces=true -o libs/api-client/src"
       }
     },
     "serve": {

@@ -34,9 +34,10 @@ export const errorHandler = (
   // handle openapi validation errors
   if (err instanceof HttpError && err.errors) {
     err.errors?.forEach((error) => {
+      const isAuthError = err.status === 401;
       apiErrors.addErrorDetail(
-        ApiError.VALIDATION_ERROR_ID,
-        'ValidationError',
+        isAuthError ? ApiError.SECURITY_ERROR_ID : ApiError.VALIDATION_ERROR_ID,
+        isAuthError ? 'SecurityError' : 'ValidationError',
         `${error.path}: ${error.message}`
       );
     });

@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * DVP
- * API for the Digital Verification Platform
+ * DVP Admin API
+ * Admin API for the Digital Verification Platform
  *
  * The version of the OpenAPI document: 0.1
  * 

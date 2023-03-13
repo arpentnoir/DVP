@@ -19,6 +19,7 @@ export interface DIDConfig {
 export interface ApiConfig {
   awsRegion: string;
   apiURL: string;
+  apiInternalPath: string;
   clientURL: string;
   didConfig: DIDConfig;
   dynamodb: {
@@ -36,6 +37,7 @@ export const config: ApiConfig = {
   awsRegion: process.env.AWS_REGION,
 
   apiURL: process.env.API_URL,
+  apiInternalPath: process.env.API_INTERNAL_PATH || '/v1',
   clientURL: process.env.CLIENT_URL,
   didConfig: {
     mnemonic:

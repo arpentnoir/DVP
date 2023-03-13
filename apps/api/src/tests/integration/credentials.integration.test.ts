@@ -50,7 +50,7 @@ const credentials = {
 };
 
 describe('credentials api', () => {
-  const endpoint = '/api/credentials';
+  const endpoint = '/v1/credentials';
 
   beforeEach(() => {
     (models.Document.find as jest.Mock).mockClear();

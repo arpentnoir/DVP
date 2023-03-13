@@ -7,9 +7,9 @@ import validOAV3 from '../../fixtures/oav3/did-signed.json';
 
 describe('verify api', () => {
   jest.setTimeout(20000);
-  const endpoint = '/api/credentials/verify';
+  const endpoint = '/v1/credentials/verify';
 
-  describe('POST /api/credentials/verify', () => {
+  describe('POST /v1/credentials/verify', () => {
     it('should verify a valid OA document', async () => {
       await request(app)
         .post(endpoint)

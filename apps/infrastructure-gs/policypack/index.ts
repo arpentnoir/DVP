@@ -21,7 +21,7 @@ new PolicyPack('gs-aws-policies', {
     kmsPolicies.cmkBackingKeyRotationEnabled,
 
     // Lambda Policies
-    lambdaPolicies.lambdaInsideVpc,
+    // lambdaPolicies.lambdaInsideVpc,
 
     // Storage Policies
     { ...s3Policies.s3BucketLoggingEnabled, enforcementLevel: 'advisory' }, // Override default `enforcementLevel`

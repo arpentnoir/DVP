@@ -1,8 +1,8 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
- * DVP
- * API for the Digital Verification Platform
+ * DVP Admin API
+ * Admin API for the Digital Verification Platform
  *
  * The version of the OpenAPI document: 0.1
  *
@@ -17,7 +17,7 @@ import { Configuration } from './configuration';
 // @ts-ignore
 import globalAxios, { AxiosInstance, AxiosRequestConfig } from 'axios';
 
-export const BASE_PATH = 'http://localhost:3333/api'.replace(/\/+$/, '');
+export const BASE_PATH = 'http://localhost:3334/v1'.replace(/\/+$/, '');
 
 /**
  *

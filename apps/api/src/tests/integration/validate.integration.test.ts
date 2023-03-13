@@ -9,9 +9,9 @@ import { ExpectedBody } from '../../routes/credentials/validate/validate.control
 import { authTokenWithSubAndAbn } from '../utils';
 
 describe('validate api', () => {
-  const endpoint = '/api/credentials/validate';
+  const endpoint = '/v1/credentials/validate';
 
-  describe('POST /api/credentials/validate', () => {
+  describe('POST /v1/credentials/validate', () => {
     it('should pass validation if a valid generic vc is submited', async () => {
       await request(app)
         .post(endpoint)
@@ -96,7 +96,7 @@ describe('validate api', () => {
       .post(endpoint)
       .send(emptyStringGeneric as ExpectedBody)
       .expect('Content-Type', /json/)
-      .expect(500)
+      .expect(401)
       .expect((res) => {
         expect(res.body.errors[0].id).toContain('DVPAPI-003');
       });

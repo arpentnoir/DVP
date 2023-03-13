@@ -8,7 +8,8 @@ import {
 import cors from 'cors';
 import express from 'express';
 import nodeProxy from 'node-global-proxy';
-import apiSpec from '../openapi/openapi.json';
+import { config } from './config';
+import apiSpec from './openapi/openapi.json';
 import { router } from './routes';
 
 if (
@@ -32,7 +33,7 @@ app.get('/healthcheck', (req, res) => {
 app.use(openApiValidatorMiddleware(apiSpec as OpenAPIV3Document));
 app.use(loggerMiddleware);
 app.use(contextMiddleware);
-app.use('/api', router); // register api routes
+app.use(config.apiInternalPath, router); // register api routes
 app.use(errorHandler);
 
 export { app };

@@ -7,12 +7,13 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3333/api",
-      "description": "Local environment"
-    },
-    {
-      "url": "https://api.dev.dvp.ha.showthething.com/api",
-      "description": "Development environment"
+      "url": "http://localhost:3333/{basePath}",
+      "description": "Local environment",
+      "variables": {
+        "basePath": {
+          "default": "v1"
+        }
+      }
     }
   ],
   "paths": {
@@ -21,6 +22,11 @@
         "summary": "creates a JWK public/private signing keypair that can be used to sign the credentials",
         "tags": ["KeyPair"],
         "operationId": "createKeyPair",
+        "security": [
+          {
+            "Authorizer": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -54,6 +60,11 @@
         "summary": "return list of keys pairs ",
         "tags": ["KeyPair"],
         "operationId": "listKeyPairs",
+        "security": [
+          {
+            "Authorizer": []
+          }
+        ],
         "parameters": [
           {
             "in": "query",
@@ -89,6 +100,11 @@
         "summary": "get a key pair",
         "tags": ["KeyPair"],
         "operationId": "getKeyPair",
+        "security": [
+          {
+            "Authorizer": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -123,6 +139,11 @@
         "summary": "delete a key pair",
         "tags": ["KeyPair"],
         "operationId": "deleteKeyPair",
+        "security": [
+          {
+            "Authorizer": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -152,6 +173,11 @@
         "summary": "disable a key pair",
         "tags": ["KeyPair"],
         "operationId": "disableKeyPair",
+        "security": [
+          {
+            "Authorizer": []
+          }
+        ],
         "parameters": [
           {
             "in": "path",
@@ -180,6 +206,11 @@
       "post": {
         "summary": "encrypt and upload document",
         "operationId": "uploadDocument",
+        "security": [
+          {
+            "Authorizer": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -255,6 +286,11 @@
         "description": "List document schemas",
         "tags": ["DocumentSchema"],
         "operationId": "getDocumentSchemas",
+        "security": [
+          {
+            "Authorizer": []
+          }
+        ],
         "parameters": [
           {
             "in": "query",
@@ -333,6 +369,11 @@
         "summary": "List all the issued credentials",
         "description": "List all the issued credentials",
         "tags": ["Credentials"],
+        "security": [
+          {
+            "Authorizer": []
+          }
+        ],
         "operationId": "getCredentials",
         "parameters": [
           {
@@ -403,6 +444,11 @@
       "post": {
         "summary": "Issues a credential and returns it in the response body.",
         "tags": ["Credentials"],
+        "security": [
+          {
+            "Authorizer": []
+          }
+        ],
         "operationId": "issueCredential",
         "description": "Issues a credential and returns it in the response body.",
         "requestBody": {
@@ -477,6 +523,11 @@
         "tags": ["Credentials"],
         "operationId": "validateCredential",
         "description": "Validates the credentialSubject and returns any errors in the response body.",
+        "security": [
+          {
+            "Authorizer": []
+          }
+        ],
         "requestBody": {
           "content": {
             "application/json": {
@@ -517,6 +568,11 @@
       "post": {
         "summary": "Sets the status of a verifiable credential",
         "tags": ["Credentials"],
+        "security": [
+          {
+            "Authorizer": []
+          }
+        ],
         "operationId": "setCredentialStatus",
         "description": "Sets the status of a verifiable credential",
         "requestBody": {
@@ -634,6 +690,13 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "Authorizer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
     "schemas": {
       "Id": {
         "type": "string",

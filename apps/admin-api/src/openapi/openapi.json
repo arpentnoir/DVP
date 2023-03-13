@@ -7,16 +7,24 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3334/api",
-      "description": "Local environment"
-    },
-    {
-      "url": "https://api.dev.internal.dvp.ha.showthething.com/api",
-      "description": "Development environment"
+      "url": "http://localhost:3334/{basePath}",
+      "description": "Local environment",
+      "variables": {
+        "basePath": {
+          "default": "v1"
+        }
+      }
     }
   ],
   "paths": {},
   "components": {
+    "securitySchemes": {
+      "Authorizer": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    },
     "schemas": {
       "Id": {
         "type": "string",

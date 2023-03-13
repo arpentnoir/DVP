@@ -33,7 +33,7 @@ pulumi
     ]) => {
       injectConfigFile('../../artifacts/client-build-internet', {
         siteUrl: `https://${config.dvpDomain}`,
-        apiUrl: `https://${process.env.DVP_API_DOMAIN}/api`,
+        apiUrl: `https://${process.env.DVP_API_DOMAIN}${process.env.DVP_API_INTERNAL_PATH}`,
         authUserPool: dvpInternetUserPoolId,
         authClient: dvpInternetUserPoolClientId,
         authDomain: dvpInternetUserPoolDomainUrl,
@@ -79,7 +79,7 @@ pulumi
     ]) => {
       injectConfigFile('../../artifacts/client-build-internal', {
         siteUrl: `https://${config.dvpInternalDomain}`,
-        apiUrl: `https://${process.env.DVP_API_DOMAIN}/api`,
+        apiUrl: `https://${process.env.DVP_API_DOMAIN}${process.env.DVP_API_INTERNAL_PATH}`,
         authClient: dvpInternalUserPoolClientId,
         authDomain: dvpInternalUserPoolDomainUrl,
         authUserPool: dvpInternalUserPoolId,

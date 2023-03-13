@@ -3,6 +3,7 @@ import * as aws from '@pulumi/aws';
 import * as awsx from '@pulumi/awsx';
 import * as pulumi from '@pulumi/pulumi';
 import { auth, kms } from '../common';
+import { getGatewayOpenApiSpec } from '../common/apigateway';
 import { dynamodbDocumentsTable } from '../common/dynamodb';
 
 import * as vpc from '../common/vpc';
@@ -62,7 +63,10 @@ const dynamodbLambdaPolicy = new aws.iam.Policy(
             'dynamodb:UpdateItem',
             'dynamodb:DeleteItem',
           ],
-          Resource: dynamodbDocumentsTable.arn,
+          Resource: [
+            dynamodbDocumentsTable.arn,
+            pulumi.interpolate`${dynamodbDocumentsTable.arn}/index/*`,
+          ],
         },
       ],
     },
@@ -124,50 +128,58 @@ const lambdaApiHandler = new aws.lambda.Function(`${stack}-admin-api-handler`, {
 ////////////////////////////////////////////////////////////////////////////////
 // ApiGateway for api
 
-const authorizer = awsx.apigateway.getCognitoAuthorizer({
-  authorizerName: `${stack}-admin-api-cognito-authorizer`,
-  providerARNs: [auth.dvpInternetUserPool, auth.dvpInternalUserPool],
-  authorizerResultTtlInSeconds: 0,
-});
-const routes: awsx.apigateway.Route[] = [
-  'GET',
-  'POST',
-  'PUT',
-  'PATCH',
-  'DELETE',
-  'OPTIONS',
-].map((method) => ({
-  path: '/{proxy+}',
-  method: method as awsx.apigateway.Method,
-  eventHandler: lambdaApiHandler,
-  authorizers: method !== 'OPTIONS' ? [authorizer] : [],
-}));
+const apiGateway = pulumi
+  .all([
+    lambdaApiHandler.arn,
+    auth.dvpInternetUserPool.arn,
+    auth.dvpInternalUserPool.arn,
+  ])
+  .apply(
+    ([lambdaApiHandlerArn, dvpInternetUserPoolArn, dvpInternalUserPoolArn]) => {
+      const apiName = `${stack}-admin-api`;
+      const openAPISpec = getGatewayOpenApiSpec({
+        apiDomain: config.dvpAdminApiDomain,
+        apiInternalPath: config.apiInternalPath,
+        cognitoUserPoolArns: [dvpInternetUserPoolArn, dvpInternalUserPoolArn],
+        lambdaApiHandlerArn: lambdaApiHandlerArn,
+        name: apiName,
+        openapiSpecPath: `${apiDir}/openapi/openapi.json`,
+      });
 
-const apiGateway = new awsx.apigateway.API(`${stack}-admin-api`, {
-  routes,
-  stageName: `${stack}-admin-api`,
-  restApiArgs: {
-    endpointConfiguration: {
-      types: 'EDGE',
-    },
-  },
-  stageArgs: {
-    xrayTracingEnabled: true,
-    accessLogSettings: {
-      destinationArn: apiLogGroup.arn,
-      format: JSON.stringify({
-        requestId: '$context.requestId',
-        ip: '$context.identity.sourceIp',
-        caller: '$context.identity.caller',
-        user: '$context.identity.user',
-        requestTime: '$context.requestTime',
-        httpMethod: '$context.httpMethod',
-        resourcePath: '$context.resourcePath',
-        status: '$context.status',
-        protocol: '$context.protocol',
-      }),
-    },
-  },
+      return new awsx.apigateway.API(apiName, {
+        swaggerString: JSON.stringify(openAPISpec),
+        stageName: config.apiInternalPath.replace(/\//g, ''),
+        restApiArgs: {
+          endpointConfiguration: {
+            types: 'EDGE',
+          },
+        },
+        stageArgs: {
+          xrayTracingEnabled: true,
+          accessLogSettings: {
+            destinationArn: apiLogGroup.arn,
+            format: JSON.stringify({
+              requestId: '$context.requestId',
+              ip: '$context.identity.sourceIp',
+              caller: '$context.identity.caller',
+              user: '$context.identity.user',
+              requestTime: '$context.requestTime',
+              httpMethod: '$context.httpMethod',
+              resourcePath: '$context.resourcePath',
+              status: '$context.status',
+              protocol: '$context.protocol',
+            }),
+          },
+        },
+      });
+    }
+  );
+
+new aws.lambda.Permission(`${stack}-admin-api-handler-permission`, {
+  action: 'lambda:InvokeFunction',
+  function: lambdaApiHandler.name,
+  principal: 'apigateway.amazonaws.com',
+  sourceArn: pulumi.interpolate`${apiGateway.restAPI.executionArn}/*/*/*`,
 });
 
 new aws.apigateway.RestApiPolicy(`${stack}-admin-api-authorizers-policy`, {
@@ -207,24 +219,36 @@ const hostedZoneAdminId = aws.route53
   .then((zone) => zone.zoneId);
 
 // Create new certificate
-const sslNewCertificateAdmin = new aws.acm.Certificate(config.dvpAdminApiDomain, {
-  domainName: config.dvpAdminApiDomain,
-  validationMethod: "DNS",
-});
+const sslNewCertificateAdmin = new aws.acm.Certificate(
+  config.dvpAdminApiDomain,
+  {
+    domainName: config.dvpAdminApiDomain,
+    validationMethod: 'DNS',
+  }
+);
 
-const sslNewCertificateUSEastAdmin = new aws.acm.Certificate(`${config.dvpAdminApiDomain}-us-east`, {
-  domainName: config.dvpAdminApiDomain,
-  validationMethod: "DNS",
-}, { provider: providerAdmin });
+const sslNewCertificateUSEastAdmin = new aws.acm.Certificate(
+  `${config.dvpAdminApiDomain}-us-east`,
+  {
+    domainName: config.dvpAdminApiDomain,
+    validationMethod: 'DNS',
+  },
+  { provider: providerAdmin }
+);
 
 // Add to route53 DNS.  Required for validation
-const sslCertificateValidation = new aws.route53.Record(`${config.dvpAdminApiDomain}-validation`, {
-  name: sslNewCertificateAdmin.domainValidationOptions[0].resourceRecordName,
-  records: [sslNewCertificateAdmin.domainValidationOptions[0].resourceRecordValue],
-  ttl: 60,
-  type: sslNewCertificateAdmin.domainValidationOptions[0].resourceRecordType,
-  zoneId: hostedZoneAdminId,
-});
+const sslCertificateValidation = new aws.route53.Record(
+  `${config.dvpAdminApiDomain}-validation`,
+  {
+    name: sslNewCertificateAdmin.domainValidationOptions[0].resourceRecordName,
+    records: [
+      sslNewCertificateAdmin.domainValidationOptions[0].resourceRecordValue,
+    ],
+    ttl: 60,
+    type: sslNewCertificateAdmin.domainValidationOptions[0].resourceRecordType,
+    zoneId: hostedZoneAdminId,
+  }
+);
 
 // Register custom domain name with ApiGateway
 const apiDomainName = new aws.apigateway.DomainName(
@@ -232,7 +256,8 @@ const apiDomainName = new aws.apigateway.DomainName(
   {
     certificateArn: sslNewCertificateUSEastAdmin.arn,
     domainName: config.dvpAdminApiDomain,
-  }, { dependsOn: [sslCertificateValidation] }
+  },
+  { dependsOn: [sslCertificateValidation] }
 );
 
 // Create dns record
@@ -252,7 +277,6 @@ new aws.route53.Record(`${stack}-admin-api-dns`, {
 // Map stage name to custom domain
 new aws.apigateway.BasePathMapping(`${stack}-admin-api-domain-mapping`, {
   restApi: apiGateway.restAPI.id,
-  stageName: apiGateway.stage.stageName,
   domainName: apiDomainName.domainName,
 });
 

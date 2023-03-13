@@ -3,8 +3,8 @@ import * as aws from '@pulumi/aws';
 import * as awsx from '@pulumi/awsx';
 import * as pulumi from '@pulumi/pulumi';
 import { auth, kms } from '../common';
+import { getGatewayOpenApiSpec } from '../common/apigateway';
 import { dynamodbDocumentsTable } from '../common/dynamodb';
-
 import * as vpc from '../common/vpc';
 import { config } from './config';
 import { bucketPolicy } from './policies/s3Policies';
@@ -58,6 +58,7 @@ const environmentVariables = {
     CLIENT_URL: config.clientUrl,
     DYNAMODB_DOCUMENTS_TABLE: dynamodbDocumentsTable.name,
     KMS_KEY_ID: kms.kmsCmk.id,
+    API_INTERNAL_PATH: config.apiInternalPath,
   },
 };
 
@@ -158,50 +159,58 @@ const lambdaApiHandler = new aws.lambda.Function(`${stack}-api-handler`, {
 ////////////////////////////////////////////////////////////////////////////////
 // ApiGateway for api
 
-const authorizer = awsx.apigateway.getCognitoAuthorizer({
-  authorizerName: `${stack}-api-cognito-authorizer`,
-  providerARNs: [auth.dvpInternetUserPool, auth.dvpInternalUserPool],
-  authorizerResultTtlInSeconds: 0,
-});
-const routes: awsx.apigateway.Route[] = [
-  'GET',
-  'POST',
-  'PUT',
-  'PATCH',
-  'DELETE',
-  'OPTIONS',
-].map((method) => ({
-  path: '/{proxy+}',
-  method: method as awsx.apigateway.Method,
-  eventHandler: lambdaApiHandler,
-  authorizers: method !== 'OPTIONS' && method !== 'GET' ? [authorizer] : [],
-}));
+const apiGateway = pulumi
+  .all([
+    lambdaApiHandler.arn,
+    auth.dvpInternetUserPool.arn,
+    auth.dvpInternalUserPool.arn,
+  ])
+  .apply(
+    ([lambdaApiHandlerArn, dvpInternetUserPoolArn, dvpInternalUserPoolArn]) => {
+      const apiName = `${stack}-api`;
+      const openAPISpec = getGatewayOpenApiSpec({
+        apiDomain: config.dvpApiDomain,
+        apiInternalPath: config.apiInternalPath,
+        cognitoUserPoolArns: [dvpInternetUserPoolArn, dvpInternalUserPoolArn],
+        lambdaApiHandlerArn: lambdaApiHandlerArn,
+        name: apiName,
+        openapiSpecPath: `${apiDir}/openapi/openapi.json`,
+      });
 
-const apiGateway = new awsx.apigateway.API(`${stack}-api`, {
-  routes,
-  stageName: `${stack}-api`,
-  restApiArgs: {
-    endpointConfiguration: {
-      types: 'EDGE',
-    },
-  },
-  stageArgs: {
-    xrayTracingEnabled: true,
-    accessLogSettings: {
-      destinationArn: apiLogGroup.arn,
-      format: JSON.stringify({
-        requestId: '$context.requestId',
-        ip: '$context.identity.sourceIp',
-        caller: '$context.identity.caller',
-        user: '$context.identity.user',
-        requestTime: '$context.requestTime',
-        httpMethod: '$context.httpMethod',
-        resourcePath: '$context.resourcePath',
-        status: '$context.status',
-        protocol: '$context.protocol',
-      }),
-    },
-  },
+      return new awsx.apigateway.API(apiName, {
+        swaggerString: JSON.stringify(openAPISpec),
+        stageName: config.apiInternalPath.replace(/\//g, ''),
+        restApiArgs: {
+          endpointConfiguration: {
+            types: 'EDGE',
+          },
+        },
+        stageArgs: {
+          xrayTracingEnabled: true,
+          accessLogSettings: {
+            destinationArn: apiLogGroup.arn,
+            format: JSON.stringify({
+              requestId: '$context.requestId',
+              ip: '$context.identity.sourceIp',
+              caller: '$context.identity.caller',
+              user: '$context.identity.user',
+              requestTime: '$context.requestTime',
+              httpMethod: '$context.httpMethod',
+              resourcePath: '$context.resourcePath',
+              status: '$context.status',
+              protocol: '$context.protocol',
+            }),
+          },
+        },
+      });
+    }
+  );
+
+new aws.lambda.Permission(`${stack}-api-handler-permission`, {
+  action: 'lambda:InvokeFunction',
+  function: lambdaApiHandler.name,
+  principal: 'apigateway.amazonaws.com',
+  sourceArn: pulumi.interpolate`${apiGateway.restAPI.executionArn}/*/*/*`,
 });
 
 new aws.apigateway.RestApiPolicy(`${stack}-api-authorizers-policy`, {
@@ -277,7 +286,6 @@ new aws.route53.Record(`${stack}-api-dns`, {
 // Map stage name to custom domain
 new aws.apigateway.BasePathMapping(`${stack}-api-domain-mapping`, {
   restApi: apiGateway.restAPI.id,
-  stageName: apiGateway.stage.stageName,
   domainName: apiDomainName.domainName,
 });
 

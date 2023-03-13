@@ -29,7 +29,7 @@ const documentSchemas = {
 };
 
 describe('document schemas api', () => {
-  const endpoint = '/api/document-schemas';
+  const endpoint = '/v1/document-schemas';
 
   beforeEach(() => {
     (models.DocumentSchema.find as jest.Mock).mockClear();

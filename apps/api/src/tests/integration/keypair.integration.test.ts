@@ -36,14 +36,14 @@ const keypairs = {
 };
 
 describe('keypairs api', () => {
-  const endpoint = '/api/keypairs';
+  const endpoint = '/v1/keypairs';
 
   beforeEach(() => {
     jest.resetAllMocks();
     kmsMock.reset();
   });
 
-  describe('[POST] /api/keypairs', () => {
+  describe('[POST] /v1/keypairs', () => {
     it('should create a keypair', async () => {
       const debRes = keypairs.results;
       (models.KeyPair.find as jest.Mock).mockResolvedValueOnce(debRes);
@@ -77,7 +77,7 @@ describe('keypairs api', () => {
         });
     });
   });
-  describe('[GET] /api/keypairs', () => {
+  describe('[GET] /v1/keypairs', () => {
     it('should list keypairs', async () => {
       const debRes = keypairs.results;
       (models.KeyPair.find as jest.Mock).mockResolvedValueOnce(debRes);
@@ -134,7 +134,7 @@ describe('keypairs api', () => {
     });
   });
 
-  describe('[GET] /api/keypairs/:keyId', () => {
+  describe('[GET] /v1/keypairs/:keyId', () => {
     it('should get keypair', async () => {
       const debRes = keypairs.results[0];
       (models.KeyPair.get as jest.Mock).mockResolvedValueOnce(debRes);
@@ -194,7 +194,7 @@ describe('keypairs api', () => {
     });
   });
 
-  describe('[PUT] /api/keypairs/:keyId/disable', () => {
+  describe('[PUT] /v1/keypairs/:keyId/disable', () => {
     it('should disable a keypair', async () => {
       const debRes = keypairs.results[0];
       (models.KeyPair.get as jest.Mock).mockResolvedValueOnce(debRes);
@@ -231,7 +231,7 @@ describe('keypairs api', () => {
     });
   });
 
-  describe('[DELETE] /api/keypairs/:keyId', () => {
+  describe('[DELETE] /v1/keypairs/:keyId', () => {
     it('should delete a keypair', async () => {
       const debRes = keypairs.results[0];
       (models.KeyPair.get as jest.Mock).mockResolvedValueOnce({

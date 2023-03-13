@@ -22,7 +22,7 @@ export const thatIsRetrievedDocument = {
   }),
 };
 
-const storagePath = '/api/storage/documents';
+const storagePath = '/v1/storage/documents';
 
 const authTokenWithSubAndAbn =
   'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwiYWJuIjoiMDAwMDAwMDAwMDAifQ.mYt_zdD9hjCC0267io5tyeTx0r6Xrh4B6JRVLqHkY5A';
@@ -45,7 +45,7 @@ describe('storage api', () => {
   beforeEach(() => {
     s3Mock.reset();
   });
-  describe('GET /api/storage/documents/:id', () => {
+  describe('GET /v1/storage/documents/:id', () => {
     it("should return error when you try to get a document that doesn't exist", async () => {
       s3Mock
         .on(GetObjectCommand)
@@ -137,7 +137,7 @@ describe('storage api', () => {
           document: 'document contents',
         })
         .expect('Content-Type', /json/)
-        .expect(500)
+        .expect(401)
         .expect((res) => {
           expect(res.body.errors[0].id).toContain('DVPAPI-003');
         });

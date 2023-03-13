@@ -1,3 +1,4 @@
+export * as apigateway from './apigateway';
 export * as auditLogBucket from './auditLogBucket';
 export * as auth from './auth';
 export * as dynamodb from './dynamodb';

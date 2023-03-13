@@ -65,14 +65,14 @@ const oaUnrevokePayload = {
 
 describe('status api', () => {
   jest.setTimeout(20000);
-  const endpoint = '/api/credentials/status';
+  const endpoint = '/v1/credentials/status';
 
   beforeEach(() => {
     s3Mock.reset();
     dynamodbMock.reset();
   });
 
-  describe('GET /api/status/oa-ocsp/:documentHash', () => {
+  describe('GET /v1/status/oa-ocsp/:documentHash', () => {
     it('should return the correct response for an unrevoked OA VC', async () => {
       dynamodbMock.on(QueryCommand).resolvesOnce({
         Items: [
@@ -114,7 +114,7 @@ describe('status api', () => {
     });
   });
 
-  describe('GET /api/status/revocation-list-2020/:listId', () => {
+  describe('GET /v1/status/revocation-list-2020/:listId', () => {
     it('should return the revocation list VC with the specified listId', async () => {
       s3Mock.on(GetObjectCommand).resolvesOnce({
         Body: {
@@ -154,7 +154,7 @@ describe('status api', () => {
     });
   });
 
-  describe('POST /api/status', () => {
+  describe('POST /v1/status', () => {
     describe('SVIP', () => {
       it('should revoke a verifiable credential ', async () => {
         dynamodbMock.on(GetItemCommand).resolvesOnce({
