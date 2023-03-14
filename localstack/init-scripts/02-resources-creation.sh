@@ -76,7 +76,7 @@ fi
 echo "############ Creating Cognito resources #############"
 echo "############ Skipping because cognito is only available in Localstack Pro #############"
 
-echo "############ Localstack ready #############"
+echo "############ Localstack ready ##############"
 
 # External
 

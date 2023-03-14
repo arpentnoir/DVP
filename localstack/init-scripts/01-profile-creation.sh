@@ -10,3 +10,5 @@ aws configure set region ap-southeast-2 --profile=localstack
 
 echo "########### Listing profile ###########"
 aws configure list --profile=localstack
+
+echo "---------------------------------END Script-01"

@@ -1,0 +1,6 @@
+# Use the default end of line converstion behaviour
+* text=auto
+
+# Ensure .sh files will always have LF line endings on checkout. When Git automatically converts to CRLF on Windows, it breaks the
+# Localstack init scripts
+*.sh text eol=lf
