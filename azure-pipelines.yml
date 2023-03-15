@@ -34,6 +34,17 @@ stages:
     jobs:
       - job: Build
         steps:
+          - script: |
+              df -h
+              SIZE=$(df -hP / | awk '{print ($4 * 1024)}' |tail -1)
+
+              if [ $SIZE -lt 3000 ]
+              then
+                  echo "Agent does not have enough disk space to continue."
+                  exit 1
+              fi
+            displayName: 'Check disk size'
+
           - checkout: self
             fetchDepth: 2
             displayName: Checkout
@@ -117,9 +128,6 @@ stages:
           runOnce:
             deploy:
               steps:
-                - script: df -h
-                  displayName: 'Check disk size'
-
                 - task: DownloadPipelineArtifact@2
                   inputs:
                     source: 'current' # Options: current, specific
