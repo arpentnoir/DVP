@@ -1,0 +1,367 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Home should render correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="MuiContainer-root MuiContainer-disableGutters css-8qkppm-MuiContainer-root"
+    >
+      <div
+        class="MuiBox-root css-1ykdma4"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-container css-12zsqbf-MuiGrid-root"
+        >
+          <div
+            class="css-7zlskd-MuiStack-root"
+          >
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-md-6 css-1fyyp8j-MuiGrid-root"
+            >
+              <div
+                class="css-hwbtf3-MuiStack-root"
+              >
+                <div
+                  class="MuiBox-root css-0"
+                >
+                  <h1
+                    class="MuiTypography-root MuiTypography-h1 css-wc1p7j-MuiTypography-root"
+                    tabindex="0"
+                  >
+                    DIGITAL VERIFICATION
+                  </h1>
+                  <h1
+                    class="MuiTypography-root MuiTypography-h1 css-wc1p7j-MuiTypography-root"
+                    tabindex="0"
+                  >
+                    PLATFORM
+                  </h1>
+                </div>
+                <p
+                  class="MuiTypography-root MuiTypography-body2 css-5wlk1t-MuiTypography-root"
+                  tabindex="0"
+                >
+                  Lorem ipsum dolar sit amet consectetur
+                </p>
+                <div
+                  class="css-124fyjl-MuiStack-root"
+                >
+                  <button
+                    class="MuiButtonBase-root css-10d1a0h-MuiButtonBase-root"
+                    tabindex="0"
+                    type="button"
+                  >
+                    <div
+                      class="css-1qqnyiw-MuiStack-root"
+                    >
+                      <p
+                        class="MuiTypography-root MuiTypography-body1 css-10rr26n-MuiTypography-root"
+                        tabindex="0"
+                      >
+                        Verify a document
+                      </p>
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                        data-testid="NavigateNextIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+                        />
+                      </svg>
+                    </div>
+                    <span
+                      class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                    />
+                  </button>
+                  <button
+                    class="MuiButtonBase-root css-10d1a0h-MuiButtonBase-root"
+                    tabindex="0"
+                    type="button"
+                  >
+                    <div
+                      class="css-1qqnyiw-MuiStack-root"
+                    >
+                      <p
+                        class="MuiTypography-root MuiTypography-body1 css-10rr26n-MuiTypography-root"
+                        tabindex="0"
+                      >
+                        Help and support
+                      </p>
+                      <svg
+                        aria-hidden="true"
+                        class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                        data-testid="NavigateNextIcon"
+                        focusable="false"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+                        />
+                      </svg>
+                    </div>
+                    <span
+                      class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                    />
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div
+              class="MuiGrid-root MuiGrid-item MuiGrid-grid-md-6 css-ovf0jd-MuiGrid-root"
+            >
+              <div
+                class="MuiBox-root css-115ea40"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+      <div
+        class="MuiBox-root css-1l4w6pd"
+      >
+        <div
+          class="MuiGrid-root MuiGrid-container css-13jiec0-MuiGrid-root"
+        >
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 css-11l5t4l-MuiGrid-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiCard-root css-1tm4xf1-MuiPaper-root-MuiCard-root"
+            >
+              <div
+                class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+              >
+                <div
+                  class="css-3y1137-MuiStack-root"
+                >
+                  <p
+                    class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                    tabindex="0"
+                  >
+                    LOREM
+                  </p>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                    data-testid="NavigateNextIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+                    />
+                  </svg>
+                </div>
+                <p
+                  class="MuiTypography-root MuiTypography-body2 css-ik0l5y-MuiTypography-root"
+                  tabindex="0"
+                >
+                  It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 css-11l5t4l-MuiGrid-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiCard-root css-1tm4xf1-MuiPaper-root-MuiCard-root"
+            >
+              <div
+                class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+              >
+                <div
+                  class="css-3y1137-MuiStack-root"
+                >
+                  <p
+                    class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                    tabindex="0"
+                  >
+                    IPSUM
+                  </p>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                    data-testid="NavigateNextIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+                    />
+                  </svg>
+                </div>
+                <p
+                  class="MuiTypography-root MuiTypography-body2 css-ik0l5y-MuiTypography-root"
+                  tabindex="0"
+                >
+                  It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 css-11l5t4l-MuiGrid-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiCard-root css-1tm4xf1-MuiPaper-root-MuiCard-root"
+            >
+              <div
+                class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+              >
+                <div
+                  class="css-3y1137-MuiStack-root"
+                >
+                  <p
+                    class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                    tabindex="0"
+                  >
+                    DOLOR
+                  </p>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                    data-testid="NavigateNextIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+                    />
+                  </svg>
+                </div>
+                <p
+                  class="MuiTypography-root MuiTypography-body2 css-ik0l5y-MuiTypography-root"
+                  tabindex="0"
+                >
+                  It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 css-11l5t4l-MuiGrid-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiCard-root css-1tm4xf1-MuiPaper-root-MuiCard-root"
+            >
+              <div
+                class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+              >
+                <div
+                  class="css-3y1137-MuiStack-root"
+                >
+                  <p
+                    class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                    tabindex="0"
+                  >
+                    LOREM
+                  </p>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                    data-testid="NavigateNextIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+                    />
+                  </svg>
+                </div>
+                <p
+                  class="MuiTypography-root MuiTypography-body2 css-ik0l5y-MuiTypography-root"
+                  tabindex="0"
+                >
+                  It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 css-11l5t4l-MuiGrid-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiCard-root css-1tm4xf1-MuiPaper-root-MuiCard-root"
+            >
+              <div
+                class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+              >
+                <div
+                  class="css-3y1137-MuiStack-root"
+                >
+                  <p
+                    class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                    tabindex="0"
+                  >
+                    IPSUM
+                  </p>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                    data-testid="NavigateNextIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+                    />
+                  </svg>
+                </div>
+                <p
+                  class="MuiTypography-root MuiTypography-body2 css-ik0l5y-MuiTypography-root"
+                  tabindex="0"
+                >
+                  It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+                </p>
+              </div>
+            </div>
+          </div>
+          <div
+            class="MuiGrid-root MuiGrid-item MuiGrid-grid-xs-12 MuiGrid-grid-sm-6 MuiGrid-grid-md-4 css-11l5t4l-MuiGrid-root"
+          >
+            <div
+              class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation0 MuiCard-root css-1tm4xf1-MuiPaper-root-MuiCard-root"
+            >
+              <div
+                class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+              >
+                <div
+                  class="css-3y1137-MuiStack-root"
+                >
+                  <p
+                    class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                    tabindex="0"
+                  >
+                    DOLOR
+                  </p>
+                  <svg
+                    aria-hidden="true"
+                    class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-i4bv87-MuiSvgIcon-root"
+                    data-testid="NavigateNextIcon"
+                    focusable="false"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      d="M10 6 8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"
+                    />
+                  </svg>
+                </div>
+                <p
+                  class="MuiTypography-root MuiTypography-body2 css-ik0l5y-MuiTypography-root"
+                  tabindex="0"
+                >
+                  It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;

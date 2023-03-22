@@ -76,17 +76,55 @@ describe('credentials.service', () => {
 
     const credentialService = new CredentialService(invocationContext);
     const query = {
-      q: 'Australia',
       limit: 10,
       nextCursor:
         'eyJwayI6IkFibiM0MTE2MTA4MDE0NiIsInNrIjoiRG9jdW1lbnQjMzNkNjY0OTctYTc4Ni00MmM5LWJkZDAtZDVjOWIxMTk5NWE3In0=',
       sort: 'desc' as 'desc' | 'asc',
     };
     const res = await credentialService.getCredentials(query);
+    expect((models.Document.find as jest.Mock).mock.calls[0][1]).toHaveProperty(
+      'limit'
+    );
     expect(res.results).toEqual(expect.arrayContaining(credentials.results));
     expect(res.pagination).toEqual(
       expect.objectContaining(credentials.pagination)
     );
+  });
+
+  it('should remove limit property from dynamodb query if q is passed in', async () => {
+    const debRes = credentials.results;
+
+    (models.Document.find as jest.Mock).mockResolvedValueOnce(debRes);
+
+    const credentialService = new CredentialService(invocationContext);
+    const query = {
+      q: 'Australia',
+      limit: 10,
+      sort: 'desc' as 'desc' | 'asc',
+    };
+    await credentialService.getCredentials(query);
+    expect(
+      (models.Document.find as jest.Mock).mock.calls[0][1]
+    ).not.toHaveProperty('limit');
+  });
+
+  it('should remove the pagination object from the response if q is defined', async () => {
+    const debRes = credentials.results;
+
+    (models.Document.find as jest.Mock).mockResolvedValueOnce(debRes);
+
+    const credentialService = new CredentialService(invocationContext);
+    const query = {
+      q: 'Australia',
+      limit: 10,
+      sort: 'desc' as 'desc' | 'asc',
+    };
+    const res = await credentialService.getCredentials(query);
+    expect(
+      (models.Document.find as jest.Mock).mock.calls[0][1]
+    ).not.toHaveProperty('limit');
+    expect(res.results).toEqual(expect.arrayContaining(credentials.results));
+    expect(res).not.toHaveProperty('pagination');
   });
 
   it('should validate nextCursor and throw error if invalid', async () => {

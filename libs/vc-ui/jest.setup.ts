@@ -1,4 +1,5 @@
 import 'jest-canvas-mock';
+import '@testing-library/jest-dom';
 
 const mockClipboard = {
   writeText: jest.fn(),

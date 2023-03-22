@@ -7,6 +7,16 @@ export const SHORT_APP_NAME = 'DVP';
 export const LOGO_ALT_TEXT = 'Australian Border Force Logo';
 export const FOOTER_LOGO_ALT_TEXT = 'Australian Government';
 
+export const DEFAULT_TABLE_LIMIT = 50;
+
+export const FAIL_FETCH_DOCUMENTS_ERR_MSG = 'Unable to fetch documents';
+export const FAIL_CREATE_VC = 'Unable to create Verifiable Credential';
+
+export const DEFAULT_API_QUERY_ERROR_MESSAGE =
+  'An error occurred while fetching the data';
+export const FAIL_VC_FETCH_DECRYPT_ERR_MSG =
+  'Unable to fetch and/or decrypt Verifiable Credential';
+
 export const ROUTES = {
   HOME: '/',
   VERIFY: '/verify',
@@ -14,18 +24,18 @@ export const ROUTES = {
   ISSUE: '/issue',
 };
 
-export const FAIL_VC_FETCH_DECRYPT_ERR_MSG =
-  'Unable to fetch and/or decrypt Verifiable Credential';
-
-export const FAIL_CREATE_VC = 'Unable to create Verifiable Credential';
-export const API_ENDPOINTS = { VERIFY: '/credentials/verify', ISSUE: '/credentials/issue' };
+export const API_ENDPOINTS = {
+  VERIFY: '/credentials/verify',
+  ISSUE: '/credentials/issue',
+  CREDENTIALS: '/credentials',
+};
 
 export const GENERIC_SVIP_META_DATA = {
   '@context': [
     'https://www.w3.org/2018/credentials/v1',
     `${contextUrl}/AANZFTA-CoO.json`,
     `${contextUrl}/AANZFTA-CoO-Context-Partial.json`,
-    "https://w3id.org/vc-revocation-list-2020/v1"
+    'https://w3id.org/vc-revocation-list-2020/v1',
   ],
   type: ['VerifiableCredential'],
   issuer: {

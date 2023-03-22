@@ -2,7 +2,7 @@
 export default {
   displayName: 'vc-ui',
   preset: '../../jest.preset.js',
-  setupFiles: ['./jest.setup.ts'],
+  setupFilesAfterEnv: ['./jest.setup.ts'],
   transform: {
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nrwl/react/plugins/jest',
     '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nrwl/react/babel'] }],

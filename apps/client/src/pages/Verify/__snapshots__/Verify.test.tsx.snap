@@ -1,0 +1,118 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Verify should render correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="MuiContainer-root MuiContainer-disableGutters css-1y9y4eh-MuiContainer-root"
+    >
+      <div
+        class="css-13fkgki-MuiStack-root"
+      >
+        <div
+          class="MuiBox-root css-0"
+        >
+          <h1
+            class="MuiTypography-root MuiTypography-h1 css-1ne5dp9-MuiTypography-root"
+            tabindex="0"
+          >
+            Verify a document
+          </h1>
+          <p
+            class="MuiTypography-root MuiTypography-body2 css-e784if-MuiTypography-root"
+            tabindex="0"
+          >
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent auctor purus luctus enim egestas, ac scelerisque ante pulvinar. Donec ut rhoncus ex. Suspendisse ac rhoncus nisl, eu tempor urna. Curabitur vel bibendum lorem. Morbi convallis convallis diam sit amet lacinia. Aliquam in elementum tellus.
+          </p>
+        </div>
+        <div
+          class="MuiBox-root css-1rr4qq7"
+        >
+          <div
+            class="css-yebffi-MuiStack-root"
+          >
+            <div
+              class="css-12a1c8v-MuiStack-root"
+            >
+              <div
+                class="MuiBox-root css-xi606m"
+                id="certificate-upload"
+              >
+                <div
+                  class="css-1g3jqqf-MuiStack-root"
+                >
+                  <div
+                    class="css-1wrk7t-MuiStack-root"
+                  >
+                    <div
+                      class="css-1i78psr-MuiStack-root"
+                    >
+                      <button
+                        class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textPrimary MuiButton-sizeMedium MuiButton-textSizeMedium css-1eoulhv-MuiButtonBase-root-MuiButton-root"
+                        data-testid="button:Scan QR code"
+                        tabindex="0"
+                        type="button"
+                      >
+                        <div
+                          class="css-doi3ij-MuiStack-root"
+                        >
+                          <h4
+                            class="MuiTypography-root MuiTypography-h4 css-5ukp3i-MuiTypography-root"
+                            data-testid="button:Scan QR code:label"
+                            tabindex="-1"
+                          >
+                            Scan QR code
+                          </h4>
+                        </div>
+                        <span
+                          class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                        />
+                      </button>
+                      <div
+                        class="MuiBox-root css-1xu3tth"
+                      >
+                        <p
+                          class="MuiTypography-root MuiTypography-body1 css-1sx1eu0-MuiTypography-root"
+                          tabindex="-1"
+                        >
+                          Or  
+                        </p>
+                        <div
+                          aria-controls="filename"
+                          aria-label="Select a file. Only JSON files with max size of 3 MB"
+                          class="MuiBox-root css-13imy7l"
+                          role="button"
+                          tabindex="0"
+                        >
+                          Select a file
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div
+                  class="MuiInputBase-root MuiInput-root MuiInput-underline MuiInputBase-colorPrimary css-1g6u8k6-MuiInputBase-root-MuiInput-root"
+                >
+                  <input
+                    class="MuiInputBase-input MuiInput-input css-1x51dt5-MuiInputBase-input-MuiInput-input"
+                    data-testid="input-file-upload"
+                    id="input-file-upload"
+                    type="file"
+                    value=""
+                  />
+                </div>
+                <label
+                  aria-label="Upload file"
+                  class="MuiFormLabel-root MuiInputLabel-root MuiInputLabel-animated MuiFormLabel-colorPrimary MuiInputLabel-root MuiInputLabel-animated css-1l91s8u-MuiFormLabel-root-MuiInputLabel-root"
+                  for="input-file-upload"
+                  id="label-file-upload"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;

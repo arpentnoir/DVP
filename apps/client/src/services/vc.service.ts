@@ -1,6 +1,10 @@
-import { IssueCredentialRequestSigningMethodEnum } from '@dvp/api-client';
+import {
+  CredentialsResponseItem,
+  IssueCredentialRequestSigningMethodEnum,
+} from '@dvp/api-client';
 import {
   CredentialSubject,
+  Pagination,
   VerifiableCredential,
   VerificationResult,
 } from '@dvp/api-interfaces';
@@ -8,12 +12,15 @@ import { AxiosError } from 'axios';
 import { axiosInstance } from './api.service';
 
 import { isOpenAttestationType } from '@dvp/vc-ui';
+import { isNull, isUndefined, omitBy } from 'lodash';
 import {
   API_ENDPOINTS,
   FAIL_CREATE_VC,
+  FAIL_FETCH_DOCUMENTS_ERR_MSG,
   GENERIC_OA_META_DATA,
   GENERIC_SVIP_META_DATA,
 } from '../constants';
+import { QueryFunction } from '../hooks';
 
 export const _getIssuer = (document: VerifiableCredential) => ({
   id: isOpenAttestationType(document)
@@ -93,4 +100,42 @@ export const getOAMetaData = (formName: string, formType: string) => {
   metaData.openAttestationMetadata.template.name = TemplateName;
 
   return metaData;
+};
+
+interface GetVCParams {
+  nextCursor?: string;
+  prevCursor?: string;
+  limit?: number;
+  q?: string;
+  sort?: 'asc' | 'desc';
+}
+
+export const getVerifiableCredentials: QueryFunction<
+  CredentialsResponseItem
+> = async (query, options) => {
+  try {
+    const { pagination, sort } = options;
+
+    const params: GetVCParams = {
+      q: query ? encodeURIComponent(query) : undefined,
+      ...omitBy(pagination, isNull),
+      sort,
+    };
+
+    const searchParams = new URLSearchParams(
+      omitBy(params, isUndefined)
+    ).toString();
+
+    return axiosInstance
+      .get(`${API_ENDPOINTS.CREDENTIALS}?${searchParams}`)
+      .then(
+        (res) =>
+          res.data as {
+            results: CredentialsResponseItem[];
+            pagination?: Pagination;
+          }
+      );
+  } catch {
+    throw new Error(FAIL_FETCH_DOCUMENTS_ERR_MSG);
+  }
 };

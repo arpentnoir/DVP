@@ -1,0 +1,52 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`CreateFormPage should render correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="MuiContainer-root MuiContainer-disableGutters css-1y9y4eh-MuiContainer-root"
+    >
+      <div
+        class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 css-k6d2hm-MuiPaper-root"
+      >
+        <div
+          class="MuiContainer-root css-5siipm-MuiContainer-root"
+        >
+          <h4
+            class="MuiTypography-root MuiTypography-h4 css-1313egv-MuiTypography-root"
+            tabindex="0"
+          >
+            Test
+          </h4>
+          <hr
+            class="MuiDivider-root MuiDivider-fullWidth css-1i2odet-MuiDivider-root"
+          />
+          <div
+            class="MuiBox-root css-dyq4ot"
+          >
+            <button
+              class="MuiButtonBase-root MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium Mui-disabled MuiButton-root MuiButton-contained MuiButton-containedPrimary MuiButton-sizeMedium MuiButton-containedSizeMedium css-1yt9wte-MuiButtonBase-root-MuiButton-root"
+              data-testid="button:Submit"
+              disabled=""
+              tabindex="-1"
+              type="button"
+            >
+              <div
+                class="css-doi3ij-MuiStack-root"
+              >
+                <p
+                  class="MuiTypography-root MuiTypography-body2 css-e784if-MuiTypography-root"
+                  data-testid="button:Submit:label"
+                  tabindex="0"
+                >
+                  Submit
+                </p>
+              </div>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;

@@ -1,0 +1,195 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Schemas should render correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="MuiContainer-root MuiContainer-disableGutters css-1y9y4eh-MuiContainer-root"
+    >
+      <div
+        class="MuiBox-root css-m31y3a"
+      >
+        <h1
+          class="MuiTypography-root MuiTypography-h1 css-1ne5dp9-MuiTypography-root"
+          tabindex="0"
+        >
+          Schemas
+        </h1>
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-e784if-MuiTypography-root"
+          tabindex="0"
+        >
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus elit sed risus. Maecenas eget condimentum velit, sit amet feugiat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Praesent auctor purus luctus enim egestas, ac scelerisque ante pulvinar. Donec ut rhoncus ex. Suspendisse ac rhoncus nisl, eu tempor urna. Curabitur vel bibendum lorem. Morbi convallis convallis diam sit amet lacinia. Aliquam in elementum tellus.
+        </p>
+      </div>
+      <div
+        class="MuiBox-root css-0"
+      >
+        <h3
+          class="MuiTypography-root MuiTypography-h3 css-1ey9xtw-MuiTypography-root"
+          tabindex="0"
+        >
+          Document schemas
+        </h3>
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-e784if-MuiTypography-root"
+          tabindex="0"
+        >
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </p>
+        <div
+          class="css-1vrx0t2-MuiStack-root"
+        >
+          <div
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-nblda9-MuiPaper-root-MuiCard-root"
+          >
+            <div
+              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+            >
+              <div
+                class="css-3y1137-MuiStack-root"
+              >
+                <p
+                  class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                  tabindex="0"
+                >
+                  Schema 1
+                </p>
+              </div>
+              <p
+                class="MuiTypography-root MuiTypography-body2 css-ik0l5y-MuiTypography-root"
+                tabindex="0"
+              >
+                It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+              </p>
+            </div>
+            <div
+              class="MuiCardActions-root MuiCardActions-spacing css-1t6e9jv-MuiCardActions-root"
+            >
+              <button
+                class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium css-1smfn1n-MuiButtonBase-root-MuiButton-root"
+                data-testid="button:Settings"
+                tabindex="0"
+                type="button"
+              >
+                <div
+                  class="css-doi3ij-MuiStack-root"
+                >
+                  <p
+                    class="MuiTypography-root MuiTypography-body2 css-1i4rn6a-MuiTypography-root"
+                    data-testid="button:Settings:label"
+                    tabindex="0"
+                  >
+                    Settings
+                  </p>
+                </div>
+                <span
+                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                />
+              </button>
+            </div>
+          </div>
+          <div
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-nblda9-MuiPaper-root-MuiCard-root"
+          >
+            <div
+              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+            >
+              <div
+                class="css-3y1137-MuiStack-root"
+              >
+                <p
+                  class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                  tabindex="0"
+                >
+                  Schema 2
+                </p>
+              </div>
+              <p
+                class="MuiTypography-root MuiTypography-body2 css-ik0l5y-MuiTypography-root"
+                tabindex="0"
+              >
+                It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+              </p>
+            </div>
+            <div
+              class="MuiCardActions-root MuiCardActions-spacing css-1t6e9jv-MuiCardActions-root"
+            >
+              <button
+                class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium css-1smfn1n-MuiButtonBase-root-MuiButton-root"
+                data-testid="button:Settings"
+                tabindex="0"
+                type="button"
+              >
+                <div
+                  class="css-doi3ij-MuiStack-root"
+                >
+                  <p
+                    class="MuiTypography-root MuiTypography-body2 css-1i4rn6a-MuiTypography-root"
+                    data-testid="button:Settings:label"
+                    tabindex="0"
+                  >
+                    Settings
+                  </p>
+                </div>
+                <span
+                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                />
+              </button>
+            </div>
+          </div>
+          <div
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-nblda9-MuiPaper-root-MuiCard-root"
+          >
+            <div
+              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+            >
+              <div
+                class="css-3y1137-MuiStack-root"
+              >
+                <p
+                  class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                  tabindex="0"
+                >
+                  Schema 3
+                </p>
+              </div>
+              <p
+                class="MuiTypography-root MuiTypography-body2 css-ik0l5y-MuiTypography-root"
+                tabindex="0"
+              >
+                It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+              </p>
+            </div>
+            <div
+              class="MuiCardActions-root MuiCardActions-spacing css-1t6e9jv-MuiCardActions-root"
+            >
+              <button
+                class="MuiButtonBase-root MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium MuiButton-root MuiButton-text MuiButton-textError MuiButton-sizeMedium MuiButton-textSizeMedium css-1smfn1n-MuiButtonBase-root-MuiButton-root"
+                data-testid="button:Settings"
+                tabindex="0"
+                type="button"
+              >
+                <div
+                  class="css-doi3ij-MuiStack-root"
+                >
+                  <p
+                    class="MuiTypography-root MuiTypography-body2 css-1i4rn6a-MuiTypography-root"
+                    data-testid="button:Settings:label"
+                    tabindex="0"
+                  >
+                    Settings
+                  </p>
+                </div>
+                <span
+                  class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;

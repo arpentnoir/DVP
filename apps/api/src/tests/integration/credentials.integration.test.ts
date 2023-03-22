@@ -66,7 +66,6 @@ describe('credentials api', () => {
     await request(app)
       .get(endpoint)
       .query({
-        q: 'Australia',
         limit: 10,
         nextCursor:
           'eyJwayI6IkFibiM0MTE2MTA4MDE0NiIsInNrIjoiRG9jdW1lbnQjMzNkNjY0OTctYTc4Ni00MmM5LWJkZDAtZDVjOWIxMTk5NWE3In0=',
@@ -82,6 +81,31 @@ describe('credentials api', () => {
         expect(res.body.pagination).toEqual(
           expect.objectContaining(credentials.pagination)
         );
+      });
+  });
+
+  it('should remove pagination property when query is supplied', async () => {
+    const debRes = credentials.results;
+    debRes['next'] = JSON.parse(decode(credentials.pagination.nextCursor));
+    debRes['prev'] = JSON.parse(decode(credentials.pagination.prevCursor));
+
+    (models.Document.find as jest.Mock).mockResolvedValueOnce(debRes);
+
+    await request(app)
+      .get(endpoint)
+      .query({
+        q: 'test',
+        limit: 10,
+        sort: 'desc' as 'desc' | 'asc',
+      })
+      .set({ Authorization: authTokenWithSubAndAbn })
+      .expect('Content-Type', /json/)
+      .expect(200)
+      .expect((res) => {
+        expect(res.body.results).toEqual(
+          expect.arrayContaining(credentials.results)
+        );
+        expect(res.body).not.toHaveProperty('pagination');
       });
   });
 

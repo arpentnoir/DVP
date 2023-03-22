@@ -1,0 +1,175 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`IssuerSchemas should render correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="MuiContainer-root MuiContainer-disableGutters css-1y9y4eh-MuiContainer-root"
+    >
+      <div
+        class="MuiBox-root css-m31y3a"
+      >
+        <h1
+          class="MuiTypography-root MuiTypography-h1 css-1e0njhx-MuiTypography-root"
+          tabindex="0"
+        />
+      </div>
+      <div
+        class="MuiBox-root css-0"
+      >
+        <h3
+          class="MuiTypography-root MuiTypography-h3 css-1ey9xtw-MuiTypography-root"
+          tabindex="0"
+        >
+          Document schemas
+        </h3>
+        <p
+          class="MuiTypography-root MuiTypography-body2 css-e784if-MuiTypography-root"
+          tabindex="0"
+        >
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </p>
+        <div
+          class="css-u5ktxm-MuiStack-root"
+        >
+          <div
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-nblda9-MuiPaper-root-MuiCard-root"
+          >
+            <div
+              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+            >
+              <div
+                class="css-3y1137-MuiStack-root"
+              >
+                <p
+                  class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                  tabindex="0"
+                >
+                  Schema 1
+                </p>
+                <span
+                  class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+                >
+                  <span
+                    class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase"
+                  >
+                    <input
+                      class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                      type="checkbox"
+                    />
+                    <span
+                      class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
+                    />
+                    <span
+                      class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                    />
+                  </span>
+                  <span
+                    class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+                  />
+                </span>
+              </div>
+              <p
+                class="MuiTypography-root MuiTypography-body2 css-ik0l5y-MuiTypography-root"
+                tabindex="0"
+              >
+                It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+              </p>
+            </div>
+          </div>
+          <div
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-nblda9-MuiPaper-root-MuiCard-root"
+          >
+            <div
+              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+            >
+              <div
+                class="css-3y1137-MuiStack-root"
+              >
+                <p
+                  class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                  tabindex="0"
+                >
+                  Schema 2
+                </p>
+                <span
+                  class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+                >
+                  <span
+                    class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase"
+                  >
+                    <input
+                      class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                      type="checkbox"
+                    />
+                    <span
+                      class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
+                    />
+                    <span
+                      class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                    />
+                  </span>
+                  <span
+                    class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+                  />
+                </span>
+              </div>
+              <p
+                class="MuiTypography-root MuiTypography-body2 css-ik0l5y-MuiTypography-root"
+                tabindex="0"
+              >
+                It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+              </p>
+            </div>
+          </div>
+          <div
+            class="MuiPaper-root MuiPaper-elevation MuiPaper-rounded MuiPaper-elevation1 MuiCard-root css-nblda9-MuiPaper-root-MuiCard-root"
+          >
+            <div
+              class="MuiCardContent-root css-46bh2p-MuiCardContent-root"
+            >
+              <div
+                class="css-3y1137-MuiStack-root"
+              >
+                <p
+                  class="MuiTypography-root MuiTypography-body1 css-ndaqpv-MuiTypography-root"
+                  tabindex="0"
+                >
+                  Schema 3
+                </p>
+                <span
+                  class="MuiSwitch-root MuiSwitch-sizeMedium css-julti5-MuiSwitch-root"
+                >
+                  <span
+                    class="MuiButtonBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary PrivateSwitchBase-root MuiSwitch-switchBase MuiSwitch-colorPrimary css-5ryogn-MuiButtonBase-root-MuiSwitch-switchBase"
+                  >
+                    <input
+                      class="PrivateSwitchBase-input MuiSwitch-input css-1m9pwf3"
+                      type="checkbox"
+                    />
+                    <span
+                      class="MuiSwitch-thumb css-jsexje-MuiSwitch-thumb"
+                    />
+                    <span
+                      class="MuiTouchRipple-root css-8je8zh-MuiTouchRipple-root"
+                    />
+                  </span>
+                  <span
+                    class="MuiSwitch-track css-1yjjitx-MuiSwitch-track"
+                  />
+                </span>
+              </div>
+              <p
+                class="MuiTypography-root MuiTypography-body2 css-ik0l5y-MuiTypography-root"
+                tabindex="0"
+              >
+                It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+`;

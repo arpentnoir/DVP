@@ -32,6 +32,14 @@ export class CredentialService {
   }): Promise<CredentialsResponse> {
     const abn = this.invocationContext.userAbn;
     let pagination = {};
+    let query = q;
+    if (q) {
+      try {
+        query = decodeURIComponent(q);
+      } catch {
+        throw new QueryParameterError('q', q);
+      }
+    }
     if (nextCursor) {
       try {
         const marker = decode(nextCursor);
@@ -58,16 +66,18 @@ export class CredentialService {
         sk: { begins: 'Document#' },
       },
       {
-        ...(q
+        ...(query
           ? {
               where:
-                '(contains(${consignmentReferenceNumber}, @{q})) or (contains(${freeTradeAgreement}, @{q})) or (contains(${documentNumber}, @{q})) or (contains(${importerName}, @{q})) or (contains(${importingJurisdiction}, @{q})) or (contains(${exporterOrManufacturerAbn}, @{q}))',
+                '(contains(${consignmentReferenceNumber}, @{query})) or (contains(${freeTradeAgreement}, @{query})) or (contains(${documentNumber}, @{query})) or (contains(${importerName}, @{query})) or (contains(${importingJurisdiction}, @{query})) or (contains(${exporterOrManufacturerAbn}, @{query}))',
               substitutions: {
-                q,
+                query,
               },
             }
           : {}),
-        limit: limit || 30,
+        // DynamoDb applies limit before filtering entries by query - https://advancedweb.hu/the-surprising-properties-of-dynamodb-pagination/
+        // Removing limit/pagination if query exists and adding as a bug in the backlog - https://dev.azure.com/bcz-prod/digital-verification-platform/_boards/board/t/digital-verification-platform%20Team/Stories/?workitem=14398
+        ...(query ? {} : { limit: limit || 30 }),
         ...pagination,
         reverse: sort === 'desc',
       }
@@ -89,15 +99,19 @@ export class CredentialService {
     );
     return {
       results,
-      pagination: {
-        limit,
-        nextCursor: credentials?.next
-          ? encode(JSON.stringify(credentials.next))
-          : null,
-        prevCursor: credentials?.prev
-          ? encode(JSON.stringify(credentials.prev))
-          : null,
-      },
+      ...(query
+        ? {}
+        : {
+            pagination: {
+              limit,
+              nextCursor: credentials?.next
+                ? encode(JSON.stringify(credentials.next))
+                : null,
+              prevCursor: credentials?.prev
+                ? encode(JSON.stringify(credentials.prev))
+                : null,
+            },
+          }),
     };
   }
 }

@@ -1,0 +1,19 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ErrorOverlay should render correctly 1`] = `
+<body>
+  <div>
+    <div
+      class="css-n3b4e1-MuiStack-root"
+    >
+      <p
+        class="MuiTypography-root MuiTypography-body2 css-e784if-MuiTypography-root"
+        data-testid="text:table-error-message"
+        tabindex="0"
+      >
+        An error occurred while loading the data
+      </p>
+    </div>
+  </div>
+</body>
+`;
