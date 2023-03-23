@@ -1,6 +1,14 @@
 import { RequestHandler } from 'express';
 import { AuthorizationError } from '../error';
 
+/**
+ * Creates an Express middleware that checks if the Authorization request header is supplied in 
+ * the correct format.
+ * 
+ * @param req The request to be extract the Authorization header from.
+ * @param res The Express response to be returned.
+ * @param next The next function injected by the Express router which, when invoked, executes the next middleware in the stack.
+ */
 export const authMiddleware: RequestHandler = (req, res, next) => {
   try {
     const authHeader = req.header('Authorization');

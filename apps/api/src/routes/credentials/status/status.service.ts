@@ -32,6 +32,9 @@ export const statusStorageClient: StorageClient = S3Adapter(
   config.statusListS3Config as S3Config
 );
 
+/**
+ * This class handles operations on the Verifiable Credential revocation list.
+ */
 export class StatusService {
   logger: Logger;
   invocationContext: RequestInvocationContext;
@@ -47,10 +50,34 @@ export class StatusService {
     this.issueService = new IssueService(this.invocationContext);
   }
 
+  /**
+   * Returns a url representing an API endpoint for the given revocation list
+   *  
+   * @param listCounter The name of the list we are generating a URL for (represented by a number)
+   * @returns A string representation of the list URL. 
+   */
   generateListUrl(listCounter: number) {
     return `${config.apiURL}/credentials/status/${SVIPStatusRouteName}/${listCounter}`;
   }
 
+  /**
+   * Creates a new list for storing the revocation status of issued Verifiable Credentials. @see {@link https://w3c-ccg.github.io/vc-status-rl-2020/}
+   * 
+   * In doing so, issues the first VC to be added to the list, and adds its default 'not revoked' status to the list. This list
+   * is then uploaded to S3. A little further information on how revocation list works:
+   * 
+   * Each revocation list has a name. This is referred to as listCounter. This number starts at 1, and is incremented whenver a new list is created.
+   * Each revocation list has a max length (referred to as bitStringLength).
+   * When adding a VC to the revocation list, we assign it a value of either 0 (NOT revoked) or 1 (Revoked).
+   * A revocation list with a max length (bitStringLength) of 8 could look like this: 00101100.
+   * Once max length is reached, the next issued VC triggers a new list to be created, and listCounter to be incremented,
+   * 
+   * Note - this currently only applies to SVIP VCs.
+   * 
+   * @param length The length of the list that will be created.
+   * @param listCounter the name of the list that will be created (represented by a number).
+   * @returns The newly created revocation list.
+   */
   async createRevocationListVC(
     length: number,
     listCounter: number
@@ -95,6 +122,18 @@ export class StatusService {
     }
   }
 
+  /**
+   * Sets the revocation status for a Verifiable Credential.
+   * 
+   * This value is set in DynamoDB, but for SVIP there is the additional step of writing to 
+   * the revocation list uploaded to S3. 
+   * 
+   * Gracefully rolls back in the case of error.
+   * 
+   * @param credentialId Identifier of the verifiable credential to have its revocation status set.
+   * @param credentialStatus The revocation status which will be written to the database and/or revocation list.
+   * @returns 
+   */
   async setRevocationStatus(
     credentialId: string,
     credentialStatus: CredentialStatus[]
@@ -181,6 +220,15 @@ export class StatusService {
     }
   }
 
+  /**
+   * Sets the revocation status for a given SVIP Verifiable Credential in the revocation list uploaded to S3. 
+   * 
+   * Retrieves the current revocation list before applying the update.
+   * 
+   * @param document The document contained within the VC that is to have its revocation status set.
+   * @param revoke Flag indicating if the credential is to be revoked.
+   * @returns Both old and updated revocation lists. Returns both to assist with rollback, if required.
+   */
   async setSvipRevocationStatus(document: DocumentType, revoke: boolean) {
     try {
       if (!document.revocationS3Path || document.revocationIndex == undefined) {
@@ -207,6 +255,7 @@ export class StatusService {
         list,
       });
 
+      // Update the revocation list
       const { verifiableCredential: newRevocationList } =
         await this.issueService.baseIssue(
           IssueCredentialRequestSigningMethodEnum.Svip,
@@ -245,6 +294,10 @@ export class StatusService {
     }
   }
 
+  /**
+   * Determines if adding a VC to the current revocation list will exceed the maximum allowed length (bitStringLength).
+   * If so, create a new revocation list. 
+   */
   async updateRevocationListData() {
     try {
       const revocationCounter = await models.RevocationCounter.get(
@@ -279,6 +332,13 @@ export class StatusService {
     }
   }
 
+  /**
+   * Gets information about the current Verifiable Credential revocation list. 
+   * Creates a new revocation list of the 
+   * 
+   * @returns An object containing the current list index, the list s3 path, and the 
+   * list url 
+   */
   async getRevocationListData() {
     try {
       // There's only ever one entry for RevocationCounter

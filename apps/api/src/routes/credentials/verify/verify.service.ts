@@ -13,6 +13,9 @@ import {
   ValidationError,
 } from '@dvp/server-common';
 
+/**
+ * Service class that handles operations for verifying Verifiable Credentials.
+ */
 export class VerifyService {
   logger: Logger;
   invocationContext: RequestInvocationContext;
@@ -22,7 +25,14 @@ export class VerifyService {
     this.logger = Logger.from(invocationContext);
   }
 
-  //Choose which backend to use based on the given VC.
+  /**
+   * Chooses which external library to use for verifying the given Verifiable Credential. 
+   * Gracefully handles the case where no suitable VC library can be found.
+   * 
+   * @param verifiableCredential The credential used to determine the verification method.
+   * @returns A function from either the transmute or openAttestation libraries that
+   * can be invoked to verify a VC.
+   */
   getVerifier(verifiableCredential: VerifiableCredential): VerifierFunction {
     if (verifiableCredential.type.includes('OpenAttestationCredential')) {
       return openAttestation.verifyCredential as VerifierFunction;
@@ -43,6 +53,14 @@ export class VerifyService {
   /**
    * TODO: We need a consistent approach for handling communicating error from the VC-API
    * We could revisit this after investigating error handling in other VC-API implementations, e.g. didkit
+   */
+  /**
+   * Verify a Verifiable Credential by invoking an exteranl VC verification library.
+   * The library (and verify function therein) is returned by the call to getVerifier().
+   * 
+   * @param verifiableCredential The Verifiable Credential to be verified.
+   * @returns A promise to return a @see {VerificationResult}.
+   * 
    */
   async verify(
     verifiableCredential: VerifiableCredential

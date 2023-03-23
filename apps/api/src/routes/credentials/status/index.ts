@@ -13,6 +13,7 @@ export const SVIPStatusRouteName = 'revocation-list-2020';
 
 export const statusRoutes = Router();
 
+// Map API routes to controller functions
 statusRoutes.post('/', authMiddleware, handleSetRevocationStatus);
 statusRoutes.get(
   `/${OAStatusRouteName}/:documentHash`,

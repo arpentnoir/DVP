@@ -33,6 +33,9 @@ export interface IMetaData {
   revocationS3Path?: string;
 }
 
+/**
+ * A service class responsible for handling issuing of Verifiable Credentials.
+ */
 export class IssueService {
   logger: Logger;
   invocationContext: RequestInvocationContext;
@@ -46,6 +49,11 @@ export class IssueService {
     return `urn:uuid:${uuid ?? getUuId()}`;
   }
 
+  /**
+   * Gets revocation status data for OpenAttestation credentials.
+   * 
+   * @returns Revocation Type and a URL representing an OA credential status endpoint.
+   */
   getOARevocationData() {
     return {
       type: RevocationType.OcspResponder,
@@ -53,6 +61,14 @@ export class IssueService {
     };
   }
 
+  /**
+   * Gets the hash of the given Verifiable Credential document. 
+   * Only applicable to OA VCs. 
+   * 
+   * @param credential The VC from which to retrieve the hash.
+   * @param signingMethod Indicates if VC is OpenAttestation or SVIP.
+   * @returns A hash for OA VCs.
+   */
   getDocumentHash(
     credential: VerifiableCredential,
     signingMethod: IssueCredentialRequestSigningMethodEnum
@@ -62,6 +78,15 @@ export class IssueService {
       : undefined;
   }
 
+  /**
+   * Invokes a function on an external Verifiable Credential library to issue a VC. 
+   * SVIP credentials use the transmute library.
+   * OA credentials use the openAttestation library.
+   * 
+   * @param signingMethod Specifies if this is an OA or SVIP credential to be issued.
+   * @param credential The Verifiable Credential to be issued.
+   * @returns An issued Verifiable Credential.
+   */
   getIssuer(
     signingMethod: IssueCredentialRequestSigningMethodEnum,
     credential: VerifiableCredential
@@ -89,6 +114,15 @@ export class IssueService {
     }
   }
 
+  /**
+   * Stores metadata in DynamoDB for the verifiable credential being issued. 
+   * If any errors occur the document is deleted from storage (S3), and the issue
+   * process fails.
+   * 
+   * @param param0 The metadata to be stored. Revocation index refers to SVIP VCs
+   * that are added to a revocation list upon being issued (its index in the list of
+   * issued VCs present in the list).
+   */
   async storeMetadata({
     credential,
     documentId,
@@ -167,6 +201,14 @@ export class IssueService {
     }
   }
 
+ /**
+   * Handles the issuing of verifiable credentials. Uses the signing method to determine if an
+   * an Open Attestation (OA) or SVIP credential is to be issued and delegates appropriately.
+   * 
+   * @param signingMethod Specifies if this is an OA or SVIP issue.
+   * @param credential The credential to be issued as a Verifiable Credential.
+   * @returns The issued document
+   */
   async issue(
     signingMethod: IssueCredentialRequestSigningMethodEnum,
     credential: VerifiableCredential
@@ -197,12 +239,25 @@ export class IssueService {
     }
   }
 
+  /**
+   * Handles the issuing of SVIP Verifiable Credentials. 
+   * Also adds the issued Verifiable Credential to the current revocation list.
+   * 
+   * @param signingMethod Specifies if this is an OA or SVIP issue.
+   * @param credential The credential to be issued as a Verifiable Credential.
+   * @returns The issued document
+   */
   async issueWithStatus(
     signingMethod: IssueCredentialRequestSigningMethodEnum,
     credential: VerifiableCredential
   ): Promise<IssuedDocument> {
     try {
       const statusService = new StatusService(this.invocationContext);
+
+      // Fetch the name of the revocation list this VC will be added to. 
+      // Also fetch the index that indicates whereabouts in this list we will be recording the revocation 
+      // status for this VC (Note: A revocation value of 0 means NOT revoked, 1 means revoked).
+      // The revocation listUrl and index are attached to the issued VC.
       const { index, listUrl, s3Path } =
         await statusService.getRevocationListData();
 
@@ -219,8 +274,8 @@ export class IssueService {
         true,
         index,
         s3Path
-      );
-
+      );     
+     
       await statusService.updateRevocationListData();
 
       return issueResult;
@@ -238,6 +293,14 @@ export class IssueService {
     }
   }
 
+  /**
+   * Handles the common parts of issuing both verifiable credential types (OA and SVIP). 
+   * By default, embeds a QR Code URL into the VC. 
+   * 
+   * @param signingMethod Specifies if this is an OA or SVIP issue.
+   * @param credential The credential to be issued as a Verifiable Credential.
+   * @returns The issued verifiable credential, the document id and public encryption key.
+   */
   async baseIssue(
     signingMethod: IssueCredentialRequestSigningMethodEnum,
     credential: VerifiableCredential,

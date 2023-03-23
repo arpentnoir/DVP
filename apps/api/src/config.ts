@@ -2,6 +2,7 @@ import { KMSClientConfig } from '@aws-sdk/client-kms';
 import { S3Config, StatusListS3Config } from '@dvp/api-interfaces';
 import { checkEnv } from '@dvp/server-common';
 
+// Check that the following environment variables are set
 checkEnv([
   'DOCUMENT_STORAGE_BUCKET_NAME',
   'API_URL',
@@ -33,6 +34,11 @@ export interface ApiConfig {
   s3Config: S3Config;
 }
 
+/**
+ * Centralised API configuration, specifying config items such as AWS_REGION, S3 bucket name, DynamoDB table name etc.
+ * 
+ * Gets injected into relevant service classes.
+ */
 export const config: ApiConfig = {
   awsRegion: process.env.AWS_REGION,
 

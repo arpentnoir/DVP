@@ -8,6 +8,9 @@ import {
 } from '@dvp/server-common';
 import { models } from '../../db';
 
+/**
+ * Service class for handling the fetching of Verifiable Credentials.
+ */
 export class CredentialService {
   logger: Logger;
   invocationContext: RequestInvocationContext;
@@ -17,6 +20,12 @@ export class CredentialService {
     this.logger = Logger.from(invocationContext);
   }
 
+  /**
+   * Gets Verifiable Credentials by querying DynamoDB.
+   * 
+   * @param param0 Credentials Query, results size limit, sorting and cursors to support pagination.
+   * @returns A promise to return a @see {CredentialsResponse}
+   */
   async getCredentials({
     q,
     limit,

@@ -6,6 +6,7 @@ import { statusRoutes } from './status';
 import { validateRoutes } from './validate';
 import { verifyRoutes } from './verify';
 
+/** API Routes */
 export const credentialsRoutes = Router();
 
 // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/50871

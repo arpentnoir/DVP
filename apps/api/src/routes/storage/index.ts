@@ -6,5 +6,6 @@ import { getDocumentById, uploadDocument } from './storage.controller';
 
 export const storageRoutes = Router();
 
+// Map API routes to controller functions 
 storageRoutes.post('/documents', authMiddleware, uploadDocument);
 storageRoutes.get('/documents/:documentId', getDocumentById);

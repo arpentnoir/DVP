@@ -3,6 +3,16 @@ import { NotFoundError, SystemError } from '@dvp/server-common';
 import type { NextFunction, Request, Response } from 'express';
 import { storageClient, StorageService } from './storage.service';
 
+/**
+ * Gets an encrypted document by invoking the @see {StorageService}.
+ * Gracefully handles the case where a document with the given documentId cannot be found.
+ * 
+ * @param req The request from which to extract the documentId.
+ * @param res The Express response to be returned.
+ * @param next The next function injected by the Express router which, when invoked, executes the next middleware in the stack. 
+ *             Used here for error handling
+ * @returns The encrypted document.
+ */
 export const getDocumentById = async (
   req: Request,
   res: Response,
@@ -25,6 +35,14 @@ export const getDocumentById = async (
   }
 };
 
+/**
+ * Uploads a document by invoking the @see {StorageService}.
+ * 
+ * @param req The request from which to extract the documentId, document and encryptionKey.
+ * @param res The Express response to be returned.
+ * @param next The next function injected by the Express router which, when invoked, executes the next middleware.
+ * @returns The encrypted document.
+ */
 export const uploadDocument = async (
   req: Request,
   res: Response,

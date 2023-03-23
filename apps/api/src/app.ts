@@ -21,6 +21,7 @@ if (
   nodeProxy.start();
 }
 
+// Create and configure an instance of the express module
 const app = express();
 app.use(cors());
 app.use(express.json({ limit: '6mb' }));

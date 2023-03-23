@@ -10,6 +10,7 @@ import {
 
 export const keyPairRoutes = Router();
 
+// Map API routes to controller functions
 keyPairRoutes
   .post('/', createKeyPair)
   .get('/', listKeyPairs)

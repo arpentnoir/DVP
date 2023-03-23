@@ -13,6 +13,9 @@ import Ajv, { Schema } from 'ajv';
 import { AANZ_FTA_COO_SCHEMA, GENERIC_SCHEMA } from './schmas';
 import addFormats from 'ajv-formats';
 
+/**
+ * Service class which handles Verifiable Credential validation operations.
+ */
 export class ValidationService {
   logger: Logger;
   invocationContext: RequestInvocationContext;
@@ -25,6 +28,13 @@ export class ValidationService {
     addFormats(this.ajv);
   }
 
+  /**
+   * Validates if a Verifiable Credential conforms to the given schema.
+   * 
+   * @param credential The Verifiable Credential to be validated.
+   * @param schemaType The type of schema to be validated (i.e. Certificate of Origin).
+   * @returns A @see {ValidationError} if validation fails. Empty object if validation passes.
+   */
   validateCredential(
     credential: VerifiableCredential,
     schemaType: CredentialSchemaType
@@ -43,6 +53,13 @@ export class ValidationService {
     }
   }
 
+  /**
+   * Validates if a Verifiable Credential conforms to the given schema by invoking the ajv library.
+   * 
+   * @param schema The type of schema to be validated (i.e. Certificate of Origin).
+   * @param data The Verifiable Credential to be validated.
+   * @returns A @see {AjvSchemaValidationError} if validation fails. Empty object if validation passes.
+   */
   validate(schema: Schema, data: CredentialSubject) {
     const validate = this.ajv.compile(schema);
     if (!validate(data)) {

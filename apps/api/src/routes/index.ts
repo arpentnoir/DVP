@@ -7,6 +7,7 @@ import { authMiddleware } from '@dvp/server-common';
 import { keyPairRoutes } from './keypair';
 export const router = Router();
 
+// Map API endpoints to child routes.
 router.use('/storage', storageRoutes);
 router.use('/credentials', credentialsRoutes);
 router.use('/document-schemas', authMiddleware, documentSchemaRoutes);

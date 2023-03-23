@@ -10,6 +10,14 @@ export interface ExpectedBody {
   schemaType: string;
 }
 
+/**
+ * Validates a Verifiable Credential by invoking the  @see {ValidationService}.
+ * 
+ * @param req The request from which to extract the verifiable credential and schema type.
+ * @param res The Express response to be returned.
+ * @param next The next function injected by the Express router which, when invoked, executes the next middleware in the stack.
+ * @returns A HTTP 200 containing the response returned by invoking @see {ValidationService.validateCredential}
+ */
 export const validate = (req: Request, res: Response, next: NextFunction) => {
   try {
     const { verifiableCredential, schemaType }: ExpectedBody = req.body;

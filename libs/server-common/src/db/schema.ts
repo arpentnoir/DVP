@@ -1,6 +1,14 @@
 import { IssueCredentialRequestSigningMethodEnum } from '@dvp/api-client';
 import { Entity } from 'dynamodb-onetable';
 
+/**
+ * Represents the DynamoDB schema. Specifies models for:
+ * 
+ * Document
+ * KeyPair
+ * RevocationCounter
+ * DocumentSchema
+ */
 export const DynamoSchema = {
   version: '0.0.1',
   indexes: {

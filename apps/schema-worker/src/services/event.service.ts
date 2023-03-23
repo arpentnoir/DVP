@@ -8,7 +8,10 @@ export class EventService {
   constructor(private readonly logger: Logger) {}
 
   /**
-   * Handles an sqs event by processing every message of it
+   * Handles an SQS event for the purpose of actioning S3 events related to creating / updating / deleting
+   * document schemas.
+   * 
+   * @param event The SQS event to be processed. 
    */
   async handle(event: SQSEvent) {
     const records = this.mapToS3Events(event);
@@ -32,6 +35,13 @@ export class EventService {
     await Promise.all(promises);
   }
 
+  /**
+   * Processes a single S3 event relating to Document Schemas.
+   * Examines the event and updates the corresponding DocumentSchema records in DynamoDB accordingly i.e. delete from
+   * DynamoDB if both document and ui schemas are removed by this event. Perform a create or update if otherwise. 
+   * 
+   * @param record The S3 event to be processed.
+   */
   async processMessage(record: S3Event) {
     if (record.objectKey.endsWith('/')) {
       this.logger.info(
@@ -122,6 +132,13 @@ export class EventService {
     );
   }
 
+  /**
+   * Maps SQS events to S3 events, extracting the bucket name, object key, and a flag 
+   * indicating if the object has been deleted. 
+   * 
+   * @param event The SQS event to be processed. 
+   * @returns An array of @see {S3Event} objects.
+   */
   public mapToS3Events(event: SQSEvent): S3Event[] {
     const records: S3Event[] = [];
     event?.Records?.forEach((record) => {

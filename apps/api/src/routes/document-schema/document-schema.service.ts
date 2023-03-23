@@ -21,6 +21,10 @@ export interface DocumentSchemasQueryParams {
   name?: string;
   sort?: 'asc' | 'desc';
 }
+
+/**
+ * A service class responsible for handling document schema operations.
+ */
 export class DocumentSchemaService {
   logger: Logger;
   invocationContext: RequestInvocationContext;
@@ -30,6 +34,12 @@ export class DocumentSchemaService {
     this.logger = Logger.from(invocationContext);
   }
 
+  /**
+   * Queries DynamoDB to fetch paginated document schemas. 
+   * 
+   * @param param0 Query, Document Schema name, results limit and cursors to support pagination.
+   * @returns A promise to return a @see {DocumentSchemasResponse}.
+   */
   async getDocumentSchemas({
     q,
     name,
