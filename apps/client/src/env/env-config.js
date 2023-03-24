@@ -1,7 +1,7 @@
 // this file will be overwritten during deployment
 window._env_ = {
-  SITE_URL: 'https://web.dev.dvp.ha.showthething.com',
-  API_URL: 'http://localhost:3333/v1',
+  SITE_URL: 'http://localhost:4200',
+  API_URL: 'http://localhost:3333/api',
   AUTH_DOMAIN:
     'dvp-dev-auth-internet-user-pool-domain.auth.ap-southeast-2.amazoncognito.com',
   AUTH_REGION: 'ap-southeast-2',

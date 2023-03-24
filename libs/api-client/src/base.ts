@@ -64,7 +64,7 @@ export class BaseAPI {
  *
  * @export
  * @class RequiredError
- * @extends {Error}
+ * @override extends {Error}
  */
 export class RequiredError extends Error {
   override name: 'RequiredError' = 'RequiredError';

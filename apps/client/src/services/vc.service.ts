@@ -102,6 +102,15 @@ export const getOAMetaData = (formName: string, formType: string) => {
   return metaData;
 };
 
+/**
+ * @typedef GetVCParams
+ * @type {object}
+ * @property {string} [nextCursor] - The cursor for the next page of data.
+ * @property {string} [prevCursor] - The cursor for the previous page of data.
+ * @property {number} [limit] - The maximum number of results to return.
+ * @property {string} [q] - The query string for searching Verifiable Credentials.
+ * @property {('asc' | 'desc')} [sort] - The sorting order for the results.
+ */
 interface GetVCParams {
   nextCursor?: string;
   prevCursor?: string;
@@ -110,6 +119,15 @@ interface GetVCParams {
   sort?: 'asc' | 'desc';
 }
 
+/**
+ * @function getVerifiableCredentials
+ * @async
+ * @param {string} query - The search query for the Verifiable Credentials.
+ * @param {QueryFunctionOptions} options - The options for the query, including pagination and sort order.
+ * @returns {Promise<QueryFunctionResponse<CredentialsResponseItem>>} A Promise that resolves with the query results and pagination.
+ * @throws {Error} Will throw an error if the request fails.
+ * @description Fetches the Verifiable Credentials based on the search query and the provided options.
+ */
 export const getVerifiableCredentials: QueryFunction<
   CredentialsResponseItem
 > = async (query, options) => {
