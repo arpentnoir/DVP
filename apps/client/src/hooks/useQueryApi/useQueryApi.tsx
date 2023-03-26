@@ -100,7 +100,7 @@ export interface PaginationControls extends Pagination {
 * @param {object} [options] - Optional settings for the hook.
 * @param {string} [options.errorMessage] - The custom error message to be displayed when an error occurs.
 * @param {number} [options.defaultLimit] - The default number of items per page.
-* @returns {object} An object containing functions to handle search, sort, and pagination,
+* @returns {object} An object containing functions to fetch the data, handle search, sort, and pagination,
   as well as the current state of the hook.
 */
 export function useQueryApi<T>(
@@ -184,6 +184,10 @@ export function useQueryApi<T>(
     }
   };
 
+  const fetch = useCallback(async () => {
+    await queryApi(state.searchString, { sort: state.sort });
+  }, [queryApi, state.searchString, state.sort]);
+
   const handleSearch = useCallback(
     async (searchString: string) => {
       await queryApi(searchString);
@@ -226,6 +230,7 @@ export function useQueryApi<T>(
   );
 
   return {
+    fetch,
     handleSearch,
     handleSort,
     paginationControls,

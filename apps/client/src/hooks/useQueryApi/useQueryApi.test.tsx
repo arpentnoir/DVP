@@ -38,6 +38,7 @@ describe('UseQueryApi', () => {
 
     await waitFor(() => {
       expect(mockQueryFunction).toBeCalledTimes(1);
+      expect(result.current.fetch).toBeDefined();
       expect(result.current.handleSearch).toBeDefined();
       expect(result.current.handleSort).toBeDefined();
       expect(result.current.paginationControls).toBeDefined();
@@ -63,6 +64,91 @@ describe('UseQueryApi', () => {
         isLoading: false,
         errorMessage: '',
         sort: 'asc',
+      });
+    });
+  });
+
+  it('should call the query function and update the state when fetch is invoked', async () => {
+    mockQueryFunction.mockResolvedValue(mockQueryResponse);
+
+    const { result } = renderHook(() =>
+      useQueryApi<any>(mockQueryFunction, { defaultLimit })
+    );
+
+    await waitFor(() => {
+      expect((result.all[1] as any).state.isLoading).toBe(true);
+      expect(mockQueryFunction).toBeCalledTimes(1);
+      expect(mockQueryFunction).toBeCalledWith('', baseQueryFunctionOptions);
+      expect(result.current.state).toStrictEqual({
+        data: mockQueryResponse.results,
+        pagination: mockQueryResponse.pagination,
+        searchString: '',
+        isLoading: false,
+        errorMessage: '',
+        sort: 'asc',
+      });
+    });
+
+    await act(async () => {
+      await result.current.handleSearch('Test query');
+    });
+
+    await waitFor(() => {
+      expect((result.all[3] as any).state.isLoading).toBe(true);
+      expect(mockQueryFunction).toBeCalledTimes(2);
+      expect(mockQueryFunction.mock.lastCall).toMatchObject([
+        'Test query',
+        baseQueryFunctionOptions,
+      ]);
+      expect(result.current.state).toStrictEqual({
+        data: mockQueryResponse.results,
+        pagination: mockQueryResponse.pagination,
+        searchString: 'Test query',
+        isLoading: false,
+        errorMessage: '',
+        sort: 'asc',
+      });
+    });
+
+    await act(async () => {
+      await result.current.handleSort('desc');
+    });
+
+    await waitFor(() => {
+      expect((result.all[5] as any).state.isLoading).toBe(true);
+      expect(mockQueryFunction).toBeCalledTimes(3);
+      expect(mockQueryFunction.mock.lastCall).toMatchObject([
+        'Test query',
+        { ...baseQueryFunctionOptions, sort: 'desc' },
+      ]);
+      expect(result.current.state).toStrictEqual({
+        data: mockQueryResponse.results,
+        pagination: mockQueryResponse.pagination,
+        searchString: 'Test query',
+        isLoading: false,
+        errorMessage: '',
+        sort: 'desc',
+      });
+    });
+
+    await act(async () => {
+      await result.current.fetch();
+    });
+
+    await waitFor(() => {
+      expect((result.all[7] as any).state.isLoading).toBe(true);
+      expect(mockQueryFunction).toBeCalledTimes(4);
+      expect(mockQueryFunction.mock.lastCall).toMatchObject([
+        'Test query',
+        { ...baseQueryFunctionOptions, sort: 'desc' },
+      ]);
+      expect(result.current.state).toStrictEqual({
+        data: mockQueryResponse.results,
+        pagination: mockQueryResponse.pagination,
+        searchString: 'Test query',
+        isLoading: false,
+        errorMessage: '',
+        sort: 'desc',
       });
     });
   });
