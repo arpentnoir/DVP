@@ -95,6 +95,8 @@ export class CredentialService {
     const results: CredentialsResponse['results'] = credentials?.map(
       (credential) => ({
         id: credential.id,
+        isRevoked: credential.isRevoked,
+        // TODO: Add issuerId property. Conversation needs to be had on what this value should be (DID Alias, etc...)
         consignmentReferenceNumber: credential.consignmentReferenceNumber,
         documentDeclaration: credential.documentDeclaration,
         documentNumber: credential.documentNumber,

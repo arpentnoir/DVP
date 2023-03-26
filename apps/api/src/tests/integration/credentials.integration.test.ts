@@ -17,6 +17,7 @@ const credentials = {
   results: [
     {
       id: '26d255c9-a86c-4c06-8d61-719fa72ed751',
+      isRevoked: false,
       consignmentReferenceNumber: '3344555',
       documentDeclaration: true,
       documentNumber: '1234',
@@ -29,6 +30,7 @@ const credentials = {
     },
     {
       id: '26d255c9-a86c-4c06-8d61-719fa72ed755',
+      isRevoked: false,
       consignmentReferenceNumber: '3344555',
       documentDeclaration: true,
       documentNumber: '1234',

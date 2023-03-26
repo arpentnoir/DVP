@@ -187,10 +187,10 @@ exports[`Documents should render correctly 1`] = `
                   </div>
                   <div
                     aria-colindex="2"
-                    aria-label="ID"
+                    aria-label="Document ID"
                     aria-sort="none"
                     class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
-                    data-field="id"
+                    data-field="documentNumber"
                     role="columnheader"
                     style="height: 56px; width: 0px; min-width: 0; max-width: 0;"
                     tabindex="-1"
@@ -210,7 +210,7 @@ exports[`Documents should render correctly 1`] = `
                             class="MuiDataGrid-columnHeaderTitle css-t89xny-MuiDataGrid-columnHeaderTitle"
                             data-mui-internal-clone-element="true"
                           >
-                            ID
+                            Document ID
                           </div>
                         </div>
                       </div>
@@ -234,10 +234,10 @@ exports[`Documents should render correctly 1`] = `
                   </div>
                   <div
                     aria-colindex="3"
-                    aria-label="Document Number"
+                    aria-label="Business Name"
                     aria-sort="none"
                     class="MuiDataGrid-columnHeader MuiDataGrid-withBorderColor"
-                    data-field="documentNumber"
+                    data-field="importerName"
                     role="columnheader"
                     style="height: 56px; width: 0px; min-width: 0; max-width: 0;"
                     tabindex="-1"
@@ -257,7 +257,7 @@ exports[`Documents should render correctly 1`] = `
                             class="MuiDataGrid-columnHeaderTitle css-t89xny-MuiDataGrid-columnHeaderTitle"
                             data-mui-internal-clone-element="true"
                           >
-                            Document Number
+                            Business Name
                           </div>
                         </div>
                       </div>

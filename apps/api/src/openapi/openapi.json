@@ -948,6 +948,9 @@
           "id": {
             "type": "string"
           },
+          "isRevoked": {
+            "type": "boolean"
+          },
           "documentNumber": {
             "type": "string"
           },

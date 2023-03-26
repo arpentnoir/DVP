@@ -8,7 +8,11 @@
 import { CredentialsResponseItem } from '@dvp/api-client';
 import { DataTable, MoreInfo, Text } from '@dvp/vc-ui';
 import { Box } from '@mui/material';
-import { GridColDef, GridRenderCellParams } from '@mui/x-data-grid';
+import {
+  GridColDef,
+  GridRenderCellParams,
+  GridValueFormatterParams,
+} from '@mui/x-data-grid';
 import { useNavigate } from 'react-router-dom';
 import { useQueryApi } from '../../hooks/useQueryApi';
 import { BaseLayout } from '../../layouts';
@@ -24,6 +28,8 @@ import { getVerifiableCredentials } from '../../services';
  * @property {boolean} sortable - Indicates whether the column is sortable or not.
  * @property {number} [minWidth] - The minimum width of the column, if defined.
  * @property {(params: GridRenderCellParams) => JSX.Element} [renderCell] - An optional render function for the column's cells.
+ * @property {(params: GridValueFormatterParams) => string} [valueFormatter] - An optional formatter function for the column's cells.
+
  */
 interface GridColType {
   field: string;
@@ -33,6 +39,7 @@ interface GridColType {
   sortable: boolean;
   minWidth?: number;
   renderCell?: (params: GridRenderCellParams) => JSX.Element;
+  valueFormatter?: (params: GridValueFormatterParams) => string;
 }
 
 /**
@@ -41,60 +48,62 @@ interface GridColType {
  */
 const columns: GridColDef<GridColType>[] = [
   {
-    field: 'id',
-    headerName: 'ID',
-    minWidth: 350,
-    flex: 1,
-    disableColumnMenu: true,
-    sortable: false,
-  },
-  {
     field: 'documentNumber',
-    headerName: 'Document Number',
-    minWidth: 200,
+    headerName: 'Document ID',
+    minWidth: 150,
     flex: 1,
     disableColumnMenu: true,
     sortable: false,
   },
   {
-    field: 'consignmentReferenceNumber',
-    headerName: 'Consignment Number',
-    minWidth: 240,
+    field: 'importerName',
+    headerName: 'Business Name',
+    minWidth: 200,
     flex: 1,
     disableColumnMenu: true,
     sortable: false,
   },
   {
     field: 'exporterOrManufacturerAbn',
-    headerName: 'Exporter Or Manufacturer Abn',
-    minWidth: 280,
+    headerName: 'ABN',
+    minWidth: 210,
+    flex: 1,
+    disableColumnMenu: true,
+    sortable: false,
+  },
+  {
+    field: 'freeTradeAgreement',
+    headerName: 'Document Type',
+    minWidth: 180,
     flex: 1,
     disableColumnMenu: true,
     sortable: false,
   },
   {
     field: 'issueDate',
-    headerName: 'Date Issued',
-    minWidth: 270,
+    headerName: 'Issue Date',
+    minWidth: 260,
     flex: 1,
     disableColumnMenu: true,
     sortable: true,
   },
   {
-    field: 'importerName',
-    headerName: 'Importer Name',
-    minWidth: 240,
+    field: 'createdBy',
+    headerName: 'Issuer ID',
+    minWidth: 150,
     flex: 1,
     disableColumnMenu: true,
     sortable: false,
   },
   {
-    field: 'importingJurisdiction',
-    headerName: 'Importing Jurisdiction',
-    minWidth: 200,
+    field: 'isRevoked',
+    headerName: 'Document Status',
+    minWidth: 170,
     flex: 1,
     disableColumnMenu: true,
     sortable: false,
+    valueFormatter: (params: GridValueFormatterParams<boolean>) =>
+      params.value ? 'Revoked' : 'Current',
   },
   {
     field: 'moreInfo',
