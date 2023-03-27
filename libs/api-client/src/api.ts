@@ -12,34 +12,25 @@
  * Do not edit the class manually.
  */
 
-import { Configuration } from './configuration';
 import globalAxios, {
-  AxiosPromise,
   AxiosInstance,
+  AxiosPromise,
   AxiosRequestConfig,
 } from 'axios';
+import { Configuration } from './configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import {
-  DUMMY_BASE_URL,
   assertParamExists,
-  setApiKeyToObject,
-  setBasicAuthToObject,
-  setBearerAuthToObject,
-  setOAuthToObject,
-  setSearchParams,
-  serializeDataIfNeeded,
-  toPathString,
   createRequestFunction,
+  DUMMY_BASE_URL,
+  serializeDataIfNeeded,
+  setApiKeyToObject,
+  setSearchParams,
+  toPathString,
 } from './common';
 // @ts-ignore
-import {
-  BASE_PATH,
-  COLLECTION_FORMATS,
-  RequestArgs,
-  BaseAPI,
-  RequiredError,
-} from './base';
+import { BaseAPI, BASE_PATH, RequestArgs } from './base';
 
 /**
  * Create keypair request payload containing
@@ -198,12 +189,6 @@ export interface CredentialsResponseItem {
   id?: string;
   /**
    *
-   * @type {boolean}
-   * @memberof CredentialsResponseItem
-   */
-  isRevoked?: boolean;
-  /**
-   *
    * @type {string}
    * @memberof CredentialsResponseItem
    */
@@ -283,17 +268,23 @@ export interface DocumentSchemasResponse {
  */
 export interface DocumentSchemasResponseItem {
   /**
+   * document schema id
+   * @type {string}
+   * @memberof DocumentSchemasResponseItem
+   */
+  schemaId: string;
+  /**
    * document schema name
    * @type {string}
    * @memberof DocumentSchemasResponseItem
    */
-  name?: string;
+  name: string;
   /**
    * document schema type
    * @type {string}
    * @memberof DocumentSchemasResponseItem
    */
-  type?: DocumentSchemasResponseItemTypeEnum;
+  type: DocumentSchemasResponseItemTypeEnum;
 }
 
 export const DocumentSchemasResponseItemTypeEnum = {

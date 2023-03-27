@@ -3,7 +3,7 @@
   "info": {
     "version": "0.1",
     "title": "DVP Admin API",
-    "description": "Admin API for the Digital Verification Platform"
+    "description": "Admin API for Digital Verification Platform"
   },
   "servers": [
     {
@@ -16,7 +16,60 @@
       }
     }
   ],
-  "paths": {},
+  "paths": {
+    "/document-schemas/{schemaId}": {
+      "put": {
+        "summary": "update document schema",
+        "description": "update document schema",
+        "tags": ["DocumentSchema"],
+        "operationId": "updateDocumentSchema",
+        "security": [
+          {
+            "Authorizer": []
+          }
+        ],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "schemaId",
+            "required": true,
+            "schema": {
+              "type": "string"
+            },
+            "description": "Document schema id"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DocumentSchemaUpdateRequest"
+              }
+            }
+          },
+          "description": "Parameters updating the document schema"
+        },
+        "responses": {
+          "200": {
+            "description": "document schema response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DocumentSchemaUpdateResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/BadRequestErrorResponse"
+          },
+          "500": {
+            "$ref": "#/components/responses/InternalServerErrorResponse"
+          }
+        }
+      }
+    }
+  },
   "components": {
     "securitySchemes": {
       "Authorizer": {
@@ -112,18 +165,73 @@
           }
         ]
       },
-      "Pagination": {
+      "DocumentSchemaUpdateRequest": {
+        "description": "Update document schema request payload",
         "type": "object",
-        "description": "Pagination data object",
         "properties": {
-          "nextCursor": {
-            "type": "string"
+          "disabled": {
+            "type": "boolean",
+            "description": "whether the document schema is disabled on the platform"
           },
-          "prevCursor": {
-            "type": "string"
+          "enableForAll": {
+            "type": "boolean",
+            "description": "Enable for all the ABNs, except for the ones in disableForABNs"
           },
-          "limit": {
-            "type": "number"
+          "enableForABNs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Enable for the ABNs listed, ignored if enableForAll is set"
+          },
+          "disableForABNs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Disable for the ABNs listed, takes the precedence over enableForAll"
+          }
+        }
+      },
+      "DocumentSchemaUpdateResponse": {
+        "type": "object",
+        "description": "Document schema",
+        "required": ["schemaId", "name", "type"],
+        "properties": {
+          "schemaId": {
+            "type": "string",
+            "description": "document schema id"
+          },
+          "name": {
+            "type": "string",
+            "description": "document schema name"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["full", "partial"],
+            "description": "document schema type"
+          },
+          "disabled": {
+            "type": "boolean",
+            "description": "whether the document schema is disabled on the platform"
+          },
+          "enableForAll": {
+            "type": "boolean",
+            "description": "Enable for all the ABNs, except for the ones in disableForABNs"
+          },
+          "enableForABNs": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "description": "Enable for the ABNs listed, ignored if enableForAll is set"
+          },
+          "disableForABNs": {
+            "type": "string",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Disable for the ABNs listed, takes the precedence over enableForAll"
           }
         }
       }

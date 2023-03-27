@@ -41,7 +41,6 @@ export const DynamoSchema = {
       isRevoked: { type: Boolean, default: false },
       revocationIndex: { type: Number },
       revocationS3Path: { type: String },
-      createdBy: { type: String, required: true },
       documentHash: { type: String },
 
       // metadata
@@ -60,6 +59,8 @@ export const DynamoSchema = {
       gs1sk: { type: String, value: 'Document#${id}' },
       gs2pk: { type: String, value: 'DocumentHash' },
       gs2sk: { type: String, value: 'DocumentHash#${documentHash}' },
+
+      createdBy: { type: String, required: true },
     },
 
     KeyPair: {
@@ -93,10 +94,27 @@ export const DynamoSchema = {
       pk: { type: String, value: 'DocumentSchema' },
       sk: { type: String, value: 'DocumentSchema#${name}#${type}' },
 
+      schemaId: { type: String, generate: 'uuid' },
+
       name: { type: String, required: true },
       type: { type: String, required: true, enum: ['full', 'partial'] },
       schemaPath: { type: String },
       uiSchemaPath: { type: String },
+
+      // Disable the document schema on the platform
+      disabled: { type: Boolean, default: false },
+      // Enable for all the ABNs, except for the ones in disableForABNs
+      enableForAll: { type: Boolean },
+      // Enable for the ABNs listed, ignored if enableForAll is set
+      enableForABNs: { type: Array },
+      // Disable for the ABNs listed, takes the precedence over enableForAll
+      disableForABNs: { type: Array },
+
+      // global secondary index
+      gs1pk: { type: String, value: 'DocumentSchema' },
+      gs1sk: { type: String, value: 'DocumentSchema#${schemaId}' },
+
+      updatedBy: { type: String },
     },
   } as const,
   params: {

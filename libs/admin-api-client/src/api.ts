@@ -22,6 +22,94 @@ import { DUMMY_BASE_URL, assertParamExists, setApiKeyToObject, setBasicAuthToObj
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from './base';
 
 /**
+ * Update document schema request payload
+ * @export
+ * @interface DocumentSchemaUpdateRequest
+ */
+export interface DocumentSchemaUpdateRequest {
+    /**
+     * whether the document schema is disabled on the platform
+     * @type {boolean}
+     * @memberof DocumentSchemaUpdateRequest
+     */
+    'disabled'?: boolean;
+    /**
+     * Enable for all the ABNs, except for the ones in disableForABNs
+     * @type {boolean}
+     * @memberof DocumentSchemaUpdateRequest
+     */
+    'enableForAll'?: boolean;
+    /**
+     * Enable for the ABNs listed, ignored if enableForAll is set
+     * @type {Array<string>}
+     * @memberof DocumentSchemaUpdateRequest
+     */
+    'enableForABNs'?: Array<string>;
+    /**
+     * Disable for the ABNs listed, takes the precedence over enableForAll
+     * @type {Array<string>}
+     * @memberof DocumentSchemaUpdateRequest
+     */
+    'disableForABNs'?: Array<string>;
+}
+/**
+ * Document schema
+ * @export
+ * @interface DocumentSchemaUpdateResponse
+ */
+export interface DocumentSchemaUpdateResponse {
+    /**
+     * document schema id
+     * @type {string}
+     * @memberof DocumentSchemaUpdateResponse
+     */
+    'schemaId': string;
+    /**
+     * document schema name
+     * @type {string}
+     * @memberof DocumentSchemaUpdateResponse
+     */
+    'name': string;
+    /**
+     * document schema type
+     * @type {string}
+     * @memberof DocumentSchemaUpdateResponse
+     */
+    'type': DocumentSchemaUpdateResponseTypeEnum;
+    /**
+     * whether the document schema is disabled on the platform
+     * @type {boolean}
+     * @memberof DocumentSchemaUpdateResponse
+     */
+    'disabled'?: boolean;
+    /**
+     * Enable for all the ABNs, except for the ones in disableForABNs
+     * @type {boolean}
+     * @memberof DocumentSchemaUpdateResponse
+     */
+    'enableForAll'?: boolean;
+    /**
+     * Enable for the ABNs listed, ignored if enableForAll is set
+     * @type {Array<string>}
+     * @memberof DocumentSchemaUpdateResponse
+     */
+    'enableForABNs'?: Array<string>;
+    /**
+     * Disable for the ABNs listed, takes the precedence over enableForAll
+     * @type {Array<number>}
+     * @memberof DocumentSchemaUpdateResponse
+     */
+    'disableForABNs'?: Array<number>;
+}
+
+export const DocumentSchemaUpdateResponseTypeEnum = {
+    Full: 'full',
+    Partial: 'partial'
+} as const;
+
+export type DocumentSchemaUpdateResponseTypeEnum = typeof DocumentSchemaUpdateResponseTypeEnum[keyof typeof DocumentSchemaUpdateResponseTypeEnum];
+
+/**
  * An object containing references to the source of an error.
  * @export
  * @interface ErrorSource
@@ -124,29 +212,138 @@ export interface ModelError {
      */
     'helpText'?: string;
 }
+
 /**
- * Pagination data object
+ * DocumentSchemaApi - axios parameter creator
  * @export
- * @interface Pagination
  */
-export interface Pagination {
+export const DocumentSchemaApiAxiosParamCreator = function (configuration?: Configuration) {
+    return {
+        /**
+         * update document schema
+         * @summary update document schema
+         * @param {string} schemaId Document schema id
+         * @param {DocumentSchemaUpdateRequest} [documentSchemaUpdateRequest] Parameters updating the document schema
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateDocumentSchema: async (schemaId: string, documentSchemaUpdateRequest?: DocumentSchemaUpdateRequest, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'schemaId' is not null or undefined
+            assertParamExists('updateDocumentSchema', 'schemaId', schemaId)
+            const localVarPath = `/document-schemas/{schemaId}`
+                .replace(`{${"schemaId"}}`, encodeURIComponent(String(schemaId)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'PUT', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorizer required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+
+    
+            localVarHeaderParameter['Content-Type'] = 'application/json';
+
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+            localVarRequestOptions.data = serializeDataIfNeeded(documentSchemaUpdateRequest, localVarRequestOptions, configuration)
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
+    }
+};
+
+/**
+ * DocumentSchemaApi - functional programming interface
+ * @export
+ */
+export const DocumentSchemaApiFp = function(configuration?: Configuration) {
+    const localVarAxiosParamCreator = DocumentSchemaApiAxiosParamCreator(configuration)
+    return {
+        /**
+         * update document schema
+         * @summary update document schema
+         * @param {string} schemaId Document schema id
+         * @param {DocumentSchemaUpdateRequest} [documentSchemaUpdateRequest] Parameters updating the document schema
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async updateDocumentSchema(schemaId: string, documentSchemaUpdateRequest?: DocumentSchemaUpdateRequest, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DocumentSchemaUpdateResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.updateDocumentSchema(schemaId, documentSchemaUpdateRequest, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+    }
+};
+
+/**
+ * DocumentSchemaApi - factory interface
+ * @export
+ */
+export const DocumentSchemaApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
+    const localVarFp = DocumentSchemaApiFp(configuration)
+    return {
+        /**
+         * update document schema
+         * @summary update document schema
+         * @param {string} schemaId Document schema id
+         * @param {DocumentSchemaUpdateRequest} [documentSchemaUpdateRequest] Parameters updating the document schema
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        updateDocumentSchema(schemaId: string, documentSchemaUpdateRequest?: DocumentSchemaUpdateRequest, options?: any): AxiosPromise<DocumentSchemaUpdateResponse> {
+            return localVarFp.updateDocumentSchema(schemaId, documentSchemaUpdateRequest, options).then((request) => request(axios, basePath));
+        },
+    };
+};
+
+/**
+ * DocumentSchemaApi - interface
+ * @export
+ * @interface DocumentSchemaApi
+ */
+export interface DocumentSchemaApiInterface {
     /**
-     * 
-     * @type {string}
-     * @memberof Pagination
+     * update document schema
+     * @summary update document schema
+     * @param {string} schemaId Document schema id
+     * @param {DocumentSchemaUpdateRequest} [documentSchemaUpdateRequest] Parameters updating the document schema
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DocumentSchemaApiInterface
      */
-    'nextCursor'?: string;
-    /**
-     * 
-     * @type {string}
-     * @memberof Pagination
-     */
-    'prevCursor'?: string;
-    /**
-     * 
-     * @type {number}
-     * @memberof Pagination
-     */
-    'limit'?: number;
+    updateDocumentSchema(schemaId: string, documentSchemaUpdateRequest?: DocumentSchemaUpdateRequest, options?: AxiosRequestConfig): AxiosPromise<DocumentSchemaUpdateResponse>;
+
 }
+
+/**
+ * DocumentSchemaApi - object-oriented interface
+ * @export
+ * @class DocumentSchemaApi
+ * @extends {BaseAPI}
+ */
+export class DocumentSchemaApi extends BaseAPI implements DocumentSchemaApiInterface {
+    /**
+     * update document schema
+     * @summary update document schema
+     * @param {string} schemaId Document schema id
+     * @param {DocumentSchemaUpdateRequest} [documentSchemaUpdateRequest] Parameters updating the document schema
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DocumentSchemaApi
+     */
+    public updateDocumentSchema(schemaId: string, documentSchemaUpdateRequest?: DocumentSchemaUpdateRequest, options?: AxiosRequestConfig) {
+        return DocumentSchemaApiFp(this.configuration).updateDocumentSchema(schemaId, documentSchemaUpdateRequest, options).then((request) => request(this.axios, this.basePath));
+    }
+}
+
 

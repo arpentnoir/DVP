@@ -65,11 +65,11 @@
     "serve": {
       "executor": "@nrwl/js:node",
       "options": {
-        "buildTarget": "api:local_build"
+        "buildTarget": "admin-api:local_build"
       },
       "configurations": {
         "production": {
-          "buildTarget": "api:local_build:production"
+          "buildTarget": "admin-api:local_build:production"
         }
       }
     },

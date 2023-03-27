@@ -92,9 +92,10 @@ export class DocumentSchemaService {
       );
 
       const results: DocumentSchemasResponse['results'] = schemas?.map(
-        ({ name, type }) => ({
+        ({ name, type, schemaId }) => ({
           name,
           type,
+          schemaId,
         })
       );
       return {

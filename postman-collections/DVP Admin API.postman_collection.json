@@ -1,0 +1,236 @@
+{
+  "info": {
+    "_postman_id": "a82ed437-30ee-404e-8cad-98e4e0fe067f",
+    "name": "DVP Admin API",
+    "description": "Admin API for Digital Verification Platform",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "1430871"
+  },
+  "item": [
+    {
+      "name": "update document schema",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"disabled\": false,\n  \"enableForAll\": false,\n  \"enableForABNs\": [],\n  \"disableForABNs\": []\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{adminApiBaseUrl}}/document-schemas/:schemaId",
+          "host": ["{{adminApiBaseUrl}}"],
+          "path": ["document-schemas", ":schemaId"],
+          "variable": [
+            {
+              "key": "schemaId",
+              "value": "ex incididunt",
+              "description": "(Required) Document schema id"
+            }
+          ]
+        },
+        "description": "update document schema"
+      },
+      "response": [
+        {
+          "name": "document schema response",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "description": "Added as a part of security scheme: apikey",
+                "key": "Authorization",
+                "value": "<API Key>"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"disabled\": false,\n  \"enableForAll\": true,\n  \"enableForABNs\": [\n    \"culpa\",\n    \"deserunt dolore occaecat in est\"\n  ],\n  \"disableForABNs\": [\n    \"id non ex ea\",\n    \"labore adipisicing voluptate consectetur\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/document-schemas/:schemaId",
+              "host": ["{{baseUrl}}"],
+              "path": ["document-schemas", ":schemaId"],
+              "variable": [
+                {
+                  "key": "schemaId",
+                  "value": "ex incididunt",
+                  "description": "(Required) Document schema id"
+                },
+                {
+                  "key": "basePath",
+                  "value": "{{basePath}}"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"schemaId\": \"eu proident culpa consequat\",\n  \"name\": \"ullamco dolor elit adipisicing minim\",\n  \"type\": \"partial\",\n  \"disabled\": true,\n  \"enableForAll\": true,\n  \"enableForABNs\": [\n    \"esse \",\n    \"sunt ipsum\"\n  ],\n  \"disableForABNs\": \"est minim labore Duis\"\n}"
+        },
+        {
+          "name": "The request could not be understood by the server due to malformed syntax.\n\nThe client **SHOULD NOT** repeat the request without modifications.",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "description": "Added as a part of security scheme: apikey",
+                "key": "Authorization",
+                "value": "<API Key>"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"disabled\": false,\n  \"enableForAll\": true,\n  \"enableForABNs\": [\n    \"culpa\",\n    \"deserunt dolore occaecat in est\"\n  ],\n  \"disableForABNs\": [\n    \"id non ex ea\",\n    \"labore adipisicing voluptate consectetur\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/document-schemas/:schemaId",
+              "host": ["{{baseUrl}}"],
+              "path": ["document-schemas", ":schemaId"],
+              "variable": [
+                {
+                  "key": "schemaId",
+                  "value": "ex incididunt",
+                  "description": "(Required) Document schema id"
+                },
+                {
+                  "key": "basePath",
+                  "value": "{{basePath}}"
+                }
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"errors\": [\n    {\n      \"id\": \"22af5d37-531c-4515-8f91-963249d3744a\",\n      \"code\": \"DVPAPI-003\",\n      \"detail\": \"Missing field in schema POSTed to resource `/storage/documents/6d343ddd-ef1a-4ec3-8bcd-b833295c239a`\",\n      \"source\": {\n        \"location\": \"REQUEST\",\n        \"parameter\": \"/decryptionKey\"\n      }\n    }\n  ]\n}"
+        },
+        {
+          "name": "Server Error - Internal Server Error. \n\nA generic error message, given when an unexpected condition was encountered while the server\nwas processing the request.",
+          "originalRequest": {
+            "method": "PUT",
+            "header": [
+              {
+                "description": "Added as a part of security scheme: apikey",
+                "key": "Authorization",
+                "value": "<API Key>"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"disabled\": false,\n  \"enableForAll\": true,\n  \"enableForABNs\": [\n    \"culpa\",\n    \"deserunt dolore occaecat in est\"\n  ],\n  \"disableForABNs\": [\n    \"id non ex ea\",\n    \"labore adipisicing voluptate consectetur\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{baseUrl}}/document-schemas/:schemaId",
+              "host": ["{{baseUrl}}"],
+              "path": ["document-schemas", ":schemaId"],
+              "variable": [
+                {
+                  "key": "schemaId",
+                  "value": "ex incididunt",
+                  "description": "(Required) Document schema id"
+                },
+                {
+                  "key": "basePath",
+                  "value": "{{basePath}}"
+                }
+              ]
+            }
+          },
+          "status": "Internal Server Error",
+          "code": 500,
+          "_postman_previewlanguage": "json",
+          "header": [
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n  \"errors\": [\n    {\n      \"id\": \"34910168-ff90-410f-a684-8eb89b876ab6\",\n      \"code\": \"DVPAPI-001\",\n      \"detail\": \"System Unavailable.  Try again later.\"\n    }\n  ]\n}"
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "eyJraWQiOiJvMDlTZ1VVbnFHdEZVMmRPQ3VGb2h5S2xFYkVFY1BldzhvbHMwWTg2R1U0PSIsImFsZyI6IlJTMjU2In0.eyJvcmlnaW5fanRpIjoiMjVlZmZkY2EtNzRmOS00ZmEzLTk5ZTEtYzA2ZmRhMWZhMDMzIiwic3ViIjoiZmM2M2U2ZGUtNGNjNS00MjFkLWIyN2EtYjk0NGU5M2U2M2I3IiwiYXVkIjoiNDNqZmE1dDdlbDJvZDU2ZTQ4MzZkNmcxMzMiLCJldmVudF9pZCI6IjVjZjg0NjNjLTM4MWItNDZmYi1hYjIzLWI0MDQxYWE1ODE5ZiIsInRva2VuX3VzZSI6ImlkIiwiYXV0aF90aW1lIjoxNjc4NDIxMzEwLCJpc3MiOiJodHRwczpcL1wvY29nbml0by1pZHAuYXAtc291dGhlYXN0LTIuYW1hem9uYXdzLmNvbVwvYXAtc291dGhlYXN0LTJfZE5yZ3ZsUUE5IiwiY29nbml0bzp1c2VybmFtZSI6ImRldl9oYV9kdnAiLCJleHAiOjE2Nzg0MjQ5MTAsImlhdCI6MTY3ODQyMTMxMCwianRpIjoiMzk5NTE2ZmUtNzMzOC00NDRlLWE3MjItOTQzYmQ4MjNlMDM1In0.znhL6tjZqqHTbLun-umLnm0uPyHB4AHvnQJpwh5E5LP1VwViM0roCGv1gT6rNe4ombdA5mRV2iyrxHcgayelSe_7x6agdQSoLI6Ri7w4n5jAr9NaQdvQP7XPk5On0I2eQzUwRLVcDLQo80qQBLAxSEK1b5SJUe25kRSDFB9xr43A5tGPH8UwZFfx44uKVv50laYrdcEt4Y4CA368uR49gsRc5M5Loi5D4aH2awLoPHGB76CxM2woNdIRkE7WjJgMFybrxrjsoewS47K3EeMYH-XFrQuiy2mvx0rzQ990-auQxFuI1VcpM2vacGb5RbJRBzgI3IqE-cG29A_9GrZ8dQ",
+        "type": "string"
+      }
+    ]
+  },
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [""]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "basePath",
+      "value": "v1",
+      "type": "any"
+    },
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:3334/{{basePath}}",
+      "type": "string"
+    }
+  ]
+}

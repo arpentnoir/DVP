@@ -12,7 +12,7 @@ import { lambdaRole } from './roles/lambdaRole';
 
 const stack = pulumi.getStack();
 
-const apiDir = '../../artifacts/api-build'; // directory for content files
+const apiDir = '../../artifacts/admin-api-build'; // directory for content files
 
 ////////////////////////////////////////////////////////////////////////////////
 // Log group for api
@@ -256,8 +256,8 @@ const apiDomainName = new aws.apigatewayv2.DomainName(
   {
     domainNameConfiguration: {
       certificateArn: sslNewCertificateAdmin.arn,
-      endpointType: "REGIONAL",
-      securityPolicy: "TLS_1_2",
+      endpointType: 'REGIONAL',
+      securityPolicy: 'TLS_1_2',
     },
     domainName: config.dvpAdminApiDomain,
   },
@@ -269,11 +269,17 @@ new aws.route53.Record(`${stack}-admin-api-dns`, {
   zoneId: hostedZoneAdminId,
   type: 'A',
   name: config.dvpAdminApiDomain,
-  aliases: [{
-    name: apiDomainName.domainNameConfiguration.apply(domainNameConfiguration => domainNameConfiguration.targetDomainName),
-    zoneId: apiDomainName.domainNameConfiguration.apply(domainNameConfiguration => domainNameConfiguration.hostedZoneId),
-    evaluateTargetHealth: false,
-  }],
+  aliases: [
+    {
+      name: apiDomainName.domainNameConfiguration.apply(
+        (domainNameConfiguration) => domainNameConfiguration.targetDomainName
+      ),
+      zoneId: apiDomainName.domainNameConfiguration.apply(
+        (domainNameConfiguration) => domainNameConfiguration.hostedZoneId
+      ),
+      evaluateTargetHealth: false,
+    },
+  ],
 });
 
 // Map stage name to custom domain

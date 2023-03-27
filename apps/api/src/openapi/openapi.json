@@ -1064,7 +1064,12 @@
       "DocumentSchemasResponseItem": {
         "type": "object",
         "description": "Document schema",
+        "required": ["schemaId", "name", "type"],
         "properties": {
+          "schemaId": {
+            "type": "string",
+            "description": "document schema id"
+          },
           "name": {
             "type": "string",
             "description": "document schema name"
