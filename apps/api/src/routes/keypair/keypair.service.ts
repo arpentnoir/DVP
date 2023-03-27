@@ -123,13 +123,14 @@ export class KeyPairService {
             : {
                 where: '${deleted} = {false}',
               }),
-          fields: ['keyId', 'name'],
+          fields: ['keyId', 'name', 'created'],
         }
       );
 
       const results = keyPairs?.map((keyPair) => ({
         keyId: keyPair.keyId,
         name: keyPair.name,
+        issueDate: keyPair.created,
       }));
       return { results };
     } catch (err) {
@@ -158,7 +159,7 @@ export class KeyPairService {
         },
         {
           where: '${deleted} = {false}',
-          fields: ['keyId', 'name', 'publicKey', 'disabled'],
+          fields: ['keyId', 'name', 'publicKey', 'disabled', 'created'],
         }
       );
       if (!keyPair) {
@@ -170,6 +171,7 @@ export class KeyPairService {
         name: keyPair.name,
         publickey: keyPair.publicKey,
         disabled: keyPair.disabled,
+        issueDate: keyPair.created,
       };
     } catch (err) {
       this.logger.error(

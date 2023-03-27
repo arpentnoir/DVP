@@ -745,6 +745,10 @@
           "name": {
             "type": "string",
             "description": "key pair name"
+          },
+          "issueDate": {
+            "type": "string",
+            "description": "key pair issued date"
           }
         }
       },

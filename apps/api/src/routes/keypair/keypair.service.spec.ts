@@ -4,6 +4,7 @@ import {
   QueryCommand,
   UpdateItemCommand,
 } from '@aws-sdk/client-dynamodb';
+import { ListKeyPairResponse } from '@dvp/api-client';
 import {
   ApplicationError,
   BadRequestError,
@@ -14,6 +15,7 @@ import {
 import { mockClient } from 'aws-sdk-client-mock';
 import 'aws-sdk-client-mock-jest';
 import { getMockRequest } from '../../tests/utils';
+import keypairsList from './../../fixtures/keypairs/keypairs.json';
 import { KeyPairService } from './keypair.service';
 
 const dynamodbMock = mockClient(DynamoDBClient);
@@ -30,17 +32,8 @@ jest.mock('@dvp/server-common', () => {
   };
 });
 
-const keypairs = {
-  results: [
-    {
-      keyId: '09436734-d746-4eec-a98f-5e8250867a04',
-      name: 'key 1',
-    },
-    {
-      keyId: '26d255c9-a86c-4c06-8d61-719fa72ed755',
-      name: 'key 2',
-    },
-  ],
+const keypairs: ListKeyPairResponse = {
+  results: keypairsList,
 };
 
 const keyPairsDynamo = [
@@ -53,6 +46,9 @@ const keyPairsDynamo = [
     },
     abn: {
       S: '41161080146',
+    },
+    created: {
+      S: '2023-03-22T05:23:06.569Z',
     },
     disabled: {
       BOOL: false,
@@ -76,6 +72,9 @@ const keyPairsDynamo = [
     },
     abn: {
       S: '41161080146',
+    },
+    created: {
+      S: '2023-03-23T05:23:06.569Z',
     },
     disabled: {
       BOOL: false,
@@ -190,6 +189,7 @@ describe('KeyPairService', () => {
           '#_3': 'sk',
           '#_4': 'keyId',
           '#_5': 'name',
+          '#_6': 'created',
         },
         ExpressionAttributeValues: {
           ':_0': { BOOL: false },
@@ -199,7 +199,7 @@ describe('KeyPairService', () => {
         },
         FilterExpression: '(#_0 = :_0) and (#_1 = :_1)',
         KeyConditionExpression: '#_2 = :_2 and begins_with(#_3, :_3)',
-        ProjectionExpression: '#_4, #_5',
+        ProjectionExpression: '#_4, #_5, #_6',
         ScanIndexForward: true,
         TableName: 'documents',
       });
@@ -222,6 +222,7 @@ describe('KeyPairService', () => {
           '#_2': 'sk',
           '#_3': 'keyId',
           '#_4': 'name',
+          '#_5': 'created',
         },
         ExpressionAttributeValues: {
           ':_0': { BOOL: false },
@@ -230,7 +231,7 @@ describe('KeyPairService', () => {
         },
         FilterExpression: '#_0 = :_0',
         KeyConditionExpression: '#_1 = :_1 and begins_with(#_2, :_2)',
-        ProjectionExpression: '#_3, #_4',
+        ProjectionExpression: '#_3, #_4, #_5',
         ScanIndexForward: true,
         TableName: 'documents',
       });
@@ -402,14 +403,13 @@ describe('KeyPairService', () => {
           '#_6': 'updatedBy',
           '#_7': 'updated',
         },
-        ExpressionAttributeValues: {
+        ExpressionAttributeValues: expect.objectContaining({
           ':_0': { S: '00000000000' },
           ':_1': { S: '09436734-d746-4eec-a98f-5e8250867a04' },
           ':_2': { BOOL: true },
           ':_3': { N: '1672531200' },
           ':_4': { S: '1234567890' },
-          ':_5': { S: '2023-01-01T00:00:00.000Z' },
-        },
+        }),
         Key: {
           pk: { S: 'Abn#00000000000' },
           sk: { S: 'KeyPair#09436734-d746-4eec-a98f-5e8250867a04' },

@@ -80,6 +80,9 @@ export const DynamoSchema = {
 
       createdBy: { type: String },
       updatedBy: { type: String },
+
+      created: { type: String },
+      updated: { type: String },
     },
 
     RevocationCounter: {

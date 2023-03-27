@@ -1,4 +1,5 @@
 import { EncryptCommand, KMSClient } from '@aws-sdk/client-kms';
+import { ListKeyPairResponse } from '@dvp/api-client';
 import { getEpochTimeStamp } from '@dvp/server-common';
 import { mockClient } from 'aws-sdk-client-mock';
 import 'aws-sdk-client-mock-jest';
@@ -6,6 +7,7 @@ import request from 'supertest';
 import { app } from '../../app';
 import { models } from '../../db';
 import { authTokenWithSubAndAbn } from '../utils';
+import keypairsList from './../../fixtures/keypairs/keypairs.json';
 
 jest.mock('../../db', () => {
   return {
@@ -22,17 +24,8 @@ jest.mock('../../db', () => {
 });
 const kmsMock = mockClient(KMSClient);
 
-const keypairs = {
-  results: [
-    {
-      keyId: '26d255c9-a86c-4c06-8d61-719fa72ed751',
-      name: 'key 1',
-    },
-    {
-      keyId: '26d255c9-a86c-4c06-8d61-719fa72ed755',
-      name: 'key 2',
-    },
-  ],
+const keypairs: ListKeyPairResponse = {
+  results: keypairsList,
 };
 
 describe('keypairs api', () => {
@@ -80,8 +73,9 @@ describe('keypairs api', () => {
   describe('[GET] /v1/keypairs', () => {
     it('should list keypairs', async () => {
       const debRes = keypairs.results;
-      (models.KeyPair.find as jest.Mock).mockResolvedValueOnce(debRes);
-
+      (models.KeyPair.find as jest.Mock).mockResolvedValueOnce(
+        debRes?.map((res) => ({ ...res, created: res.issueDate }))
+      );
       await request(app)
         .get(endpoint)
         .set({ Authorization: authTokenWithSubAndAbn })
@@ -97,7 +91,7 @@ describe('keypairs api', () => {
               sk: { begins: 'KeyPair#' },
             },
             {
-              fields: ['keyId', 'name'],
+              fields: ['keyId', 'name', 'created'],
               where: '(${deleted} = {false}) and (${disabled} = {false})',
             }
           );
@@ -106,8 +100,9 @@ describe('keypairs api', () => {
 
     it('should include disabled keypairs', async () => {
       const debRes = keypairs.results;
-      (models.KeyPair.find as jest.Mock).mockResolvedValueOnce(debRes);
-
+      (models.KeyPair.find as jest.Mock).mockResolvedValueOnce(
+        debRes?.map((res) => ({ ...res, created: res.issueDate }))
+      );
       await request(app)
         .get(endpoint)
         .set({ Authorization: authTokenWithSubAndAbn })
@@ -126,7 +121,7 @@ describe('keypairs api', () => {
               sk: { begins: 'KeyPair#' },
             },
             {
-              fields: ['keyId', 'name'],
+              fields: ['keyId', 'name', 'created'],
               where: '${deleted} = {false}',
             }
           );
@@ -137,7 +132,10 @@ describe('keypairs api', () => {
   describe('[GET] /v1/keypairs/:keyId', () => {
     it('should get keypair', async () => {
       const debRes = keypairs.results[0];
-      (models.KeyPair.get as jest.Mock).mockResolvedValueOnce(debRes);
+      (models.KeyPair.get as jest.Mock).mockResolvedValueOnce({
+        ...debRes,
+        created: debRes.issueDate,
+      });
       const keyId = keypairs.results[0].keyId;
       await request(app)
         .get(`${endpoint}/${keyId}`)
@@ -152,7 +150,7 @@ describe('keypairs api', () => {
               keyId,
             },
             {
-              fields: ['keyId', 'name', 'publicKey', 'disabled'],
+              fields: ['keyId', 'name', 'publicKey', 'disabled', 'created'],
               where: '${deleted} = {false}',
             }
           );
@@ -186,7 +184,7 @@ describe('keypairs api', () => {
               keyId,
             },
             {
-              fields: ['keyId', 'name', 'publicKey', 'disabled'],
+              fields: ['keyId', 'name', 'publicKey', 'disabled', 'created'],
               where: '${deleted} = {false}',
             }
           );

@@ -463,6 +463,12 @@ export interface GetKeyPairResponse {
    */
   name: string;
   /**
+   * key pair issued date
+   * @type {string}
+   * @memberof GetKeyPairResponse
+   */
+  issueDate?: string;
+  /**
    *
    * @type {string}
    * @memberof GetKeyPairResponse
@@ -653,6 +659,12 @@ export interface KeyPair {
    * @memberof KeyPair
    */
   name: string;
+  /**
+   * key pair issued date
+   * @type {string}
+   * @memberof KeyPair
+   */
+  issueDate?: string;
 }
 /**
  * A JSON-LD Linked Data proof.
