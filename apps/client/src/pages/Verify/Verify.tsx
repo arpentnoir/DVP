@@ -102,6 +102,13 @@ export const Verify = () => {
           errorMessage={uploadErrorMessage}
           key={errorKeyId.toString()}
           acceptMessage={ACCEPT_MESSAGE}
+          acceptRender={
+            <>
+              <Text variant="body1">JSON or PDF with QR Code</Text>
+              <Text variant="body1">(Max Size 3MB)</Text>
+              <Text variant="body1">Or Scan a QR Code</Text>
+            </>
+          }
         />
       </Stack>
     );
@@ -122,16 +129,8 @@ export const Verify = () => {
             Verify a document
           </Text>
           <Text>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-            turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus
-            nec fringilla accumsan, risus sem sollicitudin lacus, ut interdum
-            tellus elit sed risus. Maecenas eget condimentum velit, sit amet
-            feugiat lectus. Class aptent taciti sociosqu ad litora torquent per
-            conubia nostra, per inceptos himenaeos. Praesent auctor purus luctus
-            enim egestas, ac scelerisque ante pulvinar. Donec ut rhoncus ex.
-            Suspendisse ac rhoncus nisl, eu tempor urna. Curabitur vel bibendum
-            lorem. Morbi convallis convallis diam sit amet lacinia. Aliquam in
-            elementum tellus.
+            Use this page to verify a document. Drag and drop, Upload or Scan
+            the QR code. File must be either a JSON or PDF with a QR code.
           </Text>
         </Box>
         <Box

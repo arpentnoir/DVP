@@ -10,7 +10,7 @@ exports[`VCOptions should render correctly 1`] = `
         class="MuiTypography-root MuiTypography-h5 css-1sv2wdh-MuiTypography-root"
         tabindex="0"
       >
-        Verifiable Credential Options
+        Document Options
       </h5>
       <div
         class="MuiFormControl-root MuiFormControl-fullWidth css-1lof2qr-MuiFormControl-root"

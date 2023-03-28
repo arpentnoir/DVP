@@ -1,18 +1,21 @@
 /**
 * @module Documents
 * @description This module exports the Documents page component, which displays a
-  list of Verifiable Credentials and their details that were issued 
+  list of Verifiable Credentials and their details that were issued
   by the associated ABN of the user, along with options to search,
   sort, and navigate to the issue page.
 */
 import { CredentialsResponseItem } from '@dvp/api-client';
 import { DataTable, MoreInfo, Text } from '@dvp/vc-ui';
 import { Box } from '@mui/material';
+import { AmplifyUser } from '@aws-amplify/ui';
 import {
   GridColDef,
   GridRenderCellParams,
   GridValueFormatterParams,
 } from '@mui/x-data-grid';
+import { Auth } from 'aws-amplify';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useQueryApi } from '../../hooks/useQueryApi';
 import { BaseLayout } from '../../layouts';
@@ -136,6 +139,18 @@ export const errorMessage =
 */
 export const Documents = () => {
   const navigate = useNavigate();
+  const [userName, setUserName] = useState<string>();
+
+  useEffect(() => {
+    Auth.currentAuthenticatedUser()
+      .then((user: AmplifyUser) => {
+        if (user.username) setUserName(user.username);
+        else setUserName('Issuer');
+      })
+      .catch(() => {
+        setUserName('Issuer');
+      });
+  });
 
   const handleIssue = () => {
     navigate('/issue');
@@ -153,16 +168,8 @@ export const Documents = () => {
           Documents
         </Text>
         <Text>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eu
-          turpis molestie, dictum est a, mattis tellus. Sed dignissim, metus nec
-          fringilla accumsan, risus sem sollicitudin lacus, ut interdum tellus
-          elit sed risus. Maecenas eget condimentum velit, sit amet feugiat
-          lectus. Class aptent taciti sociosqu ad litora torquent per conubia
-          nostra, per inceptos himenaeos. Praesent auctor purus luctus enim
-          egestas, ac scelerisque ante pulvinar. Donec ut rhoncus ex.
-          Suspendisse ac rhoncus nisl, eu tempor urna. Curabitur vel bibendum
-          lorem. Morbi convallis convallis diam sit amet lacinia. Aliquam in
-          elementum tellus.
+          This page shows documents that have been issued by {userName}. To find
+          a particular document, use the search fields.
         </Text>
         <Text variant="h3" fontWeight="bold" paddingTop="40px">
           Documents issued

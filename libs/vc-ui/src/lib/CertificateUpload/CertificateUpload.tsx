@@ -22,6 +22,7 @@ interface ICertificateUpload {
   handleFiles: (files: FileList) => void;
   errorMessage?: string;
   acceptMessage?: string;
+  acceptRender?: React.ReactElement;
   style?: { mobile?: SxProps; desktop?: SxProps };
 }
 
@@ -29,6 +30,7 @@ export const CertificateUpload = ({
   handleFiles,
   errorMessage,
   acceptMessage,
+  acceptRender,
   style,
 }: ICertificateUpload) => {
   const [dragActive, setDragActive] = useState(false);
@@ -231,7 +233,7 @@ export const CertificateUpload = ({
                   variant="h6"
                   tabIndex={-1}
                 >
-                  Drop your document to verify
+                  Drag and drop your document to Verify
                 </Text>
                 <Box>
                   <Text
@@ -256,15 +258,23 @@ export const CertificateUpload = ({
                       ':hover': { cursor: 'pointer' },
                     }}
                   >
-                    Select a file
+                    Upload a Document
                   </Box>
                 </Box>
-
-                {acceptMessage && (
-                  <Text variant="body1" tabIndex={-1}>
-                    {acceptMessage}
-                  </Text>
-                )}
+                {/* Stack has some strange behavior around this */}
+                <>
+                  {acceptRender ? (
+                    acceptRender
+                  ) : (
+                    <>
+                      {acceptMessage && (
+                        <Text variant="body1" tabIndex={-1}>
+                          {acceptMessage}
+                        </Text>
+                      )}
+                    </>
+                  )}
+                </>
                 {errorMessage && (
                   <Alert
                     severity="error"

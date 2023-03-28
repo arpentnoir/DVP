@@ -73,8 +73,8 @@ describe('VCOptions', () => {
       fireEvent.mouseDown(getAllByRole('listbox')[1].children[0]);
       const listbox = within(getAllByRole('listbox')[0]);
 
-      expect(listbox.getByText('Partial Form')).toBeTruthy();
-      expect(listbox.getByText('Full Form')).toBeTruthy();
+      expect(listbox.getByText('Upload Document')).toBeTruthy();
+      expect(listbox.getByText('Create Full Document')).toBeTruthy();
     });
 
     it('should update the value of the listbox', () => {
@@ -84,13 +84,13 @@ describe('VCOptions', () => {
 
       fireEvent.mouseDown(getAllByRole('listbox')[1].children[0]);
       const listbox = within(getAllByRole('listbox')[0]);
-      fireEvent.click(listbox.getByText('Partial Form'));
+      fireEvent.click(listbox.getByText('Upload Document'));
 
       expect(getAllByRole('listbox')[1].querySelector('input')?.value).toBe(
         'partial'
       );
 
-      fireEvent.click(listbox.getByText('Full Form'));
+      fireEvent.click(listbox.getByText('Create Full Document'));
 
       expect(getAllByRole('listbox')[1].querySelector('input')?.value).toBe(
         'full'
@@ -162,7 +162,7 @@ describe('VCOptions', () => {
 
     fireEvent.mouseDown(getAllByRole('listbox')[1].children[0]);
     const formListBox = within(getAllByRole('listbox')[0]);
-    fireEvent.click(formListBox.getByText('Full Form'));
+    fireEvent.click(formListBox.getByText('Create Full Document'));
 
     fireEvent.mouseDown(getAllByRole('listbox')[2].children[0]);
     const credentialListBox = within(getAllByRole('listbox')[0]);

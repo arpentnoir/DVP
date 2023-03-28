@@ -1,6 +1,8 @@
 import { Card, Text } from '@dvp/vc-ui';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 import { Box, ButtonBase, Grid, Stack, useTheme } from '@mui/material';
+import { Auth, Hub } from 'aws-amplify';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 import { BaseLayout } from '../../layouts';
@@ -36,6 +38,35 @@ const actions = [
 export const Home = () => {
   const theme = useTheme();
   const navigate = useNavigate();
+  const [authed, setIsAuthed] = useState(false);
+
+  useEffect(() => {
+    //TODO: move to a context provider
+    const authChangeListener = Hub.listen(
+      'auth',
+      (data: { payload: { event: any } }) => {
+        switch (data.payload.event) {
+          case 'signIn':
+            setIsAuthed(true);
+            break;
+          case 'signOut':
+            setIsAuthed(false);
+            break;
+        }
+      }
+    );
+
+    //check auth status on load
+    Auth.currentAuthenticatedUser()
+      .then((user) => {
+        if (user) setIsAuthed(true);
+      })
+      .catch(() => setIsAuthed(false));
+
+    return () => {
+      authChangeListener();
+    };
+  });
 
   return (
     <BaseLayout
@@ -45,7 +76,7 @@ export const Home = () => {
         paddingY: 0,
         backgroundColor: theme.palette.common.backgroundBlue,
         display: 'flex',
-        justifyContent: 'center',
+        justifyContent: 'start',
         flexDirection: 'column',
         maxWidth: '100%',
       }}
@@ -78,7 +109,8 @@ export const Home = () => {
                   </Text>
                 </Box>
                 <Text color="white" paddingTop="12px">
-                  Lorem ipsum dolar sit amet consectetur
+                  Welcome to the Digital Verification Platform.
+                  {!authed && ' Login to Issue a Document.'}
                 </Text>
                 <Stack padding="8px 10px 0 0">
                   <ButtonBase onClick={() => navigate(ROUTES.VERIFY)}>
@@ -168,7 +200,7 @@ export const Home = () => {
           justifyContent: 'center',
         }}
       >
-        <Grid
+        {/*<Grid
           container
           maxWidth={'1140px'}
           padding={{
@@ -203,8 +235,8 @@ export const Home = () => {
                 }
               />
             </Grid>
-          ))}
-        </Grid>
+              ))}
+        </Grid>*/}
       </Box>
     </BaseLayout>
   );

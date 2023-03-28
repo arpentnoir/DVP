@@ -45,7 +45,7 @@ exports[`CertificateUpload Desktop should render correctly: Desktop 1`] = `
               class="MuiTypography-root MuiTypography-h6 css-n8wto6-MuiTypography-root"
               tabindex="-1"
             >
-              Drop your document to verify
+              Drag and drop your document to Verify
             </h6>
             <div
               class="MuiBox-root css-0"
@@ -64,7 +64,7 @@ exports[`CertificateUpload Desktop should render correctly: Desktop 1`] = `
                 role="button"
                 tabindex="0"
               >
-                Select a file
+                Upload a Document
               </div>
             </div>
             <p

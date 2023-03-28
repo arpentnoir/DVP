@@ -157,6 +157,7 @@ export const MenuSide = ({
           <MenuBarItem label={'Home'} handleClick={navigateTo('/')} />
           <MenuBarItem label={'Help'} handleClick={navigateTo('/')} />
           <MenuBarItem label={'Verify'} handleClick={navigateTo('/verify')} />
+          <MenuBarItem label={'Issue'} handleClick={navigateTo('/issue')} />
           <MenuBarItem
             label={'Documents'}
             handleClick={navigateTo('/documents')}

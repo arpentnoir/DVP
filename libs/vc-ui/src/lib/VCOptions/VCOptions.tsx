@@ -84,7 +84,7 @@ export const VCOptions: FunctionComponent<VCOptionsProps> = ({
           paddingBottom: '15px',
         }}
       >
-        Verifiable Credential Options
+        Document Options
       </Text>
       <FormControl fullWidth sx={{ marginBottom: '20px' }}>
         <InputLabel
@@ -139,10 +139,10 @@ export const VCOptions: FunctionComponent<VCOptionsProps> = ({
           inputProps={{ id: 'select-input-label-id-form-type' }}
         >
           <MenuItem key={`menu-item-form-full`} value={'full'}>
-            Full Form
+            Create Full Document
           </MenuItem>
           <MenuItem key={`menu-item-form-partial`} value={'partial'}>
-            Partial Form
+            Upload Document
           </MenuItem>
         </Select>
       </FormControl>
