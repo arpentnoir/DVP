@@ -2,7 +2,7 @@
 /* eslint-disable */
 /**
  * DVP Admin API
- * Admin API for the Digital Verification Platform
+ * Admin API for Digital Verification Platform
  *
  * The version of the OpenAPI document: 0.1
  * 
@@ -110,6 +110,82 @@ export const DocumentSchemaUpdateResponseTypeEnum = {
 export type DocumentSchemaUpdateResponseTypeEnum = typeof DocumentSchemaUpdateResponseTypeEnum[keyof typeof DocumentSchemaUpdateResponseTypeEnum];
 
 /**
+ * List of document schemas
+ * @export
+ * @interface DocumentSchemasResponse
+ */
+export interface DocumentSchemasResponse {
+    /**
+     * 
+     * @type {Array<DocumentSchemasResponseItem>}
+     * @memberof DocumentSchemasResponse
+     */
+    'results'?: Array<DocumentSchemasResponseItem>;
+    /**
+     * 
+     * @type {Pagination}
+     * @memberof DocumentSchemasResponse
+     */
+    'pagination'?: Pagination;
+}
+/**
+ * Document schema
+ * @export
+ * @interface DocumentSchemasResponseItem
+ */
+export interface DocumentSchemasResponseItem {
+    /**
+     * document schema id
+     * @type {string}
+     * @memberof DocumentSchemasResponseItem
+     */
+    'schemaId': string;
+    /**
+     * document schema name
+     * @type {string}
+     * @memberof DocumentSchemasResponseItem
+     */
+    'name': string;
+    /**
+     * document schema type
+     * @type {string}
+     * @memberof DocumentSchemasResponseItem
+     */
+    'type': DocumentSchemasResponseItemTypeEnum;
+    /**
+     * Whether document schema is disabled on the platform
+     * @type {boolean}
+     * @memberof DocumentSchemasResponseItem
+     */
+    'disabled'?: boolean;
+    /**
+     * Whether document schema is enable for all the ABNs
+     * @type {boolean}
+     * @memberof DocumentSchemasResponseItem
+     */
+    'enableForAll'?: boolean;
+    /**
+     * Enabled for the ABNs listed, ignored if enableForAll is set
+     * @type {Array<string>}
+     * @memberof DocumentSchemasResponseItem
+     */
+    'enableForABNs'?: Array<string>;
+    /**
+     * Disabled for the ABNs listed, takes the precedence over enableForAll
+     * @type {Array<string>}
+     * @memberof DocumentSchemasResponseItem
+     */
+    'disableForABNs'?: Array<string>;
+}
+
+export const DocumentSchemasResponseItemTypeEnum = {
+    Full: 'full',
+    Partial: 'partial'
+} as const;
+
+export type DocumentSchemasResponseItemTypeEnum = typeof DocumentSchemasResponseItemTypeEnum[keyof typeof DocumentSchemasResponseItemTypeEnum];
+
+/**
  * An object containing references to the source of an error.
  * @export
  * @interface ErrorSource
@@ -212,6 +288,31 @@ export interface ModelError {
      */
     'helpText'?: string;
 }
+/**
+ * Pagination data object
+ * @export
+ * @interface Pagination
+ */
+export interface Pagination {
+    /**
+     * 
+     * @type {string}
+     * @memberof Pagination
+     */
+    'nextCursor'?: string | null;
+    /**
+     * 
+     * @type {string}
+     * @memberof Pagination
+     */
+    'prevCursor'?: string | null;
+    /**
+     * 
+     * @type {number}
+     * @memberof Pagination
+     */
+    'limit'?: number;
+}
 
 /**
  * DocumentSchemaApi - axios parameter creator
@@ -219,6 +320,69 @@ export interface ModelError {
  */
 export const DocumentSchemaApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * List document schemas
+         * @summary List document schemas
+         * @param {string} [nextCursor] Starting key for the next result set. If you don\&#39;t pass a nextCursor parameter, but do pass a limit parameter, the default value retrieves the first portion (or \&quot;page\&quot;) of results.
+         * @param {string} [prevCursor] Starting key for the previous result set. If you pass prevCursor and nextCursor together, nextCursor takes precedence
+         * @param {number} [limit] The numbers of items to return
+         * @param {string} [q] Searches for the query string in the searchable fields
+         * @param {string} [name] filter by schema name
+         * @param {'asc' | 'desc'} [sort] The supported sort directions are either &#x60;asc&#x60; for ascending or &#x60;desc&#x60; for descending. If a sort direction is not specified, then order will default to &#x60;asc&#x60;
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDocumentSchemas: async (nextCursor?: string, prevCursor?: string, limit?: number, q?: string, name?: string, sort?: 'asc' | 'desc', options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/document-schemas`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, DUMMY_BASE_URL);
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+
+            const localVarRequestOptions = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication Authorizer required
+            await setApiKeyToObject(localVarHeaderParameter, "Authorization", configuration)
+
+            if (nextCursor !== undefined) {
+                localVarQueryParameter['nextCursor'] = nextCursor;
+            }
+
+            if (prevCursor !== undefined) {
+                localVarQueryParameter['prevCursor'] = prevCursor;
+            }
+
+            if (limit !== undefined) {
+                localVarQueryParameter['limit'] = limit;
+            }
+
+            if (q !== undefined) {
+                localVarQueryParameter['q'] = q;
+            }
+
+            if (name !== undefined) {
+                localVarQueryParameter['name'] = name;
+            }
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
+
+
+    
+            setSearchParams(localVarUrlObj, localVarQueryParameter);
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: toPathString(localVarUrlObj),
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * update document schema
          * @summary update document schema
@@ -271,6 +435,22 @@ export const DocumentSchemaApiFp = function(configuration?: Configuration) {
     const localVarAxiosParamCreator = DocumentSchemaApiAxiosParamCreator(configuration)
     return {
         /**
+         * List document schemas
+         * @summary List document schemas
+         * @param {string} [nextCursor] Starting key for the next result set. If you don\&#39;t pass a nextCursor parameter, but do pass a limit parameter, the default value retrieves the first portion (or \&quot;page\&quot;) of results.
+         * @param {string} [prevCursor] Starting key for the previous result set. If you pass prevCursor and nextCursor together, nextCursor takes precedence
+         * @param {number} [limit] The numbers of items to return
+         * @param {string} [q] Searches for the query string in the searchable fields
+         * @param {string} [name] filter by schema name
+         * @param {'asc' | 'desc'} [sort] The supported sort directions are either &#x60;asc&#x60; for ascending or &#x60;desc&#x60; for descending. If a sort direction is not specified, then order will default to &#x60;asc&#x60;
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getDocumentSchemas(nextCursor?: string, prevCursor?: string, limit?: number, q?: string, name?: string, sort?: 'asc' | 'desc', options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => AxiosPromise<DocumentSchemasResponse>> {
+            const localVarAxiosArgs = await localVarAxiosParamCreator.getDocumentSchemas(nextCursor, prevCursor, limit, q, name, sort, options);
+            return createRequestFunction(localVarAxiosArgs, globalAxios, BASE_PATH, configuration);
+        },
+        /**
          * update document schema
          * @summary update document schema
          * @param {string} schemaId Document schema id
@@ -293,6 +473,21 @@ export const DocumentSchemaApiFactory = function (configuration?: Configuration,
     const localVarFp = DocumentSchemaApiFp(configuration)
     return {
         /**
+         * List document schemas
+         * @summary List document schemas
+         * @param {string} [nextCursor] Starting key for the next result set. If you don\&#39;t pass a nextCursor parameter, but do pass a limit parameter, the default value retrieves the first portion (or \&quot;page\&quot;) of results.
+         * @param {string} [prevCursor] Starting key for the previous result set. If you pass prevCursor and nextCursor together, nextCursor takes precedence
+         * @param {number} [limit] The numbers of items to return
+         * @param {string} [q] Searches for the query string in the searchable fields
+         * @param {string} [name] filter by schema name
+         * @param {'asc' | 'desc'} [sort] The supported sort directions are either &#x60;asc&#x60; for ascending or &#x60;desc&#x60; for descending. If a sort direction is not specified, then order will default to &#x60;asc&#x60;
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getDocumentSchemas(nextCursor?: string, prevCursor?: string, limit?: number, q?: string, name?: string, sort?: 'asc' | 'desc', options?: any): AxiosPromise<DocumentSchemasResponse> {
+            return localVarFp.getDocumentSchemas(nextCursor, prevCursor, limit, q, name, sort, options).then((request) => request(axios, basePath));
+        },
+        /**
          * update document schema
          * @summary update document schema
          * @param {string} schemaId Document schema id
@@ -313,6 +508,21 @@ export const DocumentSchemaApiFactory = function (configuration?: Configuration,
  */
 export interface DocumentSchemaApiInterface {
     /**
+     * List document schemas
+     * @summary List document schemas
+     * @param {string} [nextCursor] Starting key for the next result set. If you don\&#39;t pass a nextCursor parameter, but do pass a limit parameter, the default value retrieves the first portion (or \&quot;page\&quot;) of results.
+     * @param {string} [prevCursor] Starting key for the previous result set. If you pass prevCursor and nextCursor together, nextCursor takes precedence
+     * @param {number} [limit] The numbers of items to return
+     * @param {string} [q] Searches for the query string in the searchable fields
+     * @param {string} [name] filter by schema name
+     * @param {'asc' | 'desc'} [sort] The supported sort directions are either &#x60;asc&#x60; for ascending or &#x60;desc&#x60; for descending. If a sort direction is not specified, then order will default to &#x60;asc&#x60;
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DocumentSchemaApiInterface
+     */
+    getDocumentSchemas(nextCursor?: string, prevCursor?: string, limit?: number, q?: string, name?: string, sort?: 'asc' | 'desc', options?: AxiosRequestConfig): AxiosPromise<DocumentSchemasResponse>;
+
+    /**
      * update document schema
      * @summary update document schema
      * @param {string} schemaId Document schema id
@@ -332,6 +542,23 @@ export interface DocumentSchemaApiInterface {
  * @extends {BaseAPI}
  */
 export class DocumentSchemaApi extends BaseAPI implements DocumentSchemaApiInterface {
+    /**
+     * List document schemas
+     * @summary List document schemas
+     * @param {string} [nextCursor] Starting key for the next result set. If you don\&#39;t pass a nextCursor parameter, but do pass a limit parameter, the default value retrieves the first portion (or \&quot;page\&quot;) of results.
+     * @param {string} [prevCursor] Starting key for the previous result set. If you pass prevCursor and nextCursor together, nextCursor takes precedence
+     * @param {number} [limit] The numbers of items to return
+     * @param {string} [q] Searches for the query string in the searchable fields
+     * @param {string} [name] filter by schema name
+     * @param {'asc' | 'desc'} [sort] The supported sort directions are either &#x60;asc&#x60; for ascending or &#x60;desc&#x60; for descending. If a sort direction is not specified, then order will default to &#x60;asc&#x60;
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof DocumentSchemaApi
+     */
+    public getDocumentSchemas(nextCursor?: string, prevCursor?: string, limit?: number, q?: string, name?: string, sort?: 'asc' | 'desc', options?: AxiosRequestConfig) {
+        return DocumentSchemaApiFp(this.configuration).getDocumentSchemas(nextCursor, prevCursor, limit, q, name, sort, options).then((request) => request(this.axios, this.basePath));
+    }
+
     /**
      * update document schema
      * @summary update document schema

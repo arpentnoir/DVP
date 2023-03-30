@@ -9,5 +9,16 @@
     "disabled": false,
     "schemaPath": "/path/to/schema",
     "uiSchemaPath": "/path/to/ui-schema"
+  },
+  {
+    "name": "COO",
+    "type": "partial",
+    "schemaId": "cb96bba6-52cf-4673-a485-446387a17f38",
+    "disableForABNs": ["32635864970", "32635864971"],
+    "enableForABNs": ["50110219460", "53930548027"],
+    "enableForAll": false,
+    "disabled": true,
+    "schemaPath": "/path/to/schema",
+    "uiSchemaPath": "/path/to/ui-schema"
   }
 ]

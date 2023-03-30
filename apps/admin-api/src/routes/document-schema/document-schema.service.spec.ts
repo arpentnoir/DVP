@@ -8,6 +8,7 @@ import {
   ApplicationError,
   DocumentSchemaType,
   NotFoundError,
+  QueryParameterError,
   RequestInvocationContext,
 } from '@dvp/server-common';
 import { mockClient } from 'aws-sdk-client-mock';
@@ -15,49 +16,47 @@ import 'aws-sdk-client-mock-jest';
 import schemas from '../../fixtures/document-schemas/schemas.json';
 import { getMockRequest } from '../../tests/utils';
 
-import { DocumentSchemaService } from './document-schema.service';
+import {
+  DocumentSchemaService,
+  DocumentSchemasQueryParams,
+} from './document-schema.service';
 
 const dynamodbMock = mockClient(DynamoDBClient);
 
 const schema = schemas[0] as DocumentSchemaType;
-const schemasDynamo = [
-  {
-    pk: {
-      S: 'DocumentSchema',
-    },
-    sk: {
-      S: `DocumentSchema#${schema.name}#${schema.type}`,
-    },
-    name: {
-      S: schema.name,
-    },
-    type: {
-      S: schema.type,
-    },
-    schemaId: {
-      S: schema.schemaId,
-    },
-    disabled: {
-      BOOL: false,
-    },
-    disableForABNs: {
-      L: [
-        {
-          S: schema.disableForABNs[0],
-        },
-        {
-          S: schema.disableForABNs[1],
-        },
-      ],
-    },
-    enableForABNs: {
-      L: [],
-    },
-    enableForAll: {
-      BOOL: false,
-    },
+const schemasDynamo = schemas?.map((schema) => ({
+  pk: {
+    S: 'DocumentSchema',
   },
-];
+  sk: {
+    S: `DocumentSchema#${schema.name}#${schema.type}`,
+  },
+  name: {
+    S: schema.name,
+  },
+  type: {
+    S: schema.type,
+  },
+  schemaId: {
+    S: schema.schemaId,
+  },
+  disabled: {
+    BOOL: schema.disabled,
+  },
+  disableForABNs: {
+    L: schema?.disableForABNs?.map((abn) => ({
+      S: abn,
+    })),
+  },
+  enableForABNs: {
+    L: schema?.enableForABNs?.map((abn) => ({
+      S: abn,
+    })),
+  },
+  enableForAll: {
+    BOOL: schema.enableForAll,
+  },
+}));
 
 describe('DocumentSchemaService', () => {
   jest.useFakeTimers().setSystemTime(new Date('2020-01-01'));
@@ -67,6 +66,101 @@ describe('DocumentSchemaService', () => {
   });
   const schemaId = schema.schemaId as string;
 
+  describe('getDocumentSchemas', () => {
+    const query: DocumentSchemasQueryParams = {
+      q: 'co',
+      limit: 10,
+      nextCursor:
+        'eyJwayI6IkRvY3VtZW50U2NoZW1hIiwic2siOiJEb2N1bWVudFNjaGVtYSNDT08jIn0=',
+      sort: 'desc',
+      name: 'COO',
+      type: 'full',
+    };
+    const mockRequest = getMockRequest(
+      '/api/document-schemas',
+      'GET',
+      null,
+      query
+    );
+    const invocationContext = new RequestInvocationContext(mockRequest);
+
+    it.each`
+      cursor          | value
+      ${'nextCursor'} | ${'test'}
+      ${'prevCursor'} | ${'test'}
+    `(
+      'throws error when $cursor is invalid',
+      async ({ cursor, value }: { cursor: string; value: string }) => {
+        const documentSchemaService = new DocumentSchemaService(
+          invocationContext
+        );
+        dynamodbMock.rejectsOnce('fails');
+        await expect(() =>
+          documentSchemaService.getDocumentSchemas({
+            [cursor]: value,
+          })
+        ).rejects.toThrow(new QueryParameterError(cursor, value));
+      }
+    );
+
+    it('should throw an error if fails to fetch from the database', async () => {
+      const documentSchemaService = new DocumentSchemaService(
+        invocationContext
+      );
+      dynamodbMock.rejectsOnce('fails');
+      await expect(() =>
+        documentSchemaService.getDocumentSchemas(query)
+      ).rejects.toThrow(
+        new ApplicationError('Error fetching the document schemas')
+      );
+    });
+
+    it('should list the available document schemas', async () => {
+      const documentSchemaService = new DocumentSchemaService(
+        invocationContext
+      );
+      dynamodbMock.on(QueryCommand).resolvesOnce({
+        Items: schemasDynamo,
+      });
+
+      const res = await documentSchemaService.getDocumentSchemas(query);
+      expect(dynamodbMock).toHaveReceivedCommandWith(QueryCommand, {
+        ConsistentRead: false,
+        ExclusiveStartKey: {
+          pk: { S: 'DocumentSchema' },
+          sk: { S: 'DocumentSchema#COO#' },
+        },
+        ExpressionAttributeNames: {
+          '#_0': 'name',
+          '#_1': 'type',
+          '#_2': 'pk',
+          '#_3': 'sk',
+        },
+        ExpressionAttributeValues: {
+          ':_0': { S: 'co' },
+          ':_1': { S: 'DocumentSchema' },
+          ':_2': { S: 'DocumentSchema#COO#' },
+        },
+        FilterExpression: '(contains(#_0, :_0)) or (contains(#_1, :_0))',
+        KeyConditionExpression: '#_2 = :_1 and begins_with(#_3, :_2)',
+        ProjectionExpression: '#_0, #_1',
+        ScanIndexForward: false,
+        TableName: 'documents',
+      });
+      expect(res).toMatchObject({
+        results: schemas?.map((schema) => {
+          const { uiSchemaPath, schemaPath, ...item } = schema;
+          return item;
+        }),
+        pagination: {
+          limit: 10,
+          nextCursor: null,
+          prevCursor:
+            'eyJwayI6IkRvY3VtZW50U2NoZW1hIiwic2siOiJEb2N1bWVudFNjaGVtYSNDT08jZnVsbCJ9',
+        },
+      });
+    });
+  });
   describe('updateDocumentSchema', () => {
     const payload: DocumentSchemaUpdateRequest = {
       disabled: false,

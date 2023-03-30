@@ -3,7 +3,7 @@ import { Entity } from 'dynamodb-onetable';
 
 /**
  * Represents the DynamoDB schema. Specifies models for:
- * 
+ *
  * Document
  * KeyPair
  * RevocationCounter

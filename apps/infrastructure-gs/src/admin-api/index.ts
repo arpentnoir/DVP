@@ -119,7 +119,7 @@ const lambdaApiHandler = new aws.lambda.Function(`${stack}-admin-api-handler`, {
     subnetIds: vpc.dvpVpcPrivateSubnetIds,
     securityGroupIds: [vpc.dvpVpcDefaultSecurityGroupId],
   },
-  timeout: 15,
+  timeout: 60,
 });
 
 ////////////////////////////////////////////////////////////////////////////////
