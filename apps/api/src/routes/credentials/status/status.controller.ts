@@ -127,7 +127,10 @@ export const handleSubmitToRevocationStatusQueue = async (
       invocationContext: req.invocationContext,
     };
 
-    await SQSClient.sendMessage(JSON.stringify(sqsPayload));
+    await SQSClient.sendMessage(
+      JSON.stringify(sqsPayload),
+      process.env.REVOCATION_QUEUE_URL
+    );
 
     await models.Document.update({
       id: documentId,

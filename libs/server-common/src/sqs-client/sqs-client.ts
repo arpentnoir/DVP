@@ -17,16 +17,13 @@ const sqsClient = new AWSSQSCLient(
  * This class handles sending messages to AWS SQS.
  */
 export class SQSClient {
-  /**s
+  /**
    * Sends a message to the target queue.
    *
    * @param payload The message body to be sent to the queue
    * @param queueUrl The target queue. Defaults to Revocation Queue.
    */
-  public static async sendMessage(
-    payload: string,
-    queueUrl = process.env['REVOCATION_QUEUE_URL']
-  ) {
+  public static async sendMessage(payload: string, queueUrl: string) {
     const params: SendMessageCommandInput = {
       MessageBody: payload,
       QueueUrl: queueUrl,

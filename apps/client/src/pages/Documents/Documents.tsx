@@ -58,6 +58,7 @@ export const Documents = () => {
     state,
     fetch,
     setLoading,
+    setErrorMesssage,
   } = useQueryApi<CredentialsResponseItem>(getVerifiableCredentials, {
     errorMessage,
   });
@@ -177,16 +178,21 @@ export const Documents = () => {
                   params.row.isRevoked !== true && {
                     // eslint-disable-next-line @typescript-eslint/no-misused-promises
                     [RevocationAction.REVOKE]: async () => {
-                      setLoading(true);
-                      await setRevocationStatus({
-                        credentialId: params.row.id,
-                        revoke: !params.row.isRevoked,
-                        signingMethod: params.row
-                          .signingMethod as IssueCredentialRequestSigningMethodEnum,
-                      });
+                      try {
+                        setLoading(true);
+                        await setRevocationStatus({
+                          credentialId: params.row.id,
+                          revoke: !params.row.isRevoked,
+                          signingMethod: params.row
+                            .signingMethod as IssueCredentialRequestSigningMethodEnum,
+                        });
 
-                      await fetch();
-                      return;
+                        await fetch();
+                        return;
+                      } catch (err: any) {
+                        setErrorMesssage(err.message as string);
+                        setLoading(false);
+                      }
                     },
                   }),
               }}

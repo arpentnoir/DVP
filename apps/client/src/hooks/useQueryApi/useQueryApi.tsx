@@ -233,6 +233,10 @@ export function useQueryApi<T>(
     setState((previous) => ({ ...previous, isLoading }));
   };
 
+  const setErrorMesssage = (errorMessage: string) => {
+    setState((previous) => ({ ...previous, errorMessage }));
+  };
+
   return {
     fetch,
     handleSearch,
@@ -240,5 +244,6 @@ export function useQueryApi<T>(
     paginationControls,
     state,
     setLoading,
+    setErrorMesssage,
   };
 }

@@ -16,7 +16,7 @@ describe('sqs-client', () => {
   it('should send message to queue', async () => {
     const payload = 'Up and at them';
 
-    await SQSClient.sendMessage(payload);
+    await SQSClient.sendMessage(payload, 'test-queue');
 
     expect(sqsClientMock).toHaveReceivedNthCommandWith(
       1,
@@ -24,6 +24,7 @@ describe('sqs-client', () => {
       SendMessageCommand as any,
       {
         MessageBody: payload,
+        QueueUrl: 'test-queue',
       }
     );
   });
