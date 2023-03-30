@@ -229,11 +229,16 @@ export function useQueryApi<T>(
     [handleNextPage, handlePrevPage, state.pagination]
   );
 
+  const setLoading = (isLoading: boolean) => {
+    setState((previous) => ({ ...previous, isLoading }));
+  };
+
   return {
     fetch,
     handleSearch,
     handleSort,
     paginationControls,
     state,
+    setLoading,
   };
 }

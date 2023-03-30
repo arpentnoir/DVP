@@ -6,7 +6,6 @@ import { Components } from 'gs-pulumi-library';
 import { auth, kms } from '../common';
 import { getGatewayOpenApiSpec } from '../common/apigateway';
 import { dynamodbDocumentsTable } from '../common/dynamodb';
-
 import * as vpc from '../common/vpc';
 import { config } from './config';
 import { bucketPolicy } from './policies/s3Policies';
@@ -66,9 +65,18 @@ new aws.s3.BucketPolicy(`${stack}-revocation-list-policy`, {
 });
 
 ////////////////////////////////////////////////////////////////////////////////
+// Create Revocation Status Queue
+export const revocationStatusQueue = new aws.sqs.Queue(
+  `dvp-${process.env.ENV}-credential-status-event-queue`,
+  {
+    name: `dvp-${process.env.ENV}-credential-status-event-queue`,
+  }
+);
+
+////////////////////////////////////////////////////////////////////////////////
 // Enviroment variables for Lambda functions
 
-const environmentVariables = {
+export const environmentVariables = {
   variables: {
     DOCUMENT_STORAGE_BUCKET_NAME: documentStoreBucket.bucket.bucket,
     REVOCATION_LIST_BUCKET_NAME: revocationListBucket.bucket.bucket,
@@ -77,6 +85,7 @@ const environmentVariables = {
     CLIENT_URL: config.clientUrl,
     DYNAMODB_DOCUMENTS_TABLE: dynamodbDocumentsTable.name,
     KMS_KEY_ID: kms.kmsCmk.id,
+    REVOCATION_QUEUE_URL: revocationStatusQueue.url,
   },
 };
 
@@ -128,6 +137,27 @@ const dynamodbLambdaPolicy = new aws.iam.Policy(
 new aws.iam.RolePolicyAttachment(`${stack}-api-handler-lambda-dynamodb`, {
   role: lambdaRole.name,
   policyArn: dynamodbLambdaPolicy.arn,
+});
+
+const sqsLambdaPolicy = new aws.iam.Policy(
+  `${stack}-api-handler-sqs-lambda-policy`,
+  {
+    policy: {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Effect: 'Allow',
+          Action: ['sqs:SendMessage'],
+          Resource: [revocationStatusQueue.arn],
+        },
+      ],
+    },
+  }
+);
+
+new aws.iam.RolePolicyAttachment(`${stack}-api-handler-lambda-sqs`, {
+  role: lambdaRole.name,
+  policyArn: sqsLambdaPolicy.arn,
 });
 
 new aws.iam.RolePolicyAttachment(

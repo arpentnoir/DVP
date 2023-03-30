@@ -7,5 +7,11 @@
     "resolveJsonModule": true,
     "esModuleInterop": true
   },
-  "include": ["jest.config.ts", "**/*.test.ts", "**/*.spec.ts", "**/*.d.ts", "src/app/verify/types.ts"]
+  "include": [
+    "jest.config.ts",
+    "**/*.test.ts",
+    "**/*.spec.ts",
+    "**/*.d.ts",
+    "src/app/verify/types.ts"
+  ]
 }

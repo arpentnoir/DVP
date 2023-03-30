@@ -955,6 +955,12 @@
           "isRevoked": {
             "type": "boolean"
           },
+          "revocationInProgress": {
+            "type": "boolean"
+          },
+          "signingMethod": {
+            "type": "string"
+          },
           "documentNumber": {
             "type": "string"
           },

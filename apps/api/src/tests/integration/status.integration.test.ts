@@ -7,21 +7,19 @@ import {
 import {
   GetObjectCommand,
   HeadObjectCommand,
-  PutObjectCommand,
   S3Client,
 } from '@aws-sdk/client-s3';
+import { SendMessageCommand, SQSClient } from '@aws-sdk/client-sqs';
 import { mockClient } from 'aws-sdk-client-mock';
 import 'aws-sdk-client-mock-jest';
 import request from 'supertest';
 import { app } from '../../app';
-import RevocationListRevoked from '../../fixtures/genericvc/revocation_list_revoked.json';
 import RevocationListUnrevoked from '../../fixtures/genericvc/revocation_list_unrevoked.json';
-
-import { getRevocationBitLitArray } from '../../routes/credentials/status/status.service.spec';
 import { authTokenWithSubAndAbn } from './utils';
 
 const s3Mock = mockClient(S3Client);
 const dynamodbMock = mockClient(DynamoDBClient);
+const sqsClientMock = mockClient(SQSClient);
 
 const revokePayload = {
   credentialId: '0062f9ed-1816-4cde-9d30-e0d19e428dec',
@@ -70,6 +68,7 @@ describe('status api', () => {
   beforeEach(() => {
     s3Mock.reset();
     dynamodbMock.reset();
+    sqsClientMock.reset();
   });
 
   describe('GET /v1/status/oa-ocsp/:documentHash', () => {
@@ -156,7 +155,7 @@ describe('status api', () => {
 
   describe('POST /v1/status', () => {
     describe('SVIP', () => {
-      it('should revoke a verifiable credential ', async () => {
+      it('should submit request to revoke to queue', async () => {
         dynamodbMock.on(GetItemCommand).resolvesOnce({
           Item: {
             revocationIndex: { N: '0' },
@@ -164,15 +163,6 @@ describe('status api', () => {
             signingMethod: { S: 'SVIP' },
           },
         });
-
-        s3Mock.on(GetObjectCommand).resolvesOnce({
-          Body: {
-            transformToString: () => {
-              return JSON.stringify(RevocationListUnrevoked);
-            },
-          } as any,
-        });
-        s3Mock.on(PutObjectCommand).resolvesOnce({});
 
         dynamodbMock.on(UpdateItemCommand).resolvesOnce({});
 
@@ -182,18 +172,15 @@ describe('status api', () => {
           .set({ Authorization: authTokenWithSubAndAbn })
           .expect(200);
 
-        // The updated revocation list that is stored back in S3
-        const updatedRevocationList = JSON.parse(
-          s3Mock.calls()[1].firstArg.input.Body as string
+        expect(sqsClientMock).toHaveReceivedNthCommandWith(
+          1,
+          SendMessageCommand,
+          {
+            MessageBody: expect.stringContaining(
+              '{"documentId":"0062f9ed-1816-4cde-9d30-e0d19e428dec","credentialStatus":[{"type":"RevocationList2020Status","status":"1"}]'
+            ),
+          }
         );
-
-        const list = await getRevocationBitLitArray(
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-          updatedRevocationList.credentialSubject.encodedList
-        );
-
-        // Revocation List index 0 has value 1 (revoked)
-        expect(list.bitstring.bits[0]).toStrictEqual(1);
 
         expect(dynamodbMock).toHaveReceivedNthCommandWith(
           2,
@@ -202,12 +189,12 @@ describe('status api', () => {
             ExpressionAttributeValues: expect.objectContaining({
               ':_0': { S: '0062f9ed-1816-4cde-9d30-e0d19e428dec' },
               ':_1': { S: '00000000000' },
-              ':_2': { BOOL: true }, // Revoked
+              ':_2': { BOOL: true }, // Revocaton in progress
             }),
           }
         );
       });
-      it('should unrevoke a verifiable credential ', async () => {
+      it('should submit request to unrevoke to queue', async () => {
         dynamodbMock.on(GetItemCommand).resolvesOnce({
           Item: {
             revocationIndex: { N: '0' },
@@ -215,15 +202,6 @@ describe('status api', () => {
             signingMethod: { S: 'SVIP' },
           },
         });
-
-        s3Mock.on(GetObjectCommand).resolvesOnce({
-          Body: {
-            transformToString: () => {
-              return JSON.stringify(RevocationListRevoked);
-            },
-          } as any,
-        });
-        s3Mock.on(PutObjectCommand).resolvesOnce({});
 
         dynamodbMock.on(UpdateItemCommand).resolvesOnce({});
 
@@ -233,18 +211,15 @@ describe('status api', () => {
           .set({ Authorization: authTokenWithSubAndAbn })
           .expect(200);
 
-        // The updated revocation list that is stored back in S3
-        const updatedRevocationList = JSON.parse(
-          s3Mock.calls()[1].firstArg.input.Body as string
+        expect(sqsClientMock).toHaveReceivedNthCommandWith(
+          1,
+          SendMessageCommand,
+          {
+            MessageBody: expect.stringContaining(
+              '{"documentId":"0062f9ed-1816-4cde-9d30-e0d19e428dec","credentialStatus":[{"type":"RevocationList2020Status","status":"0"}]'
+            ),
+          }
         );
-
-        const list = await getRevocationBitLitArray(
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-          updatedRevocationList.credentialSubject.encodedList
-        );
-
-        // Revocation List index 0 has value 1 (revoked)
-        expect(list.bitstring.bits[0]).toStrictEqual(0);
 
         expect(dynamodbMock).toHaveReceivedNthCommandWith(
           2,
@@ -253,73 +228,14 @@ describe('status api', () => {
             ExpressionAttributeValues: expect.objectContaining({
               ':_0': { S: '0062f9ed-1816-4cde-9d30-e0d19e428dec' },
               ':_1': { S: '00000000000' },
-              ':_2': { BOOL: false }, // Not revoked
+              ':_2': { BOOL: true }, // Revocaton in progress
             }),
           }
         );
       });
-      it('should revert to old revocationList VC if fails to update database', async () => {
-        dynamodbMock.on(GetItemCommand).resolvesOnce({
-          Item: {
-            revocationIndex: { N: '0' },
-            revocationS3Path: { S: '1' },
-            signingMethod: { S: 'SVIP' },
-          },
-        });
-
-        s3Mock.on(GetObjectCommand).resolvesOnce({
-          Body: {
-            transformToString: () => {
-              return JSON.stringify(RevocationListUnrevoked);
-            },
-          } as any,
-        });
-        s3Mock.on(PutObjectCommand).resolvesOnce({});
-
-        // DB update fails
-        dynamodbMock.on(UpdateItemCommand).rejectsOnce({});
-
-        // Reupload old revocationList VC
-        s3Mock.on(PutObjectCommand).resolvesOnce({});
-
-        await request(app)
-          .post(endpoint)
-          .send(revokePayload)
-          .set({ Authorization: authTokenWithSubAndAbn })
-          .expect(500)
-          .expect((res) => {
-            expect(res.body).toMatchObject({
-              errors: expect.arrayContaining([
-                expect.objectContaining({
-                  id: 'DVPAPI-001',
-                  code: 'SystemError',
-                  detail: 'An internal system error has occurred.',
-                }),
-              ]),
-            });
-          });
-
-        // The updated revocation list that is stored back in S3
-        const updatedRevocationList = JSON.parse(
-          s3Mock.calls()[1].firstArg.input.Body as string
-        );
-
-        const list = await getRevocationBitLitArray(
-          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-          updatedRevocationList.credentialSubject.encodedList
-        );
-
-        // Revocation List index 0 has value 1 (revoked)
-        expect(list.bitstring.bits[0]).toStrictEqual(1);
-
-        // Reupload old revocationList VC since database failed to update
-        expect(s3Mock).toHaveReceivedNthCommandWith(3, PutObjectCommand, {
-          Body: JSON.stringify(RevocationListUnrevoked),
-        });
-      });
     });
     describe('OA', () => {
-      it('should revoke a verifiable credential ', async () => {
+      it('should submit request to revoke to queue', async () => {
         dynamodbMock.on(GetItemCommand).resolvesOnce({
           Item: {
             revocationIndex: { N: '0' },
@@ -336,6 +252,16 @@ describe('status api', () => {
           .set({ Authorization: authTokenWithSubAndAbn })
           .expect(200);
 
+        expect(sqsClientMock).toHaveReceivedNthCommandWith(
+          1,
+          SendMessageCommand,
+          {
+            MessageBody: expect.stringContaining(
+              '{"documentId":"0062f9ed-1816-4cde-9d30-e0d19e428dec","credentialStatus":[{"type":"OpenAttestationOCSP","status":"1"}]'
+            ),
+          }
+        );
+
         expect(dynamodbMock).toHaveReceivedNthCommandWith(
           2,
           UpdateItemCommand,
@@ -343,12 +269,12 @@ describe('status api', () => {
             ExpressionAttributeValues: expect.objectContaining({
               ':_0': { S: '0062f9ed-1816-4cde-9d30-e0d19e428dec' },
               ':_1': { S: '00000000000' },
-              ':_2': { BOOL: true }, // Revoked
+              ':_2': { BOOL: true }, // Revocaton in progress
             }),
           }
         );
       });
-      it('should unrevoke a verifiable credential ', async () => {
+      it('should submit request to unrevoke to queue', async () => {
         dynamodbMock.on(GetItemCommand).resolvesOnce({
           Item: {
             revocationIndex: { N: '0' },
@@ -365,6 +291,16 @@ describe('status api', () => {
           .set({ Authorization: authTokenWithSubAndAbn })
           .expect(200);
 
+        expect(sqsClientMock).toHaveReceivedNthCommandWith(
+          1,
+          SendMessageCommand,
+          {
+            MessageBody: expect.stringContaining(
+              '{"documentId":"0062f9ed-1816-4cde-9d30-e0d19e428dec","credentialStatus":[{"type":"OpenAttestationOCSP","status":"0"}]'
+            ),
+          }
+        );
+
         expect(dynamodbMock).toHaveReceivedNthCommandWith(
           2,
           UpdateItemCommand,
@@ -372,7 +308,7 @@ describe('status api', () => {
             ExpressionAttributeValues: expect.objectContaining({
               ':_0': { S: '0062f9ed-1816-4cde-9d30-e0d19e428dec' },
               ':_1': { S: '00000000000' },
-              ':_2': { BOOL: false }, // Not revoked
+              ':_2': { BOOL: true }, // Revocaton in progress
             }),
           }
         );

@@ -1,0 +1,22 @@
+{
+  "@context": [
+    "https://www.w3.org/2018/credentials/v1",
+    "https://w3id.org/vc-revocation-list-2020/v1"
+  ],
+  "id": "http://localhost:3333/api/status/1",
+  "type": ["VerifiableCredential", "RevocationList2020Credential"],
+  "credentialSubject": {
+    "id": "http://localhost:3333/api/status/1#list",
+    "type": "RevocationList2020",
+    "encodedList": "H4sIAAAAAAAAA2MEABvfBaUBAAAA"
+  },
+  "issuer": "did:key:z6MkvsJoJF1ucfDbqVsbmTnxypFYCLAKZSuCMjPv4a3yLG3u",
+  "issuanceDate": "2023-02-07T02:05:18.646Z",
+  "proof": {
+    "type": "Ed25519Signature2018",
+    "created": "2023-02-07T02:05:22Z",
+    "verificationMethod": "did:key:z6MkvsJoJF1ucfDbqVsbmTnxypFYCLAKZSuCMjPv4a3yLG3u#z6MkvsJoJF1ucfDbqVsbmTnxypFYCLAKZSuCMjPv4a3yLG3u",
+    "proofPurpose": "assertionMethod",
+    "jws": "eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..UYdkIXR6NbMEwIcJ5RSSF-VE2MtkBqUBi5U703cTiNqlxO13A5VYdyRRi8vGjqXGu5gLEbyCv4Lx8pQgS5n2Bw"
+  }
+}

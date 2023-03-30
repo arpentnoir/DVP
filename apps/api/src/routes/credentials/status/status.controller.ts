@@ -1,13 +1,18 @@
-import { CredentialStatus } from '@dvp/api-client';
-import { getUuIdFromUrn, NotFoundError, SystemError } from '@dvp/server-common';
+import {
+  BadRequestError,
+  getUuIdFromUrn,
+  NotFoundError,
+  SQSClient,
+  SystemError,
+} from '@dvp/server-common';
 import type { NextFunction, Request, Response } from 'express';
 import { models } from '../../../db';
 import { StorageService } from '../../storage/storage.service';
-import { StatusService, statusStorageClient } from './status.service';
+import { statusStorageClient } from './status.service';
 
 /**
  * Gets the revocation status from DynamoDB for a given document hash.
- * 
+ *
  * @param req The request from which to extract the document hash.
  * @param res The Express response to be returned.
  * @param next The next function injected by the Express router which, when invoked, executes the next middleware in the stack.
@@ -44,7 +49,7 @@ export const handleGetRevocationStatusByDocumentHash = async (
 
 /**
  * Gets the SVIP revocation list for a given list id. Invokes @see {StorageService}.
- * 
+ *
  * @param req The request from which to extract the list id.
  * @param res The Express response to be returned.
  * @param next The next function injected by the Express router which, when invoked, executes the next middleware in the stack.
@@ -76,14 +81,14 @@ export const handleGetSvipRevocationStatusList = async (
 };
 
 /**
- * Sets the revocation status for a given credential by invoking @see {StatusService.setRevocationStatus}
- * 
+ * Submits the revocation request to queue for processing.
+ *
  * @param req The request from which to extract the list credential id and status.
  * @param res The Express response to be returned.
  * @param next The next function injected by the Express router which, when invoked, executes the next middleware in the stack.
  * @returns A HTTP 200 if successful.
  */
-export const handleSetRevocationStatus = async (
+export const handleSubmitToRevocationStatusQueue = async (
   req: Request,
   res: Response,
   next: NextFunction
@@ -91,18 +96,44 @@ export const handleSetRevocationStatus = async (
   try {
     const { credentialId, credentialStatus } = req.body;
 
+    const { userAbn } = req.invocationContext;
+
     const documentId = getUuIdFromUrn(credentialId as string);
 
     if (!documentId) {
       return next(new NotFoundError(credentialId as string));
     }
 
-    const statusService = new StatusService(req.invocationContext);
+    const credential = await models.Document.get({
+      id: documentId,
+      abn: userAbn,
+    });
 
-    await statusService.setRevocationStatus(
+    if (!credential) {
+      return next(new NotFoundError(credentialId as string));
+    } else if (credential.revocationInProgress) {
+      throw new BadRequestError(
+        new Error(
+          `Setting revocation status for ${
+            credentialId as string
+          } already in progress`
+        )
+      );
+    }
+
+    const sqsPayload = {
       documentId,
-      credentialStatus as CredentialStatus[]
-    );
+      credentialStatus,
+      invocationContext: req.invocationContext,
+    };
+
+    await SQSClient.sendMessage(JSON.stringify(sqsPayload));
+
+    await models.Document.update({
+      id: documentId,
+      abn: userAbn,
+      revocationInProgress: true,
+    });
 
     return res.sendStatus(200);
   } catch (err) {

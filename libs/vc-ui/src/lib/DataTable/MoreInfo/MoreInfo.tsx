@@ -36,6 +36,7 @@ export const MoreInfo = ({ items, params }: IMoreInfo) => {
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose}
+        onClick={handleClose}
         MenuListProps={{
           'aria-labelledby': 'basic-button',
         }}

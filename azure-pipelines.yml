@@ -117,6 +117,12 @@ stages:
             inputs:
               targetPath: $(System.DefaultWorkingDirectory)/dist/apps/schema-worker
               artifactName: 'schema-worker-build'
+
+          - task: PublishPipelineArtifact@1
+            condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))
+            inputs:
+              targetPath: $(System.DefaultWorkingDirectory)/dist/apps/status-worker
+              artifactName: 'status-worker-build'
   - stage: deploy
     dependsOn: build
     condition: and(succeeded(), or(eq(variables.isMain, 'true'), eq(variables.isDevelop, 'true')))

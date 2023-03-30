@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "nx run-many --target=serve --all",
+    "start": "nx run-many --target=serve --projects=api,client,status-worker",
     "start:worker": "NX_SERVICE_WORKER=true nx run-many --target=serve --all",
     "start:internal": "nx run-many --target=serve --all --configuration=development-internal",
     "start:internal:worker": "NX_SERVICE_WORKER=true nx run-many --target=serve --all --configuration=development-internal",
@@ -87,6 +87,7 @@
     "react-router-dom": "^6.4.2",
     "regenerator-runtime": "0.13.7",
     "shortid": "^2.2.16",
+    "sqs-consumer": "^7.0.2",
     "styled-components": "5.3.5",
     "supertest": "^6.3.1",
     "tslib": "^2.3.0",

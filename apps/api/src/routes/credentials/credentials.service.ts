@@ -22,7 +22,7 @@ export class CredentialService {
 
   /**
    * Gets Verifiable Credentials by querying DynamoDB.
-   * 
+   *
    * @param param0 Credentials Query, results size limit, sorting and cursors to support pagination.
    * @returns A promise to return a @see {CredentialsResponse}
    */
@@ -95,7 +95,6 @@ export class CredentialService {
     const results: CredentialsResponse['results'] = credentials?.map(
       (credential) => ({
         id: credential.id,
-        isRevoked: credential.isRevoked,
         // TODO: Add issuerId property. Conversation needs to be had on what this value should be (DID Alias, etc...)
         consignmentReferenceNumber: credential.consignmentReferenceNumber,
         documentDeclaration: credential.documentDeclaration,
@@ -106,6 +105,9 @@ export class CredentialService {
         freeTradeAgreement: credential.freeTradeAgreement,
         importerName: credential.importerName,
         importingJurisdiction: credential.importingJurisdiction,
+        isRevoked: credential.isRevoked,
+        revocationInProgress: credential.revocationInProgress,
+        signingMethod: credential.signingMethod,
       })
     );
     return {

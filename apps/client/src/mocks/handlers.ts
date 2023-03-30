@@ -1,10 +1,5 @@
 import { RequestHandler, rest } from 'msw';
-import {
-  invalidEncryptedVCPayload,
-  invalidVC,
-  validEncryptedVCPayload,
-  validVC,
-} from './fixtures';
+import { invalidEncryptedVCPayload, validEncryptedVCPayload } from './fixtures';
 
 export const handlers: RequestHandler[] = [
   // Storage API
@@ -24,28 +19,19 @@ export const handlers: RequestHandler[] = [
     );
   }),
 
-  // VC API
-  rest.get('http://localhost:4200/api', (req, res, ctx) => {
-    return res(ctx.status(200), ctx.json({ message: 'soopadooopa' }));
-  }),
+  // Revocation
+  rest.post(
+    'http://localhost:4200/api/credentials/status',
+    async (req, res, ctx) => {
+      const body = await req.json();
 
-  rest.post('http://localhost:4200/api/verify', async (req, res, ctx) => {
-    const result = await req.json();
-
-    // Fail
-    if (result.verifiableCredential.test) {
-      return res(ctx.status(400), ctx.delay(1500), ctx.json(invalidVC));
+      return res(
+        ctx.status(
+          body.credentialId === 'urn:uuid:mock-success-credential-id'
+            ? 200
+            : 500
+        )
+      );
     }
-
-    // Success
-    return res(ctx.status(200), ctx.delay(1500), ctx.json(validVC));
-  }),
-
-  rest.get('http://localhost:4200/api/foobar', (req, res, ctx) => {
-    return res(
-      ctx.status(200),
-      ctx.delay(1500),
-      ctx.json({ message: 'Welcome to VC-UI!' })
-    );
-  }),
+  ),
 ];

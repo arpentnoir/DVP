@@ -13,7 +13,7 @@ const defaultOptions = {
 export const axiosInstance = axios.create(defaultOptions);
 
 // Set the AUTH token for any request
-axiosInstance.interceptors.request.use(async function (config) {
+axiosInstance.interceptors.request.use(async function (config: any) {
   if (!config.headers) {
     config.headers = {};
   }
@@ -27,5 +27,6 @@ axiosInstance.interceptors.request.use(async function (config) {
     // Refresh token, skipping it because we will replace it with SSO and MyGov
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return config;
 });

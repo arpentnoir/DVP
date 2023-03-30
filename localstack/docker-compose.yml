@@ -14,6 +14,7 @@ services:
       - DEBUG=0
       - NO_PROXY
       - DATA_DIR=/tmp/localstack/data
+
     volumes:
       - './localstack:/var/lib/localstack'
       - '/var/run/docker.sock:/var/run/docker.sock'

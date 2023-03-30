@@ -17,6 +17,19 @@ export const DEFAULT_API_QUERY_ERROR_MESSAGE =
 export const FAIL_VC_FETCH_DECRYPT_ERR_MSG =
   'Unable to fetch and/or decrypt Verifiable Credential';
 
+export const REVOCATION_FAILED_MESSAGE = 'Failed to set revocation status';
+
+export enum RevocationStatus {
+  'IN_PROGRESS' = 'IN PROGRESS',
+  'ACTIVE' = 'ACTIVE',
+  'REVOKED' = 'REVOKED',
+}
+
+export enum RevocationAction {
+  REVOKE = 'Revoke',
+  UNREVOKE = 'Unrevoke',
+}
+
 export const ROUTES = {
   HOME: '/',
   VERIFY: '/verify',
@@ -28,6 +41,7 @@ export const API_ENDPOINTS = {
   VERIFY: '/credentials/verify',
   ISSUE: '/credentials/issue',
   CREDENTIALS: '/credentials',
+  REVOKE: '/credentials/status',
 };
 
 export const GENERIC_SVIP_META_DATA = {

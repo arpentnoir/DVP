@@ -47,9 +47,18 @@ new aws.s3.BucketPolicy('revocationListBucket', {
 });
 
 ////////////////////////////////////////////////////////////////////////////////
+// Create Revocation Status Queue
+export const revocationStatusQueue = new aws.sqs.Queue(
+  `dvp-${process.env.ENV}-credential-status-event-queue`,
+  {
+    name: `dvp-${process.env.ENV}-credential-status-event-queue`,
+  }
+);
+
+////////////////////////////////////////////////////////////////////////////////
 // Enviroment variables for Lambda functions
 
-const environmentVariables = {
+export const environmentVariables = {
   variables: {
     DOCUMENT_STORAGE_BUCKET_NAME: documentStoreBucket.bucket,
     REVOCATION_LIST_BUCKET_NAME: revocationListBucket.bucket,
@@ -59,6 +68,7 @@ const environmentVariables = {
     DYNAMODB_DOCUMENTS_TABLE: dynamodbDocumentsTable.name,
     KMS_KEY_ID: kms.kmsCmk.id,
     API_INTERNAL_PATH: config.apiInternalPath,
+    REVOCATION_QUEUE_URL: revocationStatusQueue.url,
   },
 };
 
@@ -110,6 +120,27 @@ const dynamodbLambdaPolicy = new aws.iam.Policy(
 new aws.iam.RolePolicyAttachment(`${stack}-api-handler-lambda-dynamodb`, {
   role: lambdaRole.name,
   policyArn: dynamodbLambdaPolicy.arn,
+});
+
+const sqsLambdaPolicy = new aws.iam.Policy(
+  `${stack}-api-handler-sqs-lambda-policy`,
+  {
+    policy: {
+      Version: '2012-10-17',
+      Statement: [
+        {
+          Effect: 'Allow',
+          Action: ['sqs:SendMessage'],
+          Resource: [revocationStatusQueue.arn],
+        },
+      ],
+    },
+  }
+);
+
+new aws.iam.RolePolicyAttachment(`${stack}-api-handler-lambda-sqs`, {
+  role: lambdaRole.name,
+  policyArn: sqsLambdaPolicy.arn,
 });
 
 new aws.iam.RolePolicyAttachment(

@@ -5,7 +5,7 @@ import { authMiddleware } from '@dvp/server-common';
 import {
   handleGetRevocationStatusByDocumentHash,
   handleGetSvipRevocationStatusList,
-  handleSetRevocationStatus,
+  handleSubmitToRevocationStatusQueue,
 } from './status.controller';
 
 export const OAStatusRouteName = 'oa-ocsp';
@@ -13,8 +13,7 @@ export const SVIPStatusRouteName = 'revocation-list-2020';
 
 export const statusRoutes = Router();
 
-// Map API routes to controller functions
-statusRoutes.post('/', authMiddleware, handleSetRevocationStatus);
+statusRoutes.post('/', authMiddleware, handleSubmitToRevocationStatusQueue);
 statusRoutes.get(
   `/${OAStatusRouteName}/:documentHash`,
   handleGetRevocationStatusByDocumentHash

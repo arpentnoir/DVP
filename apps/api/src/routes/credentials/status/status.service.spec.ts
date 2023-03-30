@@ -20,8 +20,8 @@ import RevocationListUnrevoked from '../../../fixtures/genericvc/revocation_list
 import { authTokenWithSubAndAbn } from '../../../tests/integration/utils';
 import { StatusService } from './status.service';
 
-const s3Mock = mockClient(S3Client);
 const dynamodbMock = mockClient(DynamoDBClient);
+const s3Mock = mockClient(S3Client);
 
 export const getRevocationBitLitArray = (encodedList: string) => {
   return decodeList({ encodedList });

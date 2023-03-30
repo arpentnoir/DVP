@@ -99,6 +99,7 @@ export const issueCredential = async ({
   if (format === 'vc-jwt') {
     credential['@context'].push('https://www.w3.org/2018/credentials/v1');
   }
+
   try {
     const { items } = await verifiable.credential.create({
       credential,
@@ -106,6 +107,7 @@ export const issueCredential = async ({
       documentLoader,
       format: [format],
     });
+
     return items[0];
   } catch (err) {
     if (

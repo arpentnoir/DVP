@@ -41,6 +41,7 @@ export const DynamoSchema = {
       isRevoked: { type: Boolean, default: false },
       revocationIndex: { type: Number },
       revocationS3Path: { type: String },
+      revocationInProgress: { type: Boolean, default: false },
       documentHash: { type: String },
 
       // metadata

@@ -9,7 +9,12 @@ alias awslocal="aws --endpoint-url ${LOCALSTACK_ENDPOINT}" --profile=localstack
 awslocal --version
 echo "########### Creating SQS ###########"
 awslocal sqs create-queue --queue-name local-document-schema-queue
+
+awslocal sqs create-queue --queue-name local-document-revocation-queue
+
 awslocal sqs list-queues
+
+
 
 echo "########### Creating S3 buckets  ###########"
 
